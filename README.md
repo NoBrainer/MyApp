@@ -10,7 +10,6 @@
 
 ## Developing
 - setup project structure
-- setup GIT
 - flesh out db resources
 - look into security issues
 - create user login
