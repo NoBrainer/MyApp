@@ -1,0 +1,28 @@
+/* page scaffold */
+@side_padding: 20px;
+@header_height: 50px;
+
+/* colors */
+@base_color: #333333;
+@base_green: #348654;
+
+body {
+	padding-top: @header_height;
+	color: @base_color;
+}
+
+.center-on-page {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding-left: @side_padding;
+	padding-right: @side_padding;
+}
+
+#header {
+	background-color: @base_green;
+	color: white;
+	top: 0;
+	left: 0;
+	height: @header_height;
+	width: 100%;
+}

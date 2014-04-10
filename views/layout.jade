@@ -1,0 +1,17 @@
+doctype html
+html
+	head
+		title= title
+		meta(charset='utf-8')
+		link(rel='stylesheet', href='/lib/bootstrap/css/bootstrap.css')
+		link(rel='stylesheet', href='/lib/bootstrap/css/bootstrap-custom.css')
+		link(rel='stylesheet', href='/lib/font-awesome/css/font-awesome.css')
+		link(rel='stylesheet', href='/stylesheets/style.css')
+	body.center-on-page
+		include header
+		block content
+		
+		script(type='text/javascript', src='/lib/jquery/js/jquery.js')
+		script(type='text/javascript', src='/lib/underscore/js/underscore.js')
+		script(type='text/javascript', src='/lib/bootstrap/js/bootstrap.js')
+		
