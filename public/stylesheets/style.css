@@ -1,20 +1,58 @@
-/* page scaffold */
 /* colors */
+/* page scaffold */
 body {
-  padding-top: 50px;
+  padding-top: 70px;
   color: #333333;
+  background-color: #d0d0d0;
+}
+a {
+  color: #333333;
+  text-decoration: underline;
+}
+a:hover,
+a:visited {
+  color: #666666;
+  text-decoration: none;
+  cursor: pointer;
 }
 .center-on-page {
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
   padding-left: 20px;
   padding-right: 20px;
 }
 #header {
-  background-color: #348654;
-  color: white;
+  background-color: #000000;
+  color: #ffffff;
   top: 0;
   left: 0;
-  height: 50px;
+  height: 70px;
   width: 100%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+#header_left {
+  float: left;
+}
+#header_right {
+  float: right;
+}
+#header_logo {
+  font-size: 60px;
+  margin-right: 10px;
+}
+#header_label {
+  font-size: 40px;
+  vertical-align: top;
+}
+#user_login {
+  color: #ffffff;
+}
+#app_list {
+  list-style-type: none;
+}
+#app_list li {
+  font-size: 20px;
+  display: inline;
+  margin-right: 10px;
 }

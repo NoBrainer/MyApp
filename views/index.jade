@@ -1,6 +1,18 @@
 extends layout
 
 block content
+	ul#app_list
+		li
+			i.fa.fa-twitter-square(title="Twitter")
+		li
+			i.fa.fa-facebook-square(title="Facebook")
+		li
+			i.fa.fa-instagram(title="Instagram")
+		li
+			i.fa.fa-google-plus-square(title="Google Plus")
+		li
+			i.fa.fa-rss-square(title="RSS")
+			
 	h1= title
 	p Welcome to #{title}
 	ul
@@ -8,4 +20,3 @@ block content
 			a(href="/newuser") New User
 		li
 			a(href="/userlist") User List
-		
