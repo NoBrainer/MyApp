@@ -1,3 +1,4 @@
 #!/bin/bash
 
 ./node_modules/less/bin/lessc public/stylesheets/style.less > public/stylesheets/style.css
+./node_modules/less/bin/lessc public/stylesheets/style-responsive.less > public/stylesheets/style-responsive.css
