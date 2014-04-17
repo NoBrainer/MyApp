@@ -1,6 +1,3 @@
-/**
- * Module dependencies.
- */
 
 // Imports
 var express = require('express');
@@ -8,12 +5,13 @@ var http = require('http');
 var path = require('path');
 
 // Local imports
+var config = require('./config');
 var routes = require('./routes');
 var user = require('./routes/user');
 
 // Setup the database
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test_db'); //TODO: make this a property in a file ignored by git
+mongoose.connect(config.props.MONGO_LOCATION);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function(){
@@ -57,7 +55,7 @@ db.once('open', function(){
 // Setup the environment
 var app = express();
 app.set('env', 'development');
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || config.props.REST_PORT);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
