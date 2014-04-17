@@ -1,22 +1,20 @@
 extends layout
 
 block content
-	ul#app_list
-		li
-			i.fa.fa-twitter-square(title="Twitter")
-		li
-			i.fa.fa-facebook-square(title="Facebook")
-		li
-			i.fa.fa-instagram(title="Instagram")
-		li
-			i.fa.fa-google-plus-square(title="Google Plus")
-		li
-			i.fa.fa-rss-square(title="RSS")
-			
-	h1= title
-	p Welcome to #{title}
-	ul
-		li
-			a(href="/newuser") New User
-		li
-			a(href="/userlist") User List
+	h1 API
+	h3 User REST Resources
+	ol
+		li Create
+			div
+				a(href='/user/create') Create user
+		li Read
+			div
+				a(href='/user/exists') Check if a user exists
+			div
+				a(href='/user/getall') Get all users
+		li Update
+			div
+				a(href='/user/update') Update user
+		li Delete
+			div
+				a(href='/user/delete') Delete user
