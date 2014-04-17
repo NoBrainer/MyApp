@@ -9,10 +9,14 @@
 
 
 ## Developing
-- setup project structure
+- create employee login
 - flesh out db resources
 - look into security issues
-- create user login
+- setup deployment that auto-restarts at server boot
+- rss integration
+- twitter integration
+- facebook/instagram integration
+- google plus integration
 
 
 ### Tools
