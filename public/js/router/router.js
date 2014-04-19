@@ -5,6 +5,7 @@ app.Router = Backbone.Router.extend({
 	 */
 	initialize : function(opts){
 		this.route(/^.*/, "goDefault");
+		this.route(/^home/, "goHome");
 		this.route(/^employee/, "goEmployee");
 		this.route(/^admin/, "goAdmin");
 	}
@@ -14,6 +15,14 @@ app.Router = Backbone.Router.extend({
 	 */
 	,goDefault : function(){
 		console.log("default page");
+		this.navigate("#home", { trigger: true, replace: true });
+	}
+	
+	/**
+	 * Default page
+	 */
+	,goHome : function(){
+		console.log("home page");
 		
 		var header = new app.view.Header();
 		header.render();
