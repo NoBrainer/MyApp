@@ -1,4 +1,4 @@
-App.Router = Backbone.Router.extend({
+app.Router = Backbone.Router.extend({
 	
 	/**
 	 * Constructor
@@ -14,6 +14,9 @@ App.Router = Backbone.Router.extend({
 	 */
 	,goDefault : function(){
 		console.log("default page");
+		
+		var header = new app.view.Header();
+		header.render();
 	}
 	
 	/**

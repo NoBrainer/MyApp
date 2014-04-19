@@ -10,25 +10,7 @@
 </head>
 <body class="center-on-page">
 	<!-- HEADER -->
-	<div id="header" class="affix">
-		<div class="center-on-page">
-			<div>
-				<div id="header_left">
-					<i id="header_logo" class="fa fa-globe"></i>
-					<span id="header_label">
-						My Site Name
-					</span>
-				</div>
-				<div id="header_right">
-					<span>
-						<a id="user_login">
-							User Login
-						</a>
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
+	<div id="header" class="affix"></div>
 	
 	<!-- CONTENT -->
 	<div id="content">
@@ -66,17 +48,41 @@
 	<!-- JavaScript Setup -->
 	<script type="text/javascript">
 		(function(){
-			App = {
-					Models : {},
-					Collections : {},
-					Views : {},
-					Router : {}
+			app = {
+					collection : {},
+					model : {},
+					router : {},
+					util : {},
+					view : {}
 			};
 		})();
 	</script>
 	
+	<!-- Underscore Templates -->
+	<script type="text/html" id="header-template">
+		<div class="center-on-page">
+			<div>
+				<div id="header_left">
+					<i id="header_logo" class="fa fa-globe"></i>
+					<span id="header_label">
+						My Site Name
+					</span>
+				</div>
+				<div id="header_right">
+					<span>
+						<a id="user_login">
+							User Login
+						</a>
+					</span>
+				</div>
+			</div>
+		</div>
+	</script>
+	
 	<!-- JavaScript Local Imports -->
+	<script type="text/javascript" src="/js/utils/template-cache.js"></script>
 	<script type="text/javascript" src="/js/router/router.js"></script>
+	<script type="text/javascript" src="/js/views/header/header.js"></script>
 	
 	<!-- Code Entry Point -->
 	<script type="text/javascript" src="/js/main.js"></script>
