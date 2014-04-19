@@ -34,6 +34,8 @@
 - setup backbone front-end
 - create REST resources for users
 - add user login functionality
+- add menu posting functionality
+- add schedule posting functionality
 - look into security issues
 - setup deployment that auto-restarts at server boot
 - rss, twitter, facebook/instagram, google plus integration

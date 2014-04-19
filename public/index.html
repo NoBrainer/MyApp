@@ -57,11 +57,26 @@
 		</p>
 	</div>
 	
-	<!-- JavaScript Imports -->
+	<!-- JavaScript Library Imports -->
 	<script type="text/javascript" src="/lib/jquery/js/jquery.js"></script>
 	<script type="text/javascript" src="/lib/underscore/js/underscore.js"></script>
 	<script type="text/javascript" src="/lib/backbone/js/backbone.js"></script>
 	<script type="text/javascript" src="/lib/bootstrap/js/bootstrap.js"></script>
+	
+	<!-- JavaScript Setup -->
+	<script type="text/javascript">
+		(function(){
+			App = {
+					Models : {},
+					Collections : {},
+					Views : {},
+					Router : {}
+			};
+		})();
+	</script>
+	
+	<!-- JavaScript Local Imports -->
+	<script type="text/javascript" src="/js/router/router.js"></script>
 	
 	<!-- Code Entry Point -->
 	<script type="text/javascript" src="/js/main.js"></script>

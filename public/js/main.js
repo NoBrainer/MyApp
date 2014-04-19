@@ -1,2 +1,9 @@
-//TODO: start client-side javascript here
+(function(){
+	
 console.log("Running main.js");
+
+// Start the router
+new App.Router();
+Backbone.history.start();
+
+})();
