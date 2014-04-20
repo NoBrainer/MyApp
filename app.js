@@ -17,6 +17,9 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var fileUtil = require('./utils/file-util');
 
+// Global variables
+_ = require('./public/lib/underscore/js/underscore');
+
 // Setup the database
 mongoose.connect(config.props.MONGO_LOCATION);
 var db = mongoose.connection;
@@ -77,15 +80,23 @@ if(isDevelopment){
 	app.use(logger('dev'));
 	app.use(errorHandler());
 	app.use(serveStatic(publicDir));
-	
-	// Create aggregate template file
-	var viewsDir = publicDir+'/js/views';
-	var targetFile = publicDir+'/js/views/aggregate-templates.html';
-	fileUtil.aggregateTemplates(viewsDir, targetFile);
 }else{
 	publicDir = path.join(__dirname, 'public-production');
-	//TODO: make aggregate js / css files
+	
+	// Create aggregate js file
+	var jsDir = path.join(publicDir, 'js');
+	var aggregateJsFile = path.join(publicDir, 'aggregate.js');
+	var libDir = path.join(publicDir, 'lib');
+	fileUtil.aggregateJavaScript(jsDir, aggregateJsFile, libDir);
+	
+	// Create aggregate css file
+	var aggregateCssFile = path.join(publicDir, 'aggregate.css');
+	fileUtil.aggregateCss(aggregateCssFile, publicDir);
 }
+// Create aggregate template file
+var viewsDir = path.join(publicDir, 'js/views');
+var aggregateTemplateFile = path.join(publicDir, 'aggregate.template');
+fileUtil.aggregateTemplates(viewsDir, aggregateTemplateFile);
 
 // Initialize the REST routes (TODO:use router.post where applicable)
 var router = express.Router();

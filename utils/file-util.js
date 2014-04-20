@@ -7,9 +7,9 @@ var path = require('path');
  * @param cond - callback for determining whether or not to keep file
  * @param done - callback for what to do with results
  */
-var walk = function(dir, cond, done) {
+var walk = function(dir, cond, done){
 	var results = [];
-	fs.readdir(dir, function(err, list) {
+	fs.readdir(dir, function(err, list){
 		if(err){
 			return done(err);
 		}
@@ -71,7 +71,56 @@ exports.aggregateTemplates = function(targetDir, targetFile){
 		if(err) throw err;
 		createAggregate(result, targetFile);
 	};
-	
 	// Traverse the target directory
 	walk(targetDir, isTemplate, done);
+};
+
+/**
+ * Create an aggregate JavaScript file
+ * @param targetDir - directory to look in (full path)
+ * @param targetFile - file to print to (full path)
+ * @param libDir - directory with JavaScript libraries (full path)
+ */
+exports.aggregateJavaScript = function(targetDir, targetFile, libDir){
+	// Array of libraries to import (order matters)
+	var libArray = [ "jquery/js/jquery.js", "underscore/js/underscore.js", "backbone/js/backbone.js", "bootstrap/js/bootstrap.js" ];
+	libArray = _.map(libArray, function(item){
+		return path.join(libDir, item);
+	});
+	var mainFile = "";
+	var setupFile = "";
+	// Determine what kind of files we care about
+	var isJavaScript = function(file){
+		if(file.match(/main\.js$/)){
+			mainFile = file;
+			return false;
+		}else if(file.match(/setup\.js$/)){
+			setupFile = file;
+			return false
+		}
+		return file.match(/.+\.js$/);
+	};
+	// Determine what we do with the results
+	var done = function(err, result){
+		if(err) throw err;
+		var fileArr = _.union(libArray, setupFile, result, mainFile);
+		createAggregate(fileArr, targetFile);
+	};
+	// Traverse the target directory
+	walk(targetDir, isJavaScript, done);
+};
+
+/**
+ * Create an aggregate CSS file
+ * @param targetFile - file to print to (full path)
+ * @param publicDir - public directory (full path)
+ */
+exports.aggregateCss = function(targetFile, publicDir){
+	// Array of css files to import (order matters)
+	var fileArr = [ "lib/bootstrap/css/bootstrap.css", "lib/bootstrap/css/bootstrap-custom.css", "lib/font-awesome/css/font-awesome.css", "stylesheets/style.css", "stylesheets/style-responsive.css" ];
+	fileArr = _.map(fileArr, function(item){
+		return path.join(publicDir, item);
+	});
+	// Create the aggregation
+	createAggregate(fileArr, targetFile);
 };

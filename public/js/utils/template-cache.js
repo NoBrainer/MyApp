@@ -1,10 +1,10 @@
 app.util.TemplateCache = {
 	
 	/**
-	 * Setup templates by putting the text from aggregate-templates.html into the html of the page
+	 * Setup templates by putting the text from the aggregate template file into the html of the page
 	 */
 	setup : function(){
-		var opts = { url: "js/views/aggregate-templates.html" };
+		var opts = { url: "aggregate.template" };
 		return $.ajax(opts)
 			.done(function(data, textStatus, jqxhr){
 				console.log("Loaded aggregate template file");

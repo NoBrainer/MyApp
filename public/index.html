@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="/lib/bootstrap/css/bootstrap-custom.css">
 	<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.css">
 	<link rel="stylesheet" href="/stylesheets/style.css">
+	<link rel="stylesheet" href="/stylesheets/style-responsive.css">
 </head>
 <body class="center-on-page">
 	<div id="header" class="affix"></div>
@@ -36,7 +37,7 @@
 		</p>
 	</div>
 	
-	<div id="javascript-files">
+	<div id="javascript">
 		<!-- JavaScript Library Imports -->
 		<script type="text/javascript" src="/lib/jquery/js/jquery.js"></script>
 		<script type="text/javascript" src="/lib/underscore/js/underscore.js"></script>
@@ -44,28 +45,18 @@
 		<script type="text/javascript" src="/lib/bootstrap/js/bootstrap.js"></script>
 		
 		<!-- JavaScript Setup -->
-		<script type="text/javascript">
-			(function(){
-				app = {
-						collection : {},
-						model : {},
-						router : {},
-						util : {},
-						view : {}
-				};
-			})();
-		</script>
+		<script type="text/javascript" src="/js/setup.js"></script>
 		
 		<!-- JavaScript Local Imports -->
 		<script type="text/javascript" src="/js/utils/template-cache.js"></script>
 		<script type="text/javascript" src="/js/router/router.js"></script>
 		<script type="text/javascript" src="/js/views/header/header.js"></script>
+		
+		<!-- Code Entry Point -->
+		<script type="text/javascript" src="/js/main.js"></script>
 	</div>
 	
 	<!-- Underscore Templates -->
 	<div id="templates"></div>
-	
-	<!-- Code Entry Point -->
-	<script type="text/javascript" src="/js/main.js"></script>
 </body>
 </html>
