@@ -41,12 +41,28 @@ var walk = function(dir, cond, done){
  * Create aggregate file
  * @param fileArr - array of files (full path)
  * @param targetFile - file to print to (full path)
+ * @param strictOrder - (optional) boolean whether or not to enforce order
  */
-var createAggregate = function(fileArr, targetFile){
+var createAggregate = function(fileArr, targetFile, strictOrder){
 	if(!fileArr || fileArr.length<1){
 		return;
 	}
 	fs.writeFileSync(targetFile, ""); // clear file
+	if(strictOrder){
+		var i = 0;
+		(function next(){
+			var file = fileArr[i++];
+			if(!file){
+				return;
+			}
+			fs.readFile(file, function(err, data){
+				if(err) throw err;
+				fs.appendFileSync(targetFile, data);
+				next();
+			});
+		})();
+		return;
+	}
 	for(var i=0; i<fileArr.length; i++){
 		var file = fileArr[i];
 		fs.readFile(file, function(err, data){
@@ -104,7 +120,8 @@ exports.aggregateJavaScript = function(targetDir, targetFile, libDir){
 	var done = function(err, result){
 		if(err) throw err;
 		var fileArr = _.union(libArray, setupFile, result, mainFile);
-		createAggregate(fileArr, targetFile);
+		var strictOrder = true;
+		createAggregate(fileArr, targetFile, strictOrder);
 	};
 	// Traverse the target directory
 	walk(targetDir, isJavaScript, done);
@@ -122,5 +139,6 @@ exports.aggregateCss = function(targetFile, publicDir){
 		return path.join(publicDir, item);
 	});
 	// Create the aggregation
-	createAggregate(fileArr, targetFile);
+	var strictOrder = true;
+	createAggregate(fileArr, targetFile, strictOrder);
 };

@@ -66,6 +66,7 @@ db.once('open', function(){
 var app = express();
 var port = process.env.PORT || config.props.PORT;
 var publicDir = path.join(__dirname, 'public');
+var prodPublicDir = path.join(__dirname, 'public-production');
 app.set('env', config.props.ENV);
 app.set('port', port);
 app.set('views', path.join(__dirname, 'views'));
@@ -80,23 +81,29 @@ if(isDevelopment){
 	app.use(logger('dev'));
 	app.use(errorHandler());
 	app.use(serveStatic(publicDir));
+
+	// Create aggregate template file
+	var viewsDir = path.join(publicDir, 'js/views');
+	var aggregateTemplateFile = path.join(publicDir, 'aggregate.template');
+	fileUtil.aggregateTemplates(viewsDir, aggregateTemplateFile);
 }else{
-	publicDir = path.join(__dirname, 'public-production');
+	app.use(serveStatic(prodPublicDir));
+
+	// Create aggregate template file
+	var viewsDir = path.join(publicDir, 'js/views');
+	var aggregateTemplateFile = path.join(prodPublicDir, 'aggregate.template');
+	fileUtil.aggregateTemplates(viewsDir, aggregateTemplateFile);
 	
 	// Create aggregate js file
 	var jsDir = path.join(publicDir, 'js');
-	var aggregateJsFile = path.join(publicDir, 'aggregate.js');
+	var aggregateJsFile = path.join(prodPublicDir, 'js/aggregate.js');
 	var libDir = path.join(publicDir, 'lib');
 	fileUtil.aggregateJavaScript(jsDir, aggregateJsFile, libDir);
 	
 	// Create aggregate css file
-	var aggregateCssFile = path.join(publicDir, 'aggregate.css');
+	var aggregateCssFile = path.join(prodPublicDir, 'css/aggregate.css');
 	fileUtil.aggregateCss(aggregateCssFile, publicDir);
 }
-// Create aggregate template file
-var viewsDir = path.join(publicDir, 'js/views');
-var aggregateTemplateFile = path.join(publicDir, 'aggregate.template');
-fileUtil.aggregateTemplates(viewsDir, aggregateTemplateFile);
 
 // Initialize the REST routes (TODO:use router.post where applicable)
 var router = express.Router();
