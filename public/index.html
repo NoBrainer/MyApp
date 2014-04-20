@@ -9,10 +9,7 @@
 	<link rel="stylesheet" href="/stylesheets/style.css">
 </head>
 <body class="center-on-page">
-	<!-- HEADER -->
 	<div id="header" class="affix"></div>
-	
-	<!-- CONTENT -->
 	<div id="content">
 		<ul id="app_list">
 			<li>
@@ -39,50 +36,34 @@
 		</p>
 	</div>
 	
-	<!-- JavaScript Library Imports -->
-	<script type="text/javascript" src="/lib/jquery/js/jquery.js"></script>
-	<script type="text/javascript" src="/lib/underscore/js/underscore.js"></script>
-	<script type="text/javascript" src="/lib/backbone/js/backbone.js"></script>
-	<script type="text/javascript" src="/lib/bootstrap/js/bootstrap.js"></script>
-	
-	<!-- JavaScript Setup -->
-	<script type="text/javascript">
-		(function(){
-			app = {
-					collection : {},
-					model : {},
-					router : {},
-					util : {},
-					view : {}
-			};
-		})();
-	</script>
+	<div id="javascript-files">
+		<!-- JavaScript Library Imports -->
+		<script type="text/javascript" src="/lib/jquery/js/jquery.js"></script>
+		<script type="text/javascript" src="/lib/underscore/js/underscore.js"></script>
+		<script type="text/javascript" src="/lib/backbone/js/backbone.js"></script>
+		<script type="text/javascript" src="/lib/bootstrap/js/bootstrap.js"></script>
+		
+		<!-- JavaScript Setup -->
+		<script type="text/javascript">
+			(function(){
+				app = {
+						collection : {},
+						model : {},
+						router : {},
+						util : {},
+						view : {}
+				};
+			})();
+		</script>
+		
+		<!-- JavaScript Local Imports -->
+		<script type="text/javascript" src="/js/utils/template-cache.js"></script>
+		<script type="text/javascript" src="/js/router/router.js"></script>
+		<script type="text/javascript" src="/js/views/header/header.js"></script>
+	</div>
 	
 	<!-- Underscore Templates -->
-	<script type="text/html" id="header-template">
-		<div class="center-on-page">
-			<div>
-				<div id="header_left">
-					<i id="header_logo" class="fa fa-globe"></i>
-					<span id="header_label">
-						My Site Name
-					</span>
-				</div>
-				<div id="header_right">
-					<span>
-						<a id="user_login">
-							User Login
-						</a>
-					</span>
-				</div>
-			</div>
-		</div>
-	</script>
-	
-	<!-- JavaScript Local Imports -->
-	<script type="text/javascript" src="/js/utils/template-cache.js"></script>
-	<script type="text/javascript" src="/js/router/router.js"></script>
-	<script type="text/javascript" src="/js/views/header/header.js"></script>
+	<div id="templates"></div>
 	
 	<!-- Code Entry Point -->
 	<script type="text/javascript" src="/js/main.js"></script>

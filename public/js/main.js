@@ -1,9 +1,12 @@
 (function(){
-	
+
 console.log("Running main.js");
 
-// Start the router
-new app.Router();
-Backbone.history.start();
+$.when(app.util.TemplateCache.setup())
+	.done(function(){
+		// Start the router
+		new app.Router();
+		Backbone.history.start();
+	});
 
 })();

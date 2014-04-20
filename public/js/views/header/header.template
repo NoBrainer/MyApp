@@ -1,0 +1,19 @@
+<script type="text/template" id="header-template">
+	<div class="center-on-page">
+		<div>
+			<div id="header_left">
+				<i id="header_logo" class="fa fa-globe"></i>
+				<span id="header_label">
+					My Site Name
+				</span>
+			</div>
+			<div id="header_right">
+				<span>
+					<a id="user_login">
+						User Login
+					</a>
+				</span>
+			</div>
+		</div>
+	</div>
+</script>

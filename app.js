@@ -4,9 +4,9 @@ var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var express = require('express');
 var http = require('http');
+var logger = require('morgan');
 var methodOverride = require('method-override');
 var mongoose = require('mongoose');
-var morgan = require('morgan');//logger
 var path = require('path');
 var serveStatic = require('serve-static');
 var staticFavicon = require('static-favicon');
@@ -15,6 +15,7 @@ var staticFavicon = require('static-favicon');
 var config = require('./config');
 var routes = require('./routes');
 var user = require('./routes/user');
+var fileUtil = require('./utils/file-util');
 
 // Setup the database
 mongoose.connect(config.props.MONGO_LOCATION);
@@ -61,6 +62,7 @@ db.once('open', function(){
 // Setup the environment
 var app = express();
 var port = process.env.PORT || config.props.PORT;
+var publicDir = path.join(__dirname, 'public');
 app.set('env', config.props.ENV);
 app.set('port', port);
 app.set('views', path.join(__dirname, 'views'));
@@ -68,12 +70,21 @@ app.set('view engine', 'jade');
 app.use(staticFavicon());
 app.use(bodyParser());
 app.use(methodOverride());
-app.use(serveStatic(path.join(__dirname, 'public')));
 
 // Do things when in development mode
-if('development' === app.get('env')){
-	app.use(morgan('dev'));
+var isDevelopment = 'development' === app.get('env');
+if(isDevelopment){
+	app.use(logger('dev'));
 	app.use(errorHandler());
+	app.use(serveStatic(publicDir));
+	
+	// Create aggregate template file
+	var viewsDir = publicDir+'/js/views';
+	var targetFile = publicDir+'/js/views/aggregate-templates.html';
+	fileUtil.aggregateTemplates(viewsDir, targetFile);
+}else{
+	publicDir = path.join(__dirname, 'public-production');
+	//TODO: make aggregate js / css files
 }
 
 // Initialize the REST routes (TODO:use router.post where applicable)
