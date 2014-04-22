@@ -31,14 +31,17 @@
 
 
 ## Developing
-- setup underscore templating
-- setup backbone front-end
-- create REST resources for users
+General:
+- look into security issues
+	- https
+	- db certificate
+- REST resources
+- setup deployment that auto-restarts at server boot
+
+Specific:
 - add user login functionality
 - add menu posting functionality
 - add schedule posting functionality
-- look into security issues
-- setup deployment that auto-restarts at server boot
 - rss, twitter, facebook/instagram, google plus integration
 
 
