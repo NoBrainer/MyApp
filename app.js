@@ -3,7 +3,9 @@
 var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
 var express = require('express');
+var fs = require('fs');
 var http = require('http');
+var https = require ('https');
 var logger = require('morgan');
 var methodOverride = require('method-override');
 var mongoose = require('mongoose');
@@ -64,7 +66,7 @@ db.once('open', function(){
 
 // Setup the environment
 var app = express();
-var port = process.env.PORT || config.props.PORT;
+var port = process.env.PORT || config.props.HTTPS_PORT;
 var publicDir = path.join(__dirname, 'public');
 var prodPublicDir = path.join(__dirname, 'public-production');
 app.set('env', config.props.ENV);
@@ -116,7 +118,24 @@ router.get('/user/update', user.update);
 router.get('/user/delete', user.delete);
 
 // Start the server
-var server = http.createServer(app);
+var certOpts = {
+		key : fs.readFileSync(config.props.KEY_PATH),
+		cert : fs.readFileSync(config.props.CERT_PATH)
+};
+var server = https.createServer(certOpts, app);
 server.listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
+
+// Make separate server to reroute http to https
+var httpApp = express();
+var httpRouter = express.Router();
+httpApp.use('*', httpRouter);
+httpRouter.get('*', function(req, res){
+	var host = req.get('Host');
+	host = host.replace(/:\d+$/, ":"+app.get('port'));
+	var destination = ['https://', host, req.url].join('');
+	return res.redirect(destination);
+});
+var httpServer = http.createServer(httpApp);
+httpServer.listen(config.props.HTTP_PORT);
