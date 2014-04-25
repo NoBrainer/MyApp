@@ -80,7 +80,7 @@ app.use(methodOverride());
 // Do things when in development mode
 var isDevelopment = 'development' === app.get('env');
 if(isDevelopment){
-	app.use(logger('dev'));
+//	app.use(logger('dev'));
 	app.use(errorHandler());
 	app.use(serveStatic(publicDir));
 	

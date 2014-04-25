@@ -33,7 +33,6 @@
 ## Developing
 General:
 - look into security issues
-	- https
 	- db certificate
 - REST resources
 - setup deployment that auto-restarts at server boot

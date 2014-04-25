@@ -23,9 +23,9 @@ app.Router = Backbone.Router.extend({
 	 */
 	,goHome : function(){
 		console.log("home page");
-		
-		var header = new app.view.Header();
-		header.render();
+		this.setupHeader();
+		var page = new app.view.page.Home();
+		page.render();
 	}
 	
 	/**
@@ -33,6 +33,9 @@ app.Router = Backbone.Router.extend({
 	 */
 	,goEmployee : function(){
 		console.log("employee page");
+		this.setupHeader();
+		var page = new app.view.page.Employee();
+		page.render();
 	}
 	
 	/**
@@ -40,5 +43,19 @@ app.Router = Backbone.Router.extend({
 	 */
 	,goAdmin : function(){
 		console.log("admin page");
+		this.setupHeader();
+		var page = new app.view.page.Admin();
+		page.render();
+	}
+	
+	/**
+	 * Setup the header
+	 */
+	,setupHeader : function(){
+		var $header = $("#header");
+		if($header.html().trim() === ""){
+			var header = new app.view.part.Header();
+			header.render();
+		}
 	}
 });

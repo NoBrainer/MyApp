@@ -1,4 +1,4 @@
-app.view.Header = Backbone.View.extend({
+app.view.part.Header = Backbone.View.extend({
 	
 	el : "#header"
 	
@@ -13,13 +13,18 @@ app.view.Header = Backbone.View.extend({
 	 * Render
 	 */
 	,render : function(){
+		var self = this;
+		
 		// Render html from template
 		var params = {}
 		var template = app.util.TemplateCache.get("#header-template");
 		var html = template(params);
-		this.$el.html(html);
+		self.$el.html(html);
 		
-		this.initHandlers();
+		// Initialize handlers
+		self.initHandlers();
+		
+		return self;
 	}
 	
 	/**

@@ -1,0 +1,19 @@
+<script type="text/template" id="app-list-template">
+	<ul id="app_list">
+		<li>
+			<i class="fa fa-twitter-square" title="Twitter"></i>
+		</li>
+		<li>
+			<i class="fa fa-facebook-square" title="Facebook"></i>
+		</li>
+		<li>
+			<i class="fa fa-instagram" title="Instagram"></i>
+		</li>
+		<li>
+			<i class="fa fa-google-plus-square" title="Google Plus"></i>
+		</li>
+		<li>
+			<i class="fa fa-rss-square" title="RSS"></i>
+		</li>
+	</ul>
+</script>

@@ -4,6 +4,9 @@
 			model : {},
 			router : {},
 			util : {},
-			view : {}
+			view : {
+				page : {},
+				part : {}
+			}
 	};
 })();
