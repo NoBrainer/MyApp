@@ -83,14 +83,14 @@ if(isDevelopment){
 	app.use(logger('dev'));
 	app.use(errorHandler());
 	app.use(serveStatic(publicDir));
-
+	
 	// Create aggregate template file
 	var viewsDir = path.join(publicDir, 'js/views');
 	var aggregateTemplateFile = path.join(publicDir, 'aggregate.template');
 	fileUtil.aggregateTemplates(viewsDir, aggregateTemplateFile);
 }else{
 	app.use(serveStatic(prodPublicDir));
-
+	
 	// Create aggregate template file
 	var viewsDir = path.join(publicDir, 'js/views');
 	var aggregateTemplateFile = path.join(prodPublicDir, 'aggregate.template');
