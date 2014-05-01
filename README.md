@@ -24,7 +24,7 @@
 - Window > Preferences > Nodeclipse
 	- Set "Node monitor path" to /node_modules/nodemon/bin/nodemon.js
 	- Apply, Ok
-- Add 'aggregate.js' to nodemon's ignore list
+- Add 'aggregate.js' to nodemon's ignore list (/node_modules/nodemon/lib/config/defaults.js)
 
 
 ## Usage
