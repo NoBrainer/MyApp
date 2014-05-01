@@ -20,75 +20,19 @@ var http = require('http');
 var https = require ('https');
 var logger = require('morgan');
 var methodOverride = require('method-override');
-var mongoose = require('mongoose');
 var path = require('path');
 var serveStatic = require('serve-static');
 var staticFavicon = require('static-favicon');
 
 // Local imports
-var config = require('./config');
 var routes = require('./routes');
 var user = require('./routes/user');
 var fileUtil = require('./utils/file-util');
+var dbUtil = require('./utils/db-util');
 
 // Global variables
 _ = require('./public/lib/underscore/js/underscore');
-
-// Setup the database
-var mongoOptions = {
-//	user : config.props.MONGO_USERNAME,
-//	pass : config.props.MONGO_PASSWORD,
-	replset : {
-		auto_connect : false,
-		poolSize : 10,
-		socketOptions : {
-			keepAlive : 1
-		},
-		ssl : true,
-		sslKey : fs.readFileSync(config.props.KEY_PATH),
-		sslCert : fs.readFileSync(config.props.CERT_PATH)
-	}
-};
-mongoose.connect(config.props.MONGO_LOCATION, mongoOptions);
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function(){
-//	console.log('successfully opened database!');
-//	// Create schema
-//	var userSchema = mongoose.Schema({
-//		name: String,
-//		email: String,
-//		password: String,
-//		type: String
-//	});
-//	
-//	// Compile schema into a model
-//	var User = mongoose.model('User', userSchema);
-//	
-//	// Create instance of a Kitten document
-//	var vAdmin = new User({
-//		name: "Vincent Incarvite",
-//		email: "vinniemac189@gmail.com",
-//		password: "password",
-//		type: "admin"
-//	});
-//	
-//	// Save it
-//	vAdmin.save(function(err, savedObj){
-//		if(err){
-//			return console.error(err);
-//		}
-//		console.log("saved "+savedObj);
-//	});
-//	
-//	// Searching
-//	User.find(function(err, users){
-//		if(err){
-//			return console.error(err);
-//		}
-//		console.log(kittens);
-//	});
-});
+config = require('./config');
 
 // Setup the environment
 var app = express();
@@ -102,6 +46,9 @@ app.set('view engine', 'jade');
 app.use(staticFavicon());
 app.use(bodyParser());
 app.use(methodOverride());
+
+// TODO: figure out where to put this when things are more fleshed out
+dbUtil.setup();
 
 // Do things when in development mode
 var isDevelopment = 'development' === app.get('env');
