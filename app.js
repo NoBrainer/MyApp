@@ -23,7 +23,21 @@ var fileUtil = require('./utils/file-util');
 _ = require('./public/lib/underscore/js/underscore');
 
 // Setup the database
-mongoose.connect(config.props.MONGO_LOCATION);
+var mongoOptions = {
+	user : config.props.USERNAME,
+	pass : config.props.PASSWORD,
+	replset : {
+		auto_connect : false,
+		poolSize : 10,
+		socketOptions : {
+			keepAlive : 1
+		},
+		ssl : true,
+		sslKey : fs.readFileSync(config.props.KEY_PATH),
+		sslCert : fs.readFileSync(config.props.CERT_PATH)
+	}
+};
+mongoose.connect(config.props.MONGO_LOCATION, mongoOptions);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function(){
