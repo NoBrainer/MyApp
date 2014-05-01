@@ -1,4 +1,16 @@
 
+//Create config.js at same level as this file with the following content:
+//export props = {
+//		ENV : 'development',
+//		MONGO_USERNAME : 'my_username',
+//		MONGO_PASSWORD : 'my_password',
+//		MONGO_LOCATION : 'mongodb://localhost/test_db',
+//		KEY_PATH : '/location/to/key.pem',
+//		CERT_PATH : '/location/to/cert.pem',
+//		HTTP_PORT : 8080,
+//		HTTPS_PORT : 8000
+//};
+
 // Imports
 var bodyParser = require('body-parser');
 var errorHandler = require('errorhandler');
@@ -24,8 +36,8 @@ _ = require('./public/lib/underscore/js/underscore');
 
 // Setup the database
 var mongoOptions = {
-	user : config.props.USERNAME,
-	pass : config.props.PASSWORD,
+	user : config.props.MONGO_USERNAME,
+	pass : config.props.MONGO_PASSWORD,
 	replset : {
 		auto_connect : false,
 		poolSize : 10,
