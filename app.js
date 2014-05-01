@@ -1,6 +1,6 @@
 
 //Create config.js at same level as this file with the following content:
-//export props = {
+//exports.props = {
 //		ENV : 'development',
 //		MONGO_USERNAME : 'my_username',
 //		MONGO_PASSWORD : 'my_password',
@@ -36,8 +36,8 @@ _ = require('./public/lib/underscore/js/underscore');
 
 // Setup the database
 var mongoOptions = {
-	user : config.props.MONGO_USERNAME,
-	pass : config.props.MONGO_PASSWORD,
+//	user : config.props.MONGO_USERNAME,
+//	pass : config.props.MONGO_PASSWORD,
 	replset : {
 		auto_connect : false,
 		poolSize : 10,

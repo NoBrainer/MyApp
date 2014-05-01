@@ -20,6 +20,7 @@
 		- Launch in background
 		- During manual & auto builds
 		- Specify working set of relevant resources: select all css files referenced in /public/auto-compile-less
+- Set auto-compile-less script file to be executable
 - Window > Preferences > Nodeclipse
 	- Set "Node monitor path" to /node_modules/nodemon/bin/nodemon.js
 	- Apply, Ok
