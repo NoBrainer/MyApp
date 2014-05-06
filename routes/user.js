@@ -1,3 +1,6 @@
+var mongoose = require('mongoose');
+var User = require('../models/user-model');
+
 /*
  * REST resources for user
  */
@@ -9,7 +12,8 @@ exports.create = function(req, res){
 
 // READ
 exports.exists = function(req, res){
-	res.send("checking if a user exists");
+	var emailAddress = req.params.emailAddress;
+	res.send("checking if a user exists with email: "+emailAddress);
 };
 exports.getAll = function(req, res){
 	res.send("getting all users");

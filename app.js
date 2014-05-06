@@ -84,11 +84,13 @@ if(isDevelopment){
 var router = express.Router();
 app.use('/api', router);
 router.get('/', routes.index);
-router.get('/user/create', user.create);
-router.get('/user/exists', user.exists);
-router.get('/user/getall', user.getAll);
-router.get('/user/update', user.update);
-router.get('/user/delete', user.delete);
+router.route('/users')
+	.post(user.create)
+	.get(user.getAll)
+	.put(user.update)
+	.delete(user.delete);
+router.route('/users/:emailAddress')
+	.get(user.exists);
 
 // Start the server
 var certOpts = {

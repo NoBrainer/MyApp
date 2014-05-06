@@ -31,37 +31,38 @@ exports.setup = function(){
 		console.log('successfully opened database!');
 		
 		// Create instance of a User
-		var adminUser = new User({
-			username : "email_address@gmail.com",
-			password : "password",
-			type : "admin",
-			name : "Bob Marley"
-		});
+//		var adminUser = new User({
+//			username : "email_address@gmail.com",
+//			password : "password",
+//			type : "admin",
+//			name : "Bob Marley"
+//		});
+//		
+//		// Save it
+//		adminUser.save(function(err, savedObj){
+//			if(err){
+//				return console.error(err);
+//			}
+//			console.log("saved "+savedObj);
+//		});
 		
-		// Save it
-		//	adminUser.save(function(err, savedObj){
-		//		if(err){
-		//			return console.error(err);
-		//		}
-		//		console.log("saved "+savedObj);
-		//	});
+//		var searchCriteria = {
+//				username: "email_address@gmail.com"
+//		};
+//		var testPassword = "password";
+//		
+//		// Search for a single user based on username
+//		User.findOne(searchCriteria, function(err, user){
+//			if(err) throw err;
+//			
+//			// Test password matching
+//			user.comparePassword(testPassword, function(err, isMatch){
+//				if(err) throw err;
+//				
+//				console.log("Password match?", isMatch);
+//			});
+//		});
 		
-		var searchCriteria = {
-				username: "email_address@gmail.com"
-		};
-		var testPassword = "password";
-		
-		// Search for a single user based on username
-		User.findOne(searchCriteria, function(err, user){
-			if(err) throw err;
-			
-			// Test password matching
-			user.comparePassword(testPassword, function(err, isMatch){
-				if(err) throw err;
-				
-				console.log("Password match?", isMatch);
-			});
-		});
-		
+		// http://blog.mongodb.org/post/32866457221/password-authentication-with-mongoose-part-1
 	});
 };

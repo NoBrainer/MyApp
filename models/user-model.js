@@ -26,12 +26,31 @@ var UserSchema = mongoose.Schema({
 	}
 });
 
+// Make sure usernames are unique
+UserSchema.pre('save', function(next, done){
+	var self = this;
+	
+	// Look through the users
+	mongoose.models['User'].findOne({ username : self.username }, function(err, user){
+		if(err){
+			done(err);
+		}else if(user){
+			var msg = "username must be unique";
+			self.invalidate('username', msg);
+			done(new Error(msg));
+		}else{
+			// No users found with this username, so proceed
+			next();
+		}
+	});
+});
+
 // Hash the password when saving
 UserSchema.pre('save', function(next){
-	var user = this;
+	var self = this;
 	
 	// Only has the password if it has been modified (or is new)
-	if(!user.isModified('password')){
+	if(!self.isModified('password')){
 		return next();
 	}
 	
@@ -42,13 +61,13 @@ UserSchema.pre('save', function(next){
 		}
 		
 		// Hash the password using the new salt
-		bcrypt.hash(user.password, salt, function(err, hash){
+		bcrypt.hash(self.password, salt, function(err, hash){
 			if(err){
 				return next(err);
 			}
 			
-			//Override the password with the new hashed one
-			user.password = hash;
+			// Override the password with the new hashed one
+			self.password = hash;
 			next();
 		});
 	});
