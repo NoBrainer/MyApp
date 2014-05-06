@@ -89,7 +89,7 @@ router.route('/users')
 	.get(user.getAll)
 	.put(user.update)
 	.delete(user.delete);
-router.route('/users/:emailAddress')
+router.route('/users/:username')
 	.get(user.exists);
 
 // Start the server
