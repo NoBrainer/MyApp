@@ -62,13 +62,6 @@ exports.exists = function(req, res){
 			responseObject.found = true;
 		}
 		res.send(responseObject);
-		
-		// Test password matching
-//		user.comparePassword(testPassword, function(err, isMatch){
-//			if(err) throw err;
-//			
-//			console.log("Password match?", isMatch);
-//		});
 	});
 };
 
@@ -140,4 +133,55 @@ exports.update = function(req, res){
  */
 exports.delete = function(req, res){
 	res.send("deleting a user");
+};
+
+/**
+ * POST - attempt user login
+ */
+exports.login = function(req, res){
+	//TODO: validate req.params
+	
+	var username = req.body.username;
+	var password = req.body.password;
+	
+	// Default response template
+	var responseObject = {
+		error : null,
+		successful : false,
+		message : null
+	};
+	
+	// Attempt to authenticate user
+	User.getAuthenticated(username, password, function(err, user, reason){
+		if(err){
+			responseObject.error = err;
+			console.error(err);
+			res.send(responseObject);
+			return;
+		}
+		
+		// Successful if we got a user
+		if(user){
+			responseObject.successful = true;
+			res.send(responseObject);
+			return;
+		}
+		
+		// Otherwise, failure
+		var reasons = User.failedLogin;
+		switch(reason){
+			case reasons.NOT_FOUND:
+				responseObject.message = "username not found";
+				break;
+			case reasons.PASSWORD_INCORRECT:
+				responseObject.message = "password incorrect";
+				break;
+			case reasons.MAX_ATTEMPTS:
+				responseObject.message = "max attempts exceeded, account locked for 5 minutes";
+				break;
+			default:
+				responseObject.message = "unexpected error occurred";
+		}
+		res.send(responseObject);
+	});
 };

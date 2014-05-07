@@ -80,7 +80,7 @@ if(isDevelopment){
 	fileUtil.aggregateCss(aggregateCssFile, publicDir);
 }
 
-// Initialize the REST routes (TODO:use router.post where applicable)
+// Initialize the REST routes
 var router = express.Router();
 app.use('/api', router);
 router.get('/', routes.index);
@@ -91,6 +91,8 @@ router.route('/users')
 	.delete(user.delete);
 router.route('/users/:username')
 	.get(user.exists);
+router.route('/users/login')
+	.post(user.login);
 
 // Start the server
 var certOpts = {
