@@ -15,11 +15,17 @@ a:visited {
   text-decoration: none;
   cursor: pointer;
 }
-.center-on-page {
+.center_on_page {
   max-width: 900px;
   margin: 0 auto;
   padding-left: 20px;
   padding-right: 20px;
+}
+.clear {
+  clear: both;
+}
+.error_text {
+  color: #ff0000;
 }
 #header {
   background-color: #000000;
@@ -47,6 +53,9 @@ a:visited {
 }
 #user_login {
   color: #ffffff;
+}
+#header .modal {
+  color: #333333;
 }
 #app_list {
   list-style-type: none;

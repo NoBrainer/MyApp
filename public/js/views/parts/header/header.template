@@ -1,5 +1,5 @@
 <script type="text/template" id="header-template">
-	<div class="center-on-page">
+	<div class="center_on_page">
 		<div>
 			<div id="header_left">
 				<i id="header_logo" class="fa fa-globe"></i>
@@ -9,10 +9,53 @@
 			</div>
 			<div id="header_right">
 				<span>
-					<a id="user_login">
+					<a id="user_login" data-toggle="modal" data-target="#login_modal">
 						User Login
 					</a>
 				</span>
+				<div class="modal_storage"></div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<!-- Login Modal -->
+<script type="text/template" id="login-modal-template">
+	<div class="modal fade" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="login_modal_title" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="login_modal_title">
+						User Login
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="clear">
+						<span class="">Username:</span>
+						<input id="login_username" class="pull-right login_enter" type="text">
+					</div>
+					<div class="clear">
+						<span class="">Password:</span>
+						<input id="login_password" class="pull-right login_enter" type="password">
+					</div>
+					<div class="clear">
+						<span id="login_error" class="error_text"></span>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<a class="pull-left">
+						Forgot Password?
+					</a>
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						Close
+					</button>
+					<button id="login_button" type="button" class="btn btn-primary">
+						Login
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>

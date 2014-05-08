@@ -148,7 +148,8 @@ exports.login = function(req, res){
 	var responseObject = {
 		error : null,
 		successful : false,
-		message : null
+		message : null,
+		type : null
 	};
 	
 	// Attempt to authenticate user
@@ -163,6 +164,7 @@ exports.login = function(req, res){
 		// Successful if we got a user
 		if(user){
 			responseObject.successful = true;
+			responseObject.type = user.type;
 			res.send(responseObject);
 			return;
 		}

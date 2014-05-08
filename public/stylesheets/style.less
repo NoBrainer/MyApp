@@ -4,6 +4,7 @@
 @body_background: #D0D0D0;
 @body_color: #333333;
 @link_color: @body_color;
+@error_color: red;
 
 /* page scaffold */
 @side_padding: 20px;
@@ -26,11 +27,17 @@ a:visited {
 	cursor: pointer;
 }
 
-.center-on-page {
+.center_on_page {
 	max-width: 900px;
 	margin: 0 auto;
 	padding-left: @side_padding;
 	padding-right: @side_padding;
+}
+.clear {
+	clear: both;
+}
+.error_text {
+	color: @error_color;
 }
 
 #header {
@@ -59,6 +66,9 @@ a:visited {
 }
 #user_login {
 	color: @header_color;
+}
+#header .modal {
+	color: @body_color;
 }
 
 #app_list {
