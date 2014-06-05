@@ -97,6 +97,32 @@ exports.getAll = function(req, res){
 };
 
 /**
+ * GET - check login state
+ */
+exports.isLoggedIn = function(req, res){
+	// Default response template
+	var responseObject = {
+		error : null,
+		isLoggedIn : false,
+		message : null,
+		type : null,
+		username : null
+	};
+	
+	try{
+		// Get username and user type from the session
+		responseObject.username = req.session.name;
+		responseObject.type = req.session.type;
+		responseObject.isLoggedIn = (responseObject.username && responseObject.type);
+	}catch(e){
+		responseObject.error = e;
+		responseObject.message = "Error checking login status";
+	}finally{
+		res.send(responseObject);
+	}
+};
+
+/**
  * PUT - 
  */
 exports.update = function(req, res){
@@ -149,7 +175,8 @@ exports.login = function(req, res){
 		error : null,
 		successful : false,
 		message : null,
-		type : null
+		type : null,
+		username : username
 	};
 	
 	// Attempt to authenticate user
@@ -165,6 +192,11 @@ exports.login = function(req, res){
 		if(user){
 			responseObject.successful = true;
 			responseObject.type = user.type;
+			
+			// Track username and user type in the session
+			req.session.name = username;
+			req.session.type = user.type;
+			
 			res.send(responseObject);
 			return;
 		}
@@ -186,4 +218,28 @@ exports.login = function(req, res){
 		}
 		res.send(responseObject);
 	});
+};
+
+/**
+ * POST - attempt user logout
+ */
+exports.logout = function(req, res){
+	// Default response template
+	var responseObject = {
+		error : null,
+		successful : false,
+		message : null
+	};
+	
+	try{
+		// Logout the session
+		req.session.name = undefined;
+		req.session.type = undefined;
+		responseObject.successful = true;
+	}catch(e){
+		responseObject.error = e;
+		responseObject.message = "Failed to logout";
+	}finally{
+		res.send(responseObject);
+	}
 };

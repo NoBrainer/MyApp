@@ -13,6 +13,7 @@
 
 // Imports
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var errorHandler = require('errorhandler');
 var express = require('express');
 var fs = require('fs');
@@ -22,6 +23,7 @@ var logger = require('morgan');
 var methodOverride = require('method-override');
 var path = require('path');
 var serveStatic = require('serve-static');
+var session = require('express-session');
 var staticFavicon = require('static-favicon');
 
 // Local imports
@@ -46,6 +48,15 @@ app.set('view engine', 'jade');
 app.use(staticFavicon());
 app.use(bodyParser());
 app.use(methodOverride());
+
+// Setup sessions
+var MongoStore = require('connect-mongo')(session);
+app.use(cookieParser());
+app.use(session({
+	secret : config.props.SECRET,
+	maxAge : new Date(Date.now() + 3600000),
+	store : new MongoStore(config.props.DATABASE)
+}));
 
 // TODO: figure out where to put this when things are more fleshed out
 dbUtil.setup();
@@ -89,10 +100,13 @@ router.route('/users')
 	.get(user.getAll)
 	.put(user.update)
 	.delete(user.delete);
+router.route('/users/login')
+	.get(user.isLoggedIn)
+	.post(user.login);
+router.route('/users/logout')
+	.post(user.logout);
 router.route('/users/:username')
 	.get(user.exists);
-router.route('/users/login')
-	.post(user.login);
 
 // Start the server
 var certOpts = {

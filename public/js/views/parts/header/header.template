@@ -9,11 +9,18 @@
 			</div>
 			<div id="header_right">
 				<span>
-					<a id="user_login" data-toggle="modal" data-target="#login_modal">
+					<a id="user_login" class="show_on_logout header_link" data-toggle="modal" data-target="#login_modal">
 						User Login
 					</a>
+					<a id="user_logout" class="show_on_login header_link" style="display:none;">
+						Logout
+					</a>
+					<span class="show_on_login" style="display:none;">
+						<span>-</span>
+						<span id="user_name"></span>
+					</span>
 				</span>
-				<div class="modal_storage"></div>
+				<div id="modal_storage"></div>
 			</div>
 		</div>
 	</div>
