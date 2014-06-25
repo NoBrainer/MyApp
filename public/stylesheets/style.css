@@ -15,6 +15,9 @@ a:visited {
   text-decoration: none;
   cursor: pointer;
 }
+a.footer_link {
+  font-size: 12px;
+}
 .center_on_page {
   max-width: 900px;
   margin: 0 auto;

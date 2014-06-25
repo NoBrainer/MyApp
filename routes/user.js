@@ -1,39 +1,22 @@
 var mongoose = require('mongoose');
+var crypto = require('crypto');
 var User = require('../models/user-model');
 
-
-/**
- * POST - Create new user
- */
-exports.create = function(req, res){
-	//TODO: validate req.body
-	
-	var body = req.body;
-	
-	// Default response template
-	var responseObject = {
-		error : null,
-		saved : false
-	};
-	
-	// Create instance of a User
-	var currentUser = new User({
-		username : body.username,
-		password : body.password,
-		type : body.type || "default",
-		name : body.name || ""
-	});
-	
-	// Save it
-	currentUser.save(function(err, savedObj){
-		if(err){
-			responseObject.error = err;
-			console.error(err);
-		}else{
-			responseObject.saved = true;
-		}
-		res.send(responseObject);
-	});
+// Helper functions to check user privileges
+var isDeveloper = function(req){
+	var type = req.session.type || "";
+	var matches = type.match(/developer/);
+	return !(_.isNull(matches) || _.isUndefined(matches));
+};
+var isAdmin = function(req){
+	var type = req.session.type || "";
+	var matches = type.match(/(admin|developer)/);
+	return !(_.isNull(matches) || _.isUndefined(matches));
+};
+var isEmployee = function(req){
+	var type = req.session.type || "";
+	var matches = type.match(/(employee|admin|developer)/);
+	return !(_.isNull(matches) || _.isUndefined(matches));
 };
 
 /**
@@ -41,7 +24,6 @@ exports.create = function(req, res){
  */
 exports.exists = function(req, res){
 	//TODO: validate req.params
-	
 	var username = req.params.username;
 	
 	// Default response template
@@ -86,8 +68,8 @@ exports.getAll = function(req, res){
 				// Filter the attributes returned
 				var obj = {
 						username : user.username,
-						type : user.type || "default",
-						name : user.name || ""
+						type : user.type,
+						name : user.name
 				};
 				return obj;
 			});
@@ -120,45 +102,6 @@ exports.isLoggedIn = function(req, res){
 	}finally{
 		res.send(responseObject);
 	}
-};
-
-/**
- * PUT - 
- */
-exports.update = function(req, res){
-	//TODO: validate req.body
-	
-	var body = req.body;
-	
-	// Default response template
-	var responseObject = {
-		error : null,
-		updated : false
-	};
-	
-	var query = {
-		username : body.username
-	};
-	var update = {
-		type : body.type || "default",
-		name : body.name || ""
-	};
-	User.findOneAndUpdate(query, update, function(err, user){
-		if(err){
-			responseObject.error = err;
-			console.error(err);
-		}else{
-			responseObject.updated = true;
-		}
-		res.send(responseObject);
-	});
-};
-
-/**
- * DELETE - 
- */
-exports.delete = function(req, res){
-	res.send("deleting a user");
 };
 
 /**
@@ -242,4 +185,205 @@ exports.logout = function(req, res){
 	}finally{
 		res.send(responseObject);
 	}
+};
+
+/**
+ * POST - attempt user registration
+ */
+exports.register = function(req, res){
+	// Default response template
+	var responseObject = {
+		error : null,
+		successful : false,
+		message : null
+	};
+	
+	//TODO: validate req.body
+	var body = req.body || {};
+	
+	// Generate a confirmation hash
+	crypto.randomBytes(24, function(err, buf){
+		if(err){
+			responseObject.message = "Error generating confirmation id";
+			responseObject.error = err;
+			console.error(err);
+			console.error(responseObject.message);
+			res.send(responseObject);
+			return;
+		}
+		
+		// Get the confirmation id from the buffer
+		var hash = buf.toString('hex');
+		
+		// Create instance of a User
+		var currentUser = new User({
+			username : body.username,
+			password : body.password,
+			name : body.name || "",
+			confirmation : hash
+		});
+		
+		// Save it
+		currentUser.save(function(err, savedObj){
+			if(err){
+				responseObject.error = err;
+				responseObject.message = err.message;
+				console.error(err);
+			}else{
+				responseObject.successful = true;
+			}
+			res.send(responseObject);
+		});
+	});
+};
+
+/**
+ * POST - attempt user registration
+ */
+exports.confirmation = function(req, res){
+	var params = req.params || {};
+	var id = params.id || "";
+	
+	var message = "";
+	
+	// Generate a query
+	var query = {
+		confirmation : id
+	};
+	
+	// Search for a single user based on confirmation id
+	User.findOne(query, function(err, user){
+		if(err){
+			console.error(err);
+			res.send(err);
+		}else if(user && user.isConfirmed===true){
+			// Users can only be confirmed if they haven't yet been confirmed
+			message = "ERROR: User already confirmed";
+			console.error(message);
+			res.send(message);
+		}else if(user && user.isConfirmed===false){
+			// Mark user as confirmed
+			var update = {
+				confirmation : null,
+				isConfirmed : true
+			};
+			User.findOneAndUpdate(query, update, function(err, user){
+				if(err){
+					console.error(err);
+					res.send(err);
+				}else{
+					message = "Successfully confirmed email address: "+user.username;
+					console.log(message);
+					res.send(message);
+				}
+			});
+		}else{
+			message = "ERROR: invalid confirmation id";
+			res.send(message);
+		}
+	});
+};
+
+/**
+ * POST - approve a user (creates a new entry if one doesn't exist)
+ */
+exports.approveUser = function(req, res){
+	// Default response template
+	var responseObject = {
+		error : null,
+		approved : false,
+		message : null
+	};
+	
+	// Verify admin status
+	if(!isAdmin(req)){
+		responseObject.message = "Not authorized to approve users"
+		res.send(responseObject);
+		return;
+	}
+	
+	// Get variables from request body
+	var body = req.body || {};
+	var username = body.username || "";
+	var type = body.type || 'employee';
+	
+	// Validate input
+	if(!username){
+		responseObject.message = "req.body.username required to approve users"
+		res.send(responseObject);
+		return;
+	}
+	
+	// Generate query
+	var query = {
+		username : username
+	};
+	
+	// Generate update
+	var update = {
+		type : type
+	};
+	
+	// Check if the user exists
+	User.findOne(query, function(err, user){
+		if(err){
+			responseObject.error = err;
+			responseObject.message = "Error checking if user exists";
+			console.error(responseObject.message);
+		}else if(user){
+			if(user.type === 'pending-approval'){
+				// If user already exists & isn't approved, update its type
+				User.update(query, update, function(err, numAffected){
+					if(err){
+						responseObject.error = err;
+						responseObject.message = err.message;
+						console.error(responseObject.message);
+					}else if(numAffected > 0){
+						responseObject.approved = true;
+					}
+					res.send(responseObject);
+				});
+			}else{
+				// If user already exists & is already approved, throw an error
+				responseObject.message = "Cannot approve a user more than once";
+				responseObject.error = new Error(responseObject.message);
+				console.error(responseObject.message);
+				res.send(responseObject);
+			}
+		}else{
+			// If user doesn't exist, create one with its own confirmation hash
+			crypto.randomBytes(24, function(err, buf){
+				if(err){
+					responseObject.message = "Error generating confirmation id";
+					responseObject.error = err;
+					console.error(err);
+					console.error(responseObject.message);
+					res.send(responseObject);
+					return;
+				}
+				
+				// Get the confirmation id from the buffer
+				var hash = buf.toString('hex');
+				
+				// Create a new user
+				var newUser = new User({
+					username : username,
+					type : type,
+					confirmation : hash
+				});
+				
+				// Save it
+				newUser.save(function(err, savedObj){
+					if(err){
+						responseObject.error = err;
+						responseObject.message = err.message;
+						console.error(responseObject.message);
+					}else{
+						responseObject.approved = true;
+					}
+					res.send(responseObject);
+				});
+			});
+		}
+	});
 };

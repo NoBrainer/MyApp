@@ -1,9 +1,13 @@
 var bcrypt = require('bcrypt');
 var mongoose = require('mongoose');
+var mailUtil = require('../utils/mail-util');
 
 var SALT_WORK_FACTOR = 10;
 var MAX_LOGIN_ATTEMPTS = 5;
 var LOCK_TIME = 5 * 60 * 1000; //5min
+
+var DEFAULT_NAME = "Default Name";
+var DEFAULT_PASSWORD = "password";
 
 // Initialize schema
 var UserSchema = mongoose.Schema({
@@ -16,15 +20,18 @@ var UserSchema = mongoose.Schema({
 	},
 	password : {
 		type : String,
-		required : true
+		required : true,
+		default: DEFAULT_PASSWORD
 	},
-	type : {
+	type : { // pending-approval < employee < admin < developer
 		type : String,
-		required : true
+		required : true,
+		default : 'pending-approval'
 	},
 	name : {
 		type : String,
-		required : true
+		required : true,
+		default : DEFAULT_NAME
 	},
 	loginAttempts : {
 		type : Number,
@@ -33,6 +40,14 @@ var UserSchema = mongoose.Schema({
 	},
 	lockUntil : {
 		type : Number
+	},
+	confirmation : {
+		type : String
+	},
+	isConfirmed : {
+		type : Boolean,
+		required : true,
+		default : false
 	}
 });
 
@@ -53,27 +68,40 @@ var reasons = UserSchema.statics.failedLogin = {
 UserSchema.pre('save', function(next, done){
 	var self = this;
 	
-	// Look through the users
-	mongoose.models['User'].findOne({ username : self.username }, function(err, user){
+	// Generate query for this user
+	var query = { username : self.username };
+	
+	// Look through the users for this user
+	mongoose.models['User'].findOne(query, function(err, user){
 		if(err){
 			done(err);
 		}else if(user){
-			var msg = "username must be unique";
-			self.invalidate('username', msg);
-			done(new Error(msg));
+			if(user.isConfirmed === false){
+				// Make sure the type is preserved so pre-approval isn't lost
+				self.type = user.type;
+				
+				// If user hasn't been confirmed or approved, remove it before saving a new version
+				user.remove();
+				next();
+			}else{
+				// If user has been confirmed, throw an error
+				var msg = "{0} already registered".replace(/\{0\}/, self.username);
+				done(new Error(msg));
+			}
 		}else{
-			// No users found with this username, so proceed
+			// No users found with this username, so proceed to save
 			next();
 		}
 	});
 });
 
-// Hash the password when saving
+// Hash the password when saving TODO: also hash the password when updating
 UserSchema.pre('save', function(next){
 	var self = this;
 	
-	// Only has the password if it has been modified (or is new)
-	if(!self.isModified('password')){
+	// If the password has not been modified and the password is not the default,
+	// then no need to hash the password again
+	if(!self.isModified('password') && self.password !== DEFAULT_PASSWORD){
 		return next();
 	}
 	
@@ -95,6 +123,56 @@ UserSchema.pre('save', function(next){
 		});
 	});
 });
+
+// Send a confirmation email after saving a user
+var sendConfirmationEmail = function(){
+	var self = this;
+	
+	// Do nothing if the user is already confirmed
+	if(self.isConfirmed){
+		return;
+	}
+	
+	var emailAddress = self.username || "";
+	
+	console.log("Sending confirmation email to "+emailAddress);
+	
+	// Create the email content with the confirmation link
+	var id = self.confirmation;
+	var emailContent;
+	if(self.type === 'pending-approval'){
+		// If the user has not been approved yet, send the regular confirmation email
+		emailContent = "Click this link to confirm your registration: " +
+				"<a target='_blank' href='https://localhost:3000/api/users/confirmation/_ID_'>_ID_</a>" +
+				"<br/><br/>" +
+				"You have not yet been approved. Please contact an admin to have them approve you.";
+	}else{
+		// If the user has been pre-approved, send a modified confirmation email
+		emailContent = "You have been approved for an account. Click this link to confirm your registration: " +
+				"<a target='_blank' href='https://localhost:3000/api/users/confirmation/_ID_'>_ID_</a>" +
+				"<br/><br/>" +
+				"Then login with these credentials and reset your password:" +
+				"<br/>" +
+				"<b>Username:</b> _USERNAME_" +
+				"<br/>" +
+				"<b>Password:</b> _PASSWORD_";
+	}
+	
+	// Add the variable information to the email content
+	emailContent = emailContent
+			.replace(/_ID_/g, id)
+			.replace(/_USERNAME_/g, emailAddress)
+			.replace(/_PASSWORD_/g, DEFAULT_PASSWORD);
+	
+	var params = {
+		to : emailAddress,
+		subject : "Confirm your registration",
+		html : emailContent
+	};
+	mailUtil.sendEmail(params);
+};
+UserSchema.post('save', sendConfirmationEmail);
+UserSchema.post('update', sendConfirmationEmail);
 
 // Add a method to the schema for comparing passwords
 UserSchema.methods.comparePassword = function(candidate, done){
