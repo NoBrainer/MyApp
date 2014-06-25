@@ -1,47 +1,13 @@
 var mongoose = require('mongoose');
+var crypto = require('crypto');
 var User = require('../models/user-model');
 
-
-/**
- * POST - Create new user
- */
-exports.create = function(req, res){
-	//TODO: validate req.body
-	
-	var body = req.body;
-	
-	// Default response template
-	var responseObject = {
-		error : null,
-		saved : false
-	};
-	
-	// Create instance of a User
-	var currentUser = new User({
-		username : body.username,
-		password : body.password,
-		type : body.type || "default",
-		name : body.name || ""
-	});
-	
-	// Save it
-	currentUser.save(function(err, savedObj){
-		if(err){
-			responseObject.error = err;
-			console.error(err);
-		}else{
-			responseObject.saved = true;
-		}
-		res.send(responseObject);
-	});
-};
 
 /**
  * GET - Check if a user exists
  */
 exports.exists = function(req, res){
 	//TODO: validate req.params
-	
 	var username = req.params.username;
 	
 	// Default response template
@@ -120,45 +86,6 @@ exports.isLoggedIn = function(req, res){
 	}finally{
 		res.send(responseObject);
 	}
-};
-
-/**
- * PUT - 
- */
-exports.update = function(req, res){
-	//TODO: validate req.body
-	
-	var body = req.body;
-	
-	// Default response template
-	var responseObject = {
-		error : null,
-		updated : false
-	};
-	
-	var query = {
-		username : body.username
-	};
-	var update = {
-		type : body.type || "default",
-		name : body.name || ""
-	};
-	User.findOneAndUpdate(query, update, function(err, user){
-		if(err){
-			responseObject.error = err;
-			console.error(err);
-		}else{
-			responseObject.updated = true;
-		}
-		res.send(responseObject);
-	});
-};
-
-/**
- * DELETE - 
- */
-exports.delete = function(req, res){
-	res.send("deleting a user");
 };
 
 /**
@@ -242,4 +169,94 @@ exports.logout = function(req, res){
 	}finally{
 		res.send(responseObject);
 	}
+};
+
+/**
+ * POST - attempt user registration
+ */
+exports.register = function(req, res){
+	// Default response template
+	var responseObject = {
+		error : null,
+		successful : false,
+		message : null
+	};
+	
+	//TODO: validate req.body
+	var body = req.body || {};
+	
+	// Generate a confirmation hash
+	crypto.randomBytes(24, function(ex, buf){
+		var hash = buf.toString('hex');
+		
+		// Create instance of a User
+		var currentUser = new User({
+			username : body.username,
+			password : body.password,
+			name : body.name || "",
+			confirmation : hash
+		});
+		
+		// Save it
+		currentUser.save(function(err, savedObj){
+			if(err){
+				responseObject.error = err;
+				responseObject.message = err.message;
+				console.error(err);
+			}else{
+				responseObject.successful = true;
+			}
+			res.send(responseObject);
+		});
+	});
+};
+
+/**
+ * POST - attempt user registration
+ */
+exports.confirmation = function(req, res){
+	var params = req.params || {};
+	var id = params.id || "";
+	
+	var message = "";
+	
+	// Search for a single user based on confirmation id
+	var query = {
+		$and : [
+			{ confirmation : id },
+			{ confirmation : {
+				$ne : null
+			}}
+		]
+	};
+	User.findOne(query, function(err, user){
+		if(err){
+			console.error(err);
+			res.send(err);
+		}else if(user && user.type!=='unconfirmed'){
+			// Users can only be confirmed if they haven't yet been confirmed
+			message = "ERROR: User already confirmed";
+			console.error(message);
+			res.send(message);
+		}else if(user && user.type==='unconfirmed'){
+			// Mark user as confirmed
+			var update = {
+				confirmation : null,
+				type : 'confirmed'
+			};
+			User.findOneAndUpdate(query, update, function(err, user){
+				if(err){
+					console.error(err);
+					res.send(err);
+				}else{
+					message = "Successfully confirmed email address: "+user.username;
+					console.log(message);
+					res.send(message);
+				}
+			});
+		}else{
+			message = "ERROR: invalid confirmation id";
+			res.send(message);
+		}
+	});
 };

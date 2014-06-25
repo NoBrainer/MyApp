@@ -1,5 +1,6 @@
 var bcrypt = require('bcrypt');
 var mongoose = require('mongoose');
+var mailUtil = require('../utils/mail-util');
 
 var SALT_WORK_FACTOR = 10;
 var MAX_LOGIN_ATTEMPTS = 5;
@@ -20,7 +21,8 @@ var UserSchema = mongoose.Schema({
 	},
 	type : {
 		type : String,
-		required : true
+		required : true,
+		default : "unconfirmed"
 	},
 	name : {
 		type : String,
@@ -33,6 +35,9 @@ var UserSchema = mongoose.Schema({
 	},
 	lockUntil : {
 		type : Number
+	},
+	confirmation : {
+		type : String
 	}
 });
 
@@ -58,11 +63,17 @@ UserSchema.pre('save', function(next, done){
 		if(err){
 			done(err);
 		}else if(user){
-			var msg = "username must be unique";
-			self.invalidate('username', msg);
-			done(new Error(msg));
+			if(user.type === 'unconfirmed'){
+				// If user hasn't been confirmed, remove it before saving a new version
+				user.remove();
+				next();
+			}else{
+				// If user has been confirmed, throw an error
+				var msg = "{0} already registered".replace(/\{0\}/, self.username);
+				done(new Error(msg));
+			}
 		}else{
-			// No users found with this username, so proceed
+			// No users found with this username, so proceed to save
 			next();
 		}
 	});
@@ -94,6 +105,26 @@ UserSchema.pre('save', function(next){
 			next();
 		});
 	});
+});
+
+// Send a confirmation email after saving a user
+UserSchema.post('save', function(){
+	var self = this;
+	var emailAddress = self.username || "";
+	
+	console.log("Sending confirmation email to "+emailAddress);
+	
+	// Create the email content with the confirmation link
+	var id = self.confirmation;
+	var emailContent = "Click this link to confirm your registration: <a target='_blank' href='https://localhost:3000/api/users/confirmation/{ID}'>{ID}</a>";
+	emailContent = emailContent.replace(/\{ID\}/g, id);
+	
+	var params = {
+		to : emailAddress,
+		subject : "Confirm your registration",
+		html : emailContent
+	};
+	mailUtil.sendEmail(params);
 });
 
 // Add a method to the schema for comparing passwords

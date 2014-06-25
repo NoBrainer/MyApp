@@ -42,25 +42,78 @@
 				<div class="modal-body">
 					<div class="clear">
 						<span class="">Username:</span>
-						<input id="login_username" class="pull-right login_enter" type="text">
+						<input id="login_username" class="pull-right login_enter" type="text" placeholder="Email address">
 					</div>
 					<div class="clear">
 						<span class="">Password:</span>
-						<input id="login_password" class="pull-right login_enter" type="password">
+						<input id="login_password" class="pull-right login_enter" type="password" placeholder="Your password">
 					</div>
 					<div class="clear">
 						<span id="login_error" class="error_text"></span>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<a class="pull-left">
-						Forgot Password?
-					</a>
+					<div class="pull-left">
+						<a id="forgot_password" class="footer_link">
+							Forgot Password?
+						</a>
+						<br/>
+						<a id="register" class="footer_link">
+							Register
+						</a>
+					</div>
 					<button type="button" class="btn btn-default" data-dismiss="modal">
 						Close
 					</button>
 					<button id="login_button" type="button" class="btn btn-primary">
 						Login
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<!-- Register Modal -->
+<script type="text/template" id="register-modal-template">
+	<div class="modal fade" id="register_modal" tabindex="-1" role="dialog" aria-labelledby="register_modal_title" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="register_modal_title">
+						Employee Registration
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="clear">
+						<span class="">Name:</span>
+						<input id="register_name" class="pull-right register_enter" type="text" placeholder="Your name">
+					</div>
+					<div class="clear">
+						<span class="">Username:</span>
+						<input id="register_username" class="pull-right register_enter" type="text" placeholder="Email address">
+					</div>
+					<div class="clear">
+						<span class="">Password:</span>
+						<input id="register_password" class="pull-right register_enter" type="password" placeholder="Your password">
+					</div>
+					<div class="clear">
+						<span class=""></span>
+						<input id="register_password_confirm" class="pull-right register_enter" type="password" placeholder="Confirm password">
+					</div>
+					<div class="clear">
+						<span id="register_error" class="error_text"></span>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						Close
+					</button>
+					<button id="register_button" type="button" class="btn btn-primary">
+						Register
 					</button>
 				</div>
 			</div>

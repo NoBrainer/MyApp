@@ -26,15 +26,15 @@ var serveStatic = require('serve-static');
 var session = require('express-session');
 var staticFavicon = require('static-favicon');
 
+// Global variables
+_ = require('./public/lib/underscore/js/underscore');
+config = require('./config');
+
 // Local imports
 var routes = require('./routes');
 var user = require('./routes/user');
 var fileUtil = require('./utils/file-util');
 var dbUtil = require('./utils/db-util');
-
-// Global variables
-_ = require('./public/lib/underscore/js/underscore');
-config = require('./config');
 
 // Setup the environment
 var app = express();
@@ -96,15 +96,16 @@ var router = express.Router();
 app.use('/api', router);
 router.get('/', routes.index);
 router.route('/users')
-	.post(user.create)
-	.get(user.getAll)
-	.put(user.update)
-	.delete(user.delete);
+	.get(user.getAll);
 router.route('/users/login')
 	.get(user.isLoggedIn)
 	.post(user.login);
 router.route('/users/logout')
 	.post(user.logout);
+router.route('/users/register')
+	.post(user.register);
+router.route('/users/confirmation/:id')
+	.get(user.confirmation);
 router.route('/users/:username')
 	.get(user.exists);
 
