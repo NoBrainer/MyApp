@@ -95,7 +95,7 @@ if(isDevelopment){
 var router = express.Router();
 app.use('/api', router);
 router.get('/', routes.index);
-router.route('/users') //TODO: add auth check
+router.route('/users')
 	.get(user.getAll);
 router.route('/users/login')
 	.get(user.isLoggedIn)
@@ -108,9 +108,7 @@ router.route('/users/confirmation/:id')
 	.get(user.confirmation);
 router.route('/users/approve')
 	.post(user.approveUser);
-//router.route('/users/update') TODO
-//	.post(user.updateUser);
-router.route('/users/:username') //TODO: add auth check
+router.route('/users/:username')
 	.get(user.exists);
 
 // Start the server
