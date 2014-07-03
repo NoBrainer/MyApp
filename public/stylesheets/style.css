@@ -7,6 +7,7 @@ body {
 }
 a {
   color: #333333;
+  display: inline-block;
   text-decoration: underline;
 }
 a:hover,
@@ -30,12 +31,15 @@ a.footer_link {
 .error_text {
   color: #ff0000;
 }
+.success_text {
+  color: #000000;
+}
 #header {
   background-color: #000000;
   color: #ffffff;
   top: 0;
   left: 0;
-  height: 70px;
+  min-height: 70px;
   width: 100%;
   padding-top: 5px;
   padding-bottom: 5px;

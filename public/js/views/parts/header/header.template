@@ -17,7 +17,7 @@
 					</a>
 					<span class="show_on_login" style="display:none;">
 						<span>-</span>
-						<span id="user_name"></span>
+						<a id="user_name" class="header_link" data-toggle="modal" data-target="#settings_modal"></a>
 					</span>
 				</span>
 				<div id="modal_storage"></div>
@@ -114,6 +114,56 @@
 					</button>
 					<button id="register_button" type="button" class="btn btn-primary">
 						Register
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</script>
+
+<!-- Settings Modal -->
+<script type="text/template" id="settings-modal-template">
+	<div class="modal fade" id="settings_modal" tabindex="-1" role="dialog" aria-labelledby="settings_modal_title" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="settings_modal_title">
+						User Settings
+					</h4>
+				</div>
+				<div class="modal-body">
+					<div class="clear">
+						<span class="">Name:</span>
+						<input id="settings_name" class="pull-right settings_enter" type="text" placeholder="Your name">
+					</div>
+					<div class="clear">
+						<span class="">Username:</span>
+						<input id="settings_username" class="pull-right settings_enter" type="text" placeholder="Email address" disabled>
+					</div>
+					<div class="clear">
+						<span class="">Password</span>
+						<input id="settings_password" class="pull-right settings_enter" type="password" placeholder="Enter new password">
+					</div>
+					<div class="clear">
+						<span class=""></span>
+						<input id="settings_password_confirm" class="pull-right settings_enter" type="password" placeholder="Confirm new password">
+					</div>
+					<div class="clear">
+						<span id="settings_error" class="error_text"></span>
+					</div>
+					<div class="clear">
+						<span id="settings_success" class="success_text"></span>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						Close
+					</button>
+					<button id="update_settings_button" type="button" class="btn btn-primary">
+						Update
 					</button>
 				</div>
 			</div>

@@ -108,6 +108,8 @@ router.route('/users/confirmation/:id')
 	.get(user.confirmation);
 router.route('/users/approve')
 	.post(user.approveUser);
+router.route('/users/update')
+	.post(user.updateUser);
 router.route('/users/:username')
 	.get(user.exists);
 

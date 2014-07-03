@@ -24,10 +24,14 @@ app.view.part.Header = Backbone.View.extend({
 		// Render login modal
 		var loginModalTemplate = app.util.TemplateCache.get('#login-modal-template');
 		$('#modal_storage').append(loginModalTemplate({}));
-
+		
 		// Render register modal
 		var registerModalTemplate = app.util.TemplateCache.get('#register-modal-template');
 		$('#modal_storage').append(registerModalTemplate({}));
+		
+		// Render settings modal
+		var settingsModalTemplate = app.util.TemplateCache.get('#settings-modal-template');
+		$('#modal_storage').append(settingsModalTemplate({}));
 		
 		// Initialize handlers
 		return self.initHandlers();
@@ -37,6 +41,18 @@ app.view.part.Header = Backbone.View.extend({
 	 * Initialize handlers
 	 */
 	,initHandlers : function(){
+		var self = this;
+		
+		return self
+				.initModals()		// Initialize modals
+				.initLoginStatus()	// Check if user is already logged in
+		;
+	}
+	
+	/**
+	 * Initialize modal handlers
+	 */
+	,initModals : function(){
 		var self = this;
 		
 		// UI parts for header
@@ -60,8 +76,15 @@ app.view.part.Header = Backbone.View.extend({
 		var $registerError = $('#register_error');
 		var $registerButton = $('#register_button');
 		
-		// Check if user is already logged in
-		self.initLoginStatus();
+		// UI parts for settings modal
+		var $settingsModal = $('#settings_modal');
+		var $settingsName = $('#settings_name');
+		var $settingsUsername = $('#settings_username');
+		var $settingsPassword = $('#settings_password');
+		var $settingsPasswordConfirm = $('#settings_password_confirm');
+		var $settingsError = $('#settings_error');
+		var $settingsSuccess = $('#settings_success');
+		var $updateSettingsButton = $('#update_settings_button');
 		
 		// Callback for attempting to login
 		var attemptLogin = function(e){
@@ -97,7 +120,7 @@ app.view.part.Header = Backbone.View.extend({
 				if(resp.successful){
 					// Hide the modal and update login state
 					$loginModal.modal('hide');
-					self.updateLogin(resp.type, resp.username);
+					self.updateLogin(resp);
 				}else if(resp.message){
 					$loginError.text(resp.message);
 				}else{
@@ -115,7 +138,7 @@ app.view.part.Header = Backbone.View.extend({
 		};
 		
 		// Trigger login attempt from clicking the login button or pressing enter
-		$loginButton.on('click', attemptLogin);
+		$loginButton.on('click', _.bind(attemptLogin, self));
 		$('.login_enter').on('keyup', function(e){
 			if(e.keyCode === 13){
 				return attemptLogin();
@@ -220,10 +243,100 @@ app.view.part.Header = Backbone.View.extend({
 		};
 		
 		// Trigger register attempt from clicking the register button or pressing enter
-		$registerButton.on('click', attemptRegister)
+		$registerButton.on('click', _.bind(attemptRegister, self))
 		$('.register_enter').on('keyup', function(e){
 			if(e.keyCode === 13){
 				return attemptRegister();
+			}
+		});
+		
+		// Callback for attempting to update settings
+		var attemptUpdateSettings = function(e){
+			// Clear error/success messages
+			$settingsError.text("");
+			$settingsSuccess.text("");
+			
+			// Get name & password from input
+			var name = $settingsName.val().trim();
+			var password = $settingsPassword.val() || "";
+			var passwordConfirm = $settingsPasswordConfirm.val() || "";
+			
+			// Validate input
+			if(!name || name.trim() === ""){
+				$settingsError.text("Please enter your name");
+				return false;
+			}
+			
+			// Validate password update
+			var updatingPassword = !_.isEmpty(password) || !_.isEmpty(passwordConfirm);
+			if(updatingPassword && password !== passwordConfirm){
+				$settingsError.text("Passwords don't match");
+				return false;
+			}
+			
+			// Build updated data
+			var updatedData = {
+				name : name
+			};
+			if(updatingPassword){
+				updatedData.password = password;
+			}
+			
+			// Build ajax options
+			var options = {
+				type : 'POST',
+				url : "https://localhost:3000/api/users/update", //TODO: build base url dynamically
+				cache : false,
+				contentType : 'application/json',
+				dataType : 'json',
+				data : JSON.stringify(updatedData)
+			};
+			options.success = function(resp){
+				if(resp.successful){
+					//TODO: make a date util
+					// Display a success message
+					var now = new Date();
+					var hours = now.getHours();
+					if(hours < 10){
+						hours = "0"+hours;
+					}
+					var minutes = now.getMinutes();
+					if(minutes < 10){
+						minutes = "0"+minutes;
+					}
+					var seconds = now.getSeconds();
+					if(seconds < 10){
+						seconds = "0"+seconds;
+					}
+					var time = "hour:min:sec"
+							.replace("hour", hours)
+							.replace("min", minutes)
+							.replace("sec", seconds);
+					var msg = "Updated [_TIME_]".replace(/_TIME_/, time);
+					$settingsSuccess.text(msg);
+				}else if(resp.message){
+					$settingsError.text(resp.message);
+				}else if(resp.error && typeof resp.error === "string"){
+					$settingsError.text(resp.error);
+				}else{
+					$settingsError.text("Unexpected response from server");
+				}
+			};
+			options.error = function(resp){
+				$settingsError.text("Failure to communicate with site. Try again later.");
+			};
+			
+			// POST registration to the server
+			$.ajax(options);
+			
+			return false;
+		};
+		
+		// Trigger settings update attempt from clicking the update button or pressing enter
+		$updateSettingsButton.on('click', _.bind(attemptUpdateSettings, self));
+		$('.settings_enter').on('keyup', function(e){
+			if(e.keyCode === 13){
+				return attemptUpdateSettings();
 			}
 		});
 		
@@ -245,10 +358,11 @@ app.view.part.Header = Backbone.View.extend({
 		};
 		options.success = function(resp){
 			if(resp.isLoggedIn){
-				//TODO: something
-				self.updateLogin(resp.type, resp.username);
+				// Update the login status
+				self.updateLogin(resp);
 			}else{
-				// Do nothing
+				// Logout
+				self.updateLogout();
 			}
 		};
 		options.error = function(resp){
@@ -264,21 +378,35 @@ app.view.part.Header = Backbone.View.extend({
 	/**
 	 * After successful login, setup UI to be in a logged in state
 	 */
-	,updateLogin : function(type, username){
+	,updateLogin : function(resp){
 		var self = this;
+		
+		// Extract data from the response
+		resp = resp || {};
+		var name = resp.name || "";
+		var username = resp.username || "";
+		var type = resp.type || "";
 		
 		var $showOnLogout = $('.show_on_logout');
 		var $showOnLogin = $('.show_on_login');
 		var $userName = $('#user_name');
+		var $settingsName = $('#settings_name');
+		var $settingsUsername = $('#settings_username');
 		
 		// Update header
 		$showOnLogout.hide();
 		$showOnLogin.show();
 		$userName.text(username || "???");
 		
-		if(type==="admin"){
+		// Update settings modal
+		$settingsName.val(name || "");
+		$settingsUsername.val(username || "");
+		
+		if(type==='developer'){
+			//TODO: developer-specific things
+		}else if(type==='admin'){
 			//TODO: admin-specific things
-		}else if(type==="employee"){
+		}else if(type==='employee'){
 			//TODO: employee-specific things
 		}else{
 			self.updateLogout();

@@ -5,6 +5,7 @@
 @body_color: #333333;
 @link_color: @body_color;
 @error_color: red;
+@success_color: #000000;
 
 /* page scaffold */
 @side_padding: 20px;
@@ -18,6 +19,7 @@ body {
 
 a {
 	color: @link_color;
+	display: inline-block;
 	text-decoration: underline;
 }
 a:hover,
@@ -42,13 +44,16 @@ a.footer_link {
 .error_text {
 	color: @error_color;
 }
+.success_text {
+	color: @success_color;
+}
 
 #header {
 	background-color: @header_background;
 	color: @header_color;
 	top: 0;
 	left: 0;
-	height: @header_height;
+	min-height: @header_height;
 	width: 100%;
 	padding-top: 5px;
 	padding-bottom: 5px;

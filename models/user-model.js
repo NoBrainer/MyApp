@@ -95,7 +95,7 @@ UserSchema.pre('save', function(next, done){
 	});
 });
 
-// Hash the password when saving TODO: also hash the password when updating
+// Hash the password when saving
 UserSchema.pre('save', function(next){
 	var self = this;
 	
@@ -123,6 +123,42 @@ UserSchema.pre('save', function(next){
 		});
 	});
 });
+
+// Update with a hook to encrypt the password beforehand
+UserSchema.methods.updateWithPasswordEncryption = function(query, updates, done){
+	var self = this;
+	
+	// Setup the next function to be updating if there is no error
+	var next = function(err){
+		if(err){
+			return done(err, 0);
+		}
+		mongoose.models['User'].update(query, updates, done);
+	};
+	
+	// Hash the password if necessary
+	if(updates.password){
+		// Generate a salt
+		bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt){
+			if(err){
+				return next(err);
+			}
+			
+			// Hash the password using the new salt
+			bcrypt.hash(updates.password, salt, function(err, hash){
+				if(err){
+					return next(err);
+				}
+				
+				// Override the password with the new hashed one
+				updates.password = hash;
+				next();
+			});
+		});
+	}else{
+		next();
+	}
+};
 
 // Send a confirmation email after saving a user
 var sendConfirmationEmail = function(){

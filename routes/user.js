@@ -88,14 +88,16 @@ exports.isLoggedIn = function(req, res){
 		isLoggedIn : false,
 		message : null,
 		type : null,
-		username : null
+		username : null,
+		name : null
 	};
 	
 	try{
 		// Get username and user type from the session
-		responseObject.username = req.session.name;
+		responseObject.username = req.session.username;
+		responseObject.name = req.session.name;
 		responseObject.type = req.session.type;
-		responseObject.isLoggedIn = (responseObject.username && responseObject.type);
+		responseObject.isLoggedIn = (responseObject.username && responseObject.name && responseObject.type);
 	}catch(e){
 		responseObject.error = e;
 		responseObject.message = "Error checking login status";
@@ -119,7 +121,8 @@ exports.login = function(req, res){
 		successful : false,
 		message : null,
 		type : null,
-		username : username
+		username : username,
+		name : null
 	};
 	
 	// Attempt to authenticate user
@@ -135,9 +138,11 @@ exports.login = function(req, res){
 		if(user){
 			responseObject.successful = true;
 			responseObject.type = user.type;
+			responseObject.name = user.name;
 			
-			// Track username and user type in the session
-			req.session.name = username;
+			// Track username, name, & type in the session
+			req.session.username = username;
+			req.session.name = user.name;
 			req.session.type = user.type;
 			
 			res.send(responseObject);
@@ -176,6 +181,7 @@ exports.logout = function(req, res){
 	
 	try{
 		// Logout the session
+		req.session.username = undefined;
 		req.session.name = undefined;
 		req.session.type = undefined;
 		responseObject.successful = true;
@@ -383,6 +389,78 @@ exports.approveUser = function(req, res){
 					}
 					res.send(responseObject);
 				});
+			});
+		}
+	});
+};
+
+/**
+ * POST - update the user
+ */
+exports.updateUser = function(req, res){
+	// Default response template
+	var responseObject = {
+		error : null,
+		successful : false,
+		message : null
+	};
+	
+	// Get variables from request body
+	var body = req.body || {};
+	body.username = body.username || "";
+	body.name = body.name || "";
+	body.password = body.password || "";
+	body.type = body.type || "";
+	
+	// Only admins are allowed to update type or username
+	if(!isAdmin(req)){
+		body.type = "";
+		body.username = "";
+	}
+	
+	// Map request body to mongo update object
+	var updates = {};
+	updates = _.reduce(body, function(memo, value, key){
+		if(!value || !key || _.isEmpty(value) || _.isEmpty(key)){
+			// Ignore invalid/empty pieces
+			return memo;
+		}else{
+			// Add valid pieces to the memo
+			memo[key] = value;
+			return memo;
+		}
+	}, updates);
+	
+	// Build the query
+	var query = {
+		username : req.session.username || ""
+	};
+	
+	// Find the user to update
+	User.findOne(query, function(err, user){
+		if(err){
+			responseObject.error = err;
+			responseObject.message = err.message;
+			console.error(responseObject.message);
+			res.send(responseObject);
+			return;
+		}else if(user){
+			// Update the user
+			user.updateWithPasswordEncryption(query, updates, function(err, savedObj){
+				if(err){
+					responseObject.error = err;
+					responseObject.message = err.message;
+					console.error(responseObject.message);
+				}else{
+					responseObject.successful = true;
+					_.each(updates, function(value, key){
+						// Update each session variable
+						if(key !== "password"){
+							req.session[key] = value;
+						}
+					});
+				}
+				res.send(responseObject);
 			});
 		}
 	});
