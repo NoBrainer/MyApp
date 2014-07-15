@@ -8,6 +8,9 @@ app.Router = Backbone.Router.extend({
 		this.route(/^home/, "goHome");
 		this.route(/^employee/, "goEmployee");
 		this.route(/^admin/, "goAdmin");
+		this.route(/^resetPassword\/(.+)/, "goResetPassword");
+		
+		app.router = this;
 	}
 	
 	/**
@@ -46,6 +49,37 @@ app.Router = Backbone.Router.extend({
 		this.setupHeader();
 		var page = new app.view.page.Admin();
 		page.render();
+	}
+	
+	/**
+	 * Reset Password page
+	 */
+	,goResetPassword : function(id){
+		var self = this;
+		console.log("password reset page");
+		self.setupHeader();
+		
+		// Check if we are setup to reset the password
+		var ajaxOpts = {
+			type : 'GET',
+			url : "https://localhost:3000/api/users/resetPassword/",
+			success : function(resp){
+				if(resp.isAble === true){
+					// Render the password reset page
+					var params = {
+							mode : 'reset-password',
+							username : resp.username,
+							id : id
+					};
+					var page = new app.view.page.Home(params);
+					page.render();
+				}else{
+					// Instead, go to the default page
+					self.goDefault();
+				}
+			}
+		};
+		$.ajax(ajaxOpts);
 	}
 	
 	/**

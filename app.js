@@ -110,6 +110,11 @@ router.route('/users/approve')
 	.post(user.approveUser);
 router.route('/users/update')
 	.post(user.updateUser);
+router.route('/users/startPasswordReset')
+	.post(user.startPasswordReset);
+router.route('/users/resetPassword')
+	.get(user.isAbleToResetPassword)
+	.post(user.resetPassword);
 router.route('/users/:username')
 	.get(user.exists);
 

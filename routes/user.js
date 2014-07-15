@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var crypto = require('crypto');
 var User = require('../models/user-model');
+var mailUtil = require('../utils/mail-util');
 
 // Helper functions to check user privileges
 var isDeveloper = function(req){
@@ -144,6 +145,8 @@ exports.login = function(req, res){
 			req.session.username = username;
 			req.session.name = user.name;
 			req.session.type = user.type;
+			req.session.passwordResetId = undefined;
+			req.session.passwordResetUsername = undefined;
 			
 			res.send(responseObject);
 			return;
@@ -462,6 +465,172 @@ exports.updateUser = function(req, res){
 				}
 				res.send(responseObject);
 			});
+		}
+	});
+};
+
+/**
+ * POST - Start a password reset
+ */
+exports.startPasswordReset = function(req, res){
+	var body = req.body || {};
+	var username = body.username || "";
+	
+	// Default response template
+	var responseObject = {
+		error : null,
+		sentToUser : false,
+		message : null
+	};
+	
+	// Generate a query
+	var query = {
+		username : username
+	};
+	
+	// Search for a single user based on confirmation id
+	User.findOne(query, function(err, user){
+		if(err){
+			console.error(err);
+			responseObject.error = err;
+			responseObject.message = err.message;
+			res.send(responseObject);
+		}else if(user){
+			// User is found, so generate a password reset id
+			crypto.randomBytes(24, function(err, buf){
+				if(err){
+					responseObject.message = "Error generating password reset id";
+					responseObject.error = err;
+					console.error(err);
+					console.error(responseObject.message);
+					res.send(responseObject);
+					return;
+				}
+				
+				// Get the password reset id from the buffer
+				var id = buf.toString('hex');
+				
+				// Save the id for this session
+				req.session.passwordResetId = id;
+				req.session.passwordResetUsername = user.username;
+				
+				// Then send the password reset email
+				user.sendPasswordResetEmail(id, function(err, successful){
+					if(err){
+						console.error(err);
+						responseObject.error = err;
+						responseObject.message = err.message;
+					}else{
+						responseObject.sentToUser = true;
+					}
+					res.send(responseObject);
+				});
+			});
+		}else{
+			// User is not found
+			responseObject.message = "ERROR: _username_ not found".replace("_username_", username);
+			responseObject.error = new Error(responseObject.message);
+			console.error(responseObject.message);
+			res.send(responseObject);
+		}
+	});
+};
+
+/**
+ * GET - Checks if the user can reset the password
+ */
+exports.isAbleToResetPassword = function(req, res){
+	// Default response template
+	var responseObject = {
+		error : null,
+		isAble : false,
+		message : null,
+		username : req.session.passwordResetUsername
+	};
+	
+	try{
+		// req.session.passwordResetId must be set to be able to reset the password
+		responseObject.isAble = !_.isUndefined(req.session.passwordResetId || req.session.passwordResetUsername);
+	}catch(e){
+		responseObject.error = e;
+		responseObject.message = e.message;
+	}
+	res.send(responseObject);
+};
+
+/**
+ * POST - Reset the password
+ */
+exports.resetPassword = function(req, res){
+	var body = req.body || {};
+	var newPassword = body.password || "";
+	var id = body.id || "";
+	var username = req.session.passwordResetUsername;
+	
+	// Default response template
+	var responseObject = {
+		error : null,
+		successful : false,
+		message : null
+	};
+	
+	// Validate input
+	if(!username || _.isEmpty(username)){
+		responseObject.message = "Invalid username while confirming password reset";
+		responseObject.error = new Error(responseObject.message);
+		console.error(responseObject.message);
+		res.send(responseObject);
+		return;
+	}else if(!newPassword || _.isEmpty(newPassword)){
+		responseObject.message = "Invalid password provided while confirming password reset";
+		responseObject.error = new Error(responseObject.message);
+		console.error(responseObject.message);
+		res.send(responseObject);
+		return;
+	}else if(!id || _.isEmpty(id) || id !== req.session.passwordResetId){
+		responseObject.message = "Invalid id provided while confirming password reset";
+		responseObject.error = new Error(responseObject.message);
+		console.error(responseObject.message);
+		res.send(responseObject);
+		return;
+	}
+	
+	// Generate query and updates
+	var query = {
+		username : username
+	};
+	var updates = {
+		password : newPassword
+	};
+	
+	// Search for the user for a password reset
+	User.findOne(query, function(err, user){
+		if(err){
+			responseObject.error = err;
+			responseObject.message = err.message;
+			console.error(err);
+			res.send(responseObject);
+		}else if(user){
+			// User is found, so try to update the password
+			user.updateWithPasswordEncryption(query, updates, function(err){
+				if(err){
+					responseObject.error = err;
+					responseObject.message = err.message;
+					console.error(responseObject.message);
+				}else{
+					// Succeeded
+					responseObject.successful = true;
+				}
+				// Update the session variables and send the response
+				req.session.passwordResetId = undefined;
+				req.session.passwordResetUsername = undefined;
+				res.send(responseObject);
+			});
+		}else{
+			responseObject.message = "Cannot reset password for user: [_USER_]".replace("_USER_", username);
+			responseObject.error = new Error(responseObject.message);
+			console.error(responseObject.message);
+			res.send(responseObject);
 		}
 	});
 };

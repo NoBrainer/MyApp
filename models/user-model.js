@@ -303,5 +303,34 @@ UserSchema.statics.getAuthenticated = function(username, password, done){
 	});
 };
 
+// Try to send a password reset email
+UserSchema.methods.sendPasswordResetEmail = function(id, done){
+	try{
+		// Generate the email html
+		var emailContent = 
+			"Click this " +
+			"<a target='_blank' href='https://localhost:3000/#resetPassword/_ID_'>link</a> " +
+			"to reset your password." +
+			"<br/><br/>" +
+			"If you did not try to reset your password, then please delete this email.";
+		
+		// Add the variable information to the email content
+		emailContent = emailContent
+				.replace(/_ID_/g, id);
+		
+		// Build the params and send the email
+		var params = {
+			to : this.username,
+			subject : "Password Reset",
+			html : emailContent
+		};
+		console.log("Sending password reset email to "+this.username);
+		mailUtil.sendEmail(params);
+		return done();
+	}catch(e){
+		return done(e);
+	}
+};
+
 // Compile and export the model
 module.exports = mongoose.model('User', UserSchema);
