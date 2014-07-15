@@ -33,9 +33,9 @@ app.view.part.Header = Backbone.View.extend({
 		var settingsModalTemplate = app.util.TemplateCache.get('#settings-modal-template');
 		$('#modal_storage').append(settingsModalTemplate({}));
 		
-		// Render password reset modal
-		var passwordResetModalTemplate = app.util.TemplateCache.get('#password-reset-modal-template');
-		$('#modal_storage').append(passwordResetModalTemplate({}));
+		// Render forgot password modal
+		var forgotPasswordModalTemplate = app.util.TemplateCache.get('#forgot-password-modal-template');
+		$('#modal_storage').append(forgotPasswordModalTemplate({}));
 		
 		// Initialize handlers
 		return self.initHandlers();
@@ -90,12 +90,12 @@ app.view.part.Header = Backbone.View.extend({
 		var $settingsSuccess = $('#settings_success');
 		var $updateSettingsButton = $('#update_settings_button');
 		
-		// UI parts for password reset modal
-		var $passwordResetModal = $('#password_reset_modal');
-		var $passwordResetUsername = $('#password_reset_username');
-		var $passwordResetError = $('#password_reset_error');
-		var $passwordResetSuccess = $('#password_reset_success');
-		var $passwordResetButton = $('#password_reset_button');
+		// UI parts for forgot password modal
+		var $forgotPasswordModal = $('#forgot_password_modal');
+		var $forgotPasswordUsername = $('#forgot_password_username');
+		var $forgotPasswordError = $('#forgot_password_error');
+		var $forgotPasswordSuccess = $('#forgot_password_success');
+		var $forgotPasswordButton = $('#forgot_password_button');
 		
 		// Callback for attempting to login
 		var attemptLogin = function(e){
@@ -181,7 +181,7 @@ app.view.part.Header = Backbone.View.extend({
 		$forgotPassword.on('click', function(e){
 			// Hide the login modal & show the password reset modal
 			$loginModal.modal('hide');
-			$passwordResetModal.modal('show');
+			$forgotPasswordModal.modal('show');
 		});
 		
 		// Reset register modal on hide
@@ -360,24 +360,25 @@ app.view.part.Header = Backbone.View.extend({
 		});
 		
 		// Reset password reset modal on hide
-		$passwordResetModal.on('hide.bs.modal', function(e){
+		$forgotPasswordModal.on('hide.bs.modal', function(e){
 			// Reset fields
-			$passwordResetUsername.val("");
-			$passwordResetError.text("");
-			$passwordResetSuccess.text("");
+			$forgotPasswordUsername.val("");
+			$forgotPasswordError.text("");
+			$forgotPasswordSuccess.text("");
 		});
 		
 		// Callback for attempting to reset the password
-		var attemptPasswordReset = function(){
-			// Clear error message
-			$passwordResetError.text("");
+		var attemptForgottenPasswordReset = function(){
+			// Clear messages
+			$forgotPasswordError.text("");
+			$forgotPasswordSuccess.text("");
 			
 			// Get username from input
-			var username = $passwordResetUsername.val().trim();
+			var username = $forgotPasswordUsername.val().trim();
 			
 			// Validate input
 			if(!username.match(/^[\w\.\-\+]+[@][\w\.\-\+]+\.[\w\.\-\+]+$/)){
-				$passwordResetError.text("Please enter a valid email address for your username");
+				$forgotPasswordError.text("Please enter a valid email address for your username");
 				return false;
 			}
 			
@@ -395,19 +396,20 @@ app.view.part.Header = Backbone.View.extend({
 			options.success = function(resp){
 				if(resp.sentToUser){
 					// Show a message for the user
-					var successMessage = "Email sent!<br/>" +
+					var successMessage = "<br/>" +
+							"Email sent!<br/><br/>" +
 							"IMPORTANT: You must keep this browser tab open in order to reset your password.";
-					$passwordResetSuccess.html(successMessage);
+					$forgotPasswordSuccess.html(successMessage);
 				}else if(resp.message){
-					$passwordResetError.text(resp.message);
+					$forgotPasswordError.text(resp.message);
 				}else if(resp.error && typeof resp.error === "string"){
-					$passwordResetError.text(resp.error);
+					$forgotPasswordError.text(resp.error);
 				}else{
-					$passwordResetError.text("Unexpected response from server");
+					$forgotPasswordError.text("Unexpected response from server");
 				}
 			};
 			options.error = function(resp){
-				$passwordResetError.text("Failure to communicate with site. Try again later.");
+				$forgotPasswordError.text("Failure to communicate with site. Try again later.");
 			};
 			
 			// POST password reset to the server
@@ -417,10 +419,10 @@ app.view.part.Header = Backbone.View.extend({
 		};
 		
 		// Trigger password reset attempt from clicking the button or pressing enter
-		$passwordResetButton.on('click', _.bind(attemptPasswordReset, self));
-		$('.password_reset_enter').on('keyup', function(e){
+		$forgotPasswordButton.on('click', _.bind(attemptForgottenPasswordReset, self));
+		$('.forgot_password_enter').on('keyup', function(e){
 			if(e.keyCode === 13){
-				return attemptPasswordReset();
+				return attemptForgottenPasswordReset();
 			}
 		});
 		
@@ -488,10 +490,13 @@ app.view.part.Header = Backbone.View.extend({
 		
 		if(type==='developer'){
 			//TODO: developer-specific things
+			self.goHome();
 		}else if(type==='admin'){
 			//TODO: admin-specific things
+			self.goHome();
 		}else if(type==='employee'){
 			//TODO: employee-specific things
+			self.goHome();
 		}else{
 			self.updateLogout();
 		}
@@ -522,10 +527,9 @@ app.view.part.Header = Backbone.View.extend({
 				$showOnLogout.show();
 				$showOnLogin.hide();
 				$userName.text("");
-				app.router.navigate("#home", {
-					trigger : true,
-					replace : false
-				});
+				if(!window.location.hash.match(/resetPassword/)){
+					self.goHome();
+				}
 			}else if(resp.message){
 				alert(resp.message);
 			}else{
@@ -540,5 +544,15 @@ app.view.part.Header = Backbone.View.extend({
 		$.ajax(options);
 		
 		return self;
+	}
+	
+	/**
+	 * Go to the homepage
+	 */
+	,goHome : function(){
+		app.router.navigate("#home", {
+			trigger : true,
+			replace : false
+		});
 	}
 });

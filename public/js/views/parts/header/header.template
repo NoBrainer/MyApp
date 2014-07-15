@@ -171,36 +171,36 @@
 	</div>
 </script>
 
-<!-- Password Reset Modal -->
-<script type="text/template" id="password-reset-modal-template">
-	<div class="modal fade" id="password_reset_modal" tabindex="-1" role="dialog" aria-labelledby="password_reset_modal_title" aria-hidden="true">
+<!-- Forgot Password Modal -->
+<script type="text/template" id="forgot-password-modal-template">
+	<div class="modal fade" id="forgot_password_modal" tabindex="-1" role="dialog" aria-labelledby="forgot_password_modal_title" aria-hidden="true">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 						&times;
 					</button>
-					<h4 class="modal-title" id="password_reset_modal_title">
+					<h4 class="modal-title" id="forgot_password_modal_title">
 						Password Reset
 					</h4>
 				</div>
 				<div class="modal-body">
 					<div class="clear">
 						<span class="">Username:</span>
-						<input id="password_reset_username" class="pull-right password_reset_enter" type="text" placeholder="Email address">
+						<input id="forgot_password_username" class="pull-right forgot_password_enter" type="text" placeholder="Email address">
 					</div>
 					<div class="clear">
-						<span id="password_reset_error" class="error_text"></span>
+						<span id="forgot_password_error" class="error_text"></span>
 					</div>
 					<div class="clear">
-						<span id="password_reset_success" class="success_text"></span>
+						<span id="forgot_password_success" class="success_text"></span>
 					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">
 						Close
 					</button>
-					<button id="password_reset_button" type="button" class="btn btn-primary">
+					<button id="forgot_password_button" type="button" class="btn btn-primary">
 						Send Email
 					</button>
 				</div>
