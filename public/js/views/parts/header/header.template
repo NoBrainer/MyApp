@@ -124,7 +124,7 @@
 <!-- Settings Modal -->
 <script type="text/template" id="settings-modal-template">
 	<div class="modal fade" id="settings_modal" tabindex="-1" role="dialog" aria-labelledby="settings_modal_title" aria-hidden="true">
-		<div class="modal-dialog modal-sm">
+		<div class="modal-dialog modal_med">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -144,7 +144,11 @@
 						<input id="settings_username" class="pull-right settings_enter" type="text" placeholder="Email address" disabled>
 					</div>
 					<div class="clear">
-						<span class="">Password</span>
+						<span class="">Old Password:</span>
+						<input id="settings_old_password" class="pull-right settings_enter" type="password" placeholder="Enter old password">
+					</div>
+					<div class="clear">
+						<span class="">New Password:</span>
 						<input id="settings_password" class="pull-right settings_enter" type="password" placeholder="Enter new password">
 					</div>
 					<div class="clear">

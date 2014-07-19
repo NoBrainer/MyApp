@@ -412,8 +412,13 @@ exports.updateUser = function(req, res){
 	var body = req.body || {};
 	body.username = body.username || "";
 	body.name = body.name || "";
+	body.oldPassword = body.oldPassword || "";
 	body.password = body.password || "";
 	body.type = body.type || "";
+	
+	// Keep track of old password but remove it from the request body
+	var oldPassword = body.oldPassword;
+	body.oldPassword = undefined;
 	
 	// Only admins are allowed to update type or username
 	if(!isAdmin(req)){
@@ -448,23 +453,53 @@ exports.updateUser = function(req, res){
 			res.send(responseObject);
 			return;
 		}else if(user){
-			// Update the user
-			user.updateWithPasswordEncryption(query, updates, function(err, savedObj){
-				if(err){
-					responseObject.error = err;
-					responseObject.message = err.message;
-					console.error(responseObject.message);
-				}else{
-					responseObject.successful = true;
-					_.each(updates, function(value, key){
-						// Update each session variable
-						if(key !== "password"){
-							req.session[key] = value;
-						}
-					});
-				}
-				res.send(responseObject);
-			});
+			// Create a callback for the updating
+			var triggerUpdate = function(){
+				// Update the user
+				user.updateWithPasswordEncryption(query, updates, function(err, savedObj){
+					if(err){
+						responseObject.error = err;
+						responseObject.message = err.message;
+						console.error(responseObject.message);
+					}else{
+						responseObject.successful = true;
+						_.each(updates, function(value, key){
+							// Update each session variable
+							if(key !== "password"){
+								req.session[key] = value;
+							}
+						});
+					}
+					res.send(responseObject);
+				});
+			};
+			
+			// Decide if we are doing a password update
+			if(_.isEmpty(updates.password) && _.isEmpty(oldPassword)){
+				// Not doing a password update, so just update
+				triggerUpdate();
+			}else{
+				// We are doing a password update, so check the password before updating
+				user.comparePassword(oldPassword, function(err, isMatch){
+					if(err){
+						responseObject.error = err;
+						responseObject.message = err.message;
+						console.error(responseObject.message);
+						res.send(responseObject);
+						return;
+					}
+					if(isMatch){
+						// Old password matches, so update
+						triggerUpdate();
+					}else{
+						// Old password doesn't match
+						responseObject.message = "Old password is incorrect";
+						responseObject.error = new Error(responseObject.message);;
+						console.error(responseObject.message);
+						res.send(responseObject);
+					}
+				});
+			}
 		}
 	});
 };

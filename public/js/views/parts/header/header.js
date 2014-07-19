@@ -84,6 +84,7 @@ app.view.part.Header = Backbone.View.extend({
 		var $settingsModal = $('#settings_modal');
 		var $settingsName = $('#settings_name');
 		var $settingsUsername = $('#settings_username');
+		var $settingsOldPassword = $('#settings_old_password');
 		var $settingsPassword = $('#settings_password');
 		var $settingsPasswordConfirm = $('#settings_password_confirm');
 		var $settingsError = $('#settings_error');
@@ -277,6 +278,7 @@ app.view.part.Header = Backbone.View.extend({
 			
 			// Get name & password from input
 			var name = $settingsName.val().trim();
+			var oldPassword = $settingsOldPassword.val() || "";
 			var password = $settingsPassword.val() || "";
 			var passwordConfirm = $settingsPasswordConfirm.val() || "";
 			
@@ -287,10 +289,18 @@ app.view.part.Header = Backbone.View.extend({
 			}
 			
 			// Validate password update
-			var updatingPassword = !_.isEmpty(password) || !_.isEmpty(passwordConfirm);
-			if(updatingPassword && password !== passwordConfirm){
-				$settingsError.text("Passwords don't match");
-				return false;
+			var updatingPassword = !_.isEmpty(oldPassword) || !_.isEmpty(password) || !_.isEmpty(passwordConfirm);
+			if(updatingPassword){
+				if(password !== passwordConfirm){
+					$settingsError.text("Passwords don't match");
+					return false;
+				}else if(_.isEmpty(oldPassword)){
+					$settingsError.text("Old password is required to update your password");
+					return false;
+				}else if(_.isEmpty(password)){
+					$settingsError.text("New password is required to update your password");
+					return false;
+				}
 			}
 			
 			// Build updated data
@@ -298,6 +308,7 @@ app.view.part.Header = Backbone.View.extend({
 				name : name
 			};
 			if(updatingPassword){
+				updatedData.oldPassword = oldPassword;
 				updatedData.password = password;
 			}
 			
@@ -357,6 +368,16 @@ app.view.part.Header = Backbone.View.extend({
 			if(e.keyCode === 13){
 				return attemptUpdateSettings();
 			}
+		});
+		
+		// Reset settings modal on hide
+		$settingsModal.on('hide.bs.modal', function(e){
+			// Reset fields & messages
+			$settingsOldPassword.val("");
+			$settingsPassword.val("");
+			$settingsPasswordConfirm.val("");
+			$settingsError.text("");
+			$settingsSuccess.text("");
 		});
 		
 		// Reset password reset modal on hide

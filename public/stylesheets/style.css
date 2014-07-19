@@ -64,6 +64,9 @@ a.footer_link {
 #header .modal {
   color: #333333;
 }
+.modal_med {
+  width: 325px;
+}
 #app_list {
   list-style-type: none;
 }
