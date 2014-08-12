@@ -1,6 +1,4 @@
 /* colors */
-@header_background: #000000;
-@header_color: #FFFFFF;
 @body_background: #D0D0D0;
 @body_color: #333333;
 @link_color: @body_color;
@@ -9,7 +7,7 @@
 
 /* page scaffold */
 @side_padding: 20px;
-@header_height: 70px;
+@header_height: 52px;
 
 body {
 	padding-top: @header_height;
@@ -49,31 +47,21 @@ a.footer_link {
 }
 
 #header {
-	background-color: @header_background;
-	color: @header_color;
 	top: 0;
 	left: 0;
-	min-height: @header_height;
 	width: 100%;
-	padding-top: 5px;
-	padding-bottom: 5px;
-}
-#header_left {
-	float: left;
-}
-#header_right {
-	float: right;
-}
-#header_logo {
-	font-size: 60px;
-	margin-right: 10px;
-}
-#header_label {
-	font-size: 40px;
-	vertical-align: top;
-}
-.header_link {
-	color: @header_color;
+	
+	#header_logo {
+		font-size: 59px;
+		margin-top: -4px;
+		padding-bottom: 0;
+		padding-left: 0;
+		padding-top: 0;
+	}
+	
+	#header_brand {
+		margin-left: -15px;
+	}
 }
 #header .modal {
 	color: @body_color;

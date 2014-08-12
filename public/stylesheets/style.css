@@ -1,7 +1,7 @@
 /* colors */
 /* page scaffold */
 body {
-  padding-top: 70px;
+  padding-top: 52px;
   color: #333333;
   background-color: #d0d0d0;
 }
@@ -35,31 +35,19 @@ a.footer_link {
   color: #000000;
 }
 #header {
-  background-color: #000000;
-  color: #ffffff;
   top: 0;
   left: 0;
-  min-height: 70px;
   width: 100%;
-  padding-top: 5px;
-  padding-bottom: 5px;
 }
-#header_left {
-  float: left;
+#header #header_logo {
+  font-size: 59px;
+  margin-top: -4px;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-top: 0;
 }
-#header_right {
-  float: right;
-}
-#header_logo {
-  font-size: 60px;
-  margin-right: 10px;
-}
-#header_label {
-  font-size: 40px;
-  vertical-align: top;
-}
-.header_link {
-  color: #ffffff;
+#header #header_brand {
+  margin-left: -15px;
 }
 #header .modal {
   color: #333333;
