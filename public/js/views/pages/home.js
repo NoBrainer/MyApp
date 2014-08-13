@@ -32,7 +32,8 @@ app.view.page.Home = Backbone.View.extend({
 			});
 		}else{
 			// Render the default pieces of the page
-			var appList = new app.view.part.AppList({ el : self.el });
+			var sampleContent = new app.view.part.SampleContent({ el : self.el });
+			sampleContent.render();
 		}
 		
 		return self;
