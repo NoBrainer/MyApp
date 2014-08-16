@@ -1,11 +1,9 @@
 <script type="text/template" id="sample-content-template">
 	<div class="jumbotron">
-		<h1>Welcome to the Restaurant!</h1>
+		<h1>Copy Cat Company</h1>
 		<p>
-			This is the place you go if you want great food and delicious drinks.
-		</p>
-		<p>
-			Good company is not included.
+			<i class="fa fa-wrench"></i>
+			UNDER CONSTRUCTION
 		</p>
 	</div>
 	
@@ -25,7 +23,7 @@
 					</a>
 					<div class="media-body">
 						<h4 class="media-heading">
-							Soft Opening - 4 July 2014
+							Soft Opening - TBD
 						</h4>
 						<p>
 							Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin 
@@ -40,7 +38,7 @@
 					</a>
 					<div class="media-body">
 						<h4 class="media-heading">
-							Grand Opening - 10 July 2014
+							Grand Opening - TBD
 						</h4>
 						<p>
 							Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin 

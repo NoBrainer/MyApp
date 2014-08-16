@@ -37,6 +37,9 @@ a.footer_link {
 .modal_med {
   width: 325px;
 }
+.nav.navbar-nav:first-child {
+  margin-left: -15px;
+}
 #content {
   background-color: #FFFFFF;
   padding-left: 5px;
@@ -66,5 +69,15 @@ a.footer_link {
 #app_list li {
   font-size: 25px;
   display: inline;
+  height: 56px;
   margin-right: 15px;
+  max-height: 56px;
+  max-width: 51px;
+  width: 51px;
+}
+#app_list li:hover {
+  font-size: 35px;
+}
+#app_list li:hover a {
+  padding: 3px 10px;
 }
