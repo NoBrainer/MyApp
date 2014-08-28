@@ -18,10 +18,10 @@ exports.setup = function(){
 			poolSize : 10,
 			socketOptions : {
 				keepAlive : 1
-			},
+			}/*,
 			ssl : true,
 			sslKey : fs.readFileSync(config.props.KEY_PATH),
-			sslCert : fs.readFileSync(config.props.CERT_PATH)
+			sslCert : fs.readFileSync(config.props.CERT_PATH)*/
 		}
 	};
 	mongoose.connect(config.props.MONGO_LOCATION, mongoOptions);

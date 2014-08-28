@@ -80,7 +80,7 @@ app.view.part.ResetPassword = Backbone.View.extend({
 			// Send new password to server
 			var ajaxOpts = {
 				type : 'POST',
-				url : "https://localhost:3000/api/users/resetPassword",
+				url : "/api/users/resetPassword",
 				contentType : 'application/json',
 				dataType : 'json',
 				data : JSON.stringify({

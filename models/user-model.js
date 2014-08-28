@@ -179,13 +179,13 @@ var sendConfirmationEmail = function(){
 	if(self.type === 'pending-approval'){
 		// If the user has not been approved yet, send the regular confirmation email
 		emailContent = "Click this link to confirm your registration: " +
-				"<a target='_blank' href='https://localhost:3000/api/users/confirmation/_ID_'>_ID_</a>" +
+				"<a target='_blank' href='/api/users/confirmation/_ID_'>_ID_</a>" +
 				"<br/><br/>" +
 				"You have not yet been approved. Please contact an admin to have them approve you.";
 	}else{
 		// If the user has been pre-approved, send a modified confirmation email
 		emailContent = "You have been approved for an account. Click this link to confirm your registration: " +
-				"<a target='_blank' href='https://localhost:3000/api/users/confirmation/_ID_'>_ID_</a>" +
+				"<a target='_blank' href='/api/users/confirmation/_ID_'>_ID_</a>" +
 				"<br/><br/>" +
 				"Then login with these credentials and reset your password:" +
 				"<br/>" +
@@ -309,7 +309,7 @@ UserSchema.methods.sendPasswordResetEmail = function(id, done){
 		// Generate the email html
 		var emailContent = 
 			"Click this " +
-			"<a target='_blank' href='https://localhost:3000/#resetPassword/_ID_'>link</a> " +
+			"<a target='_blank' href='/#resetPassword/_ID_'>link</a> " +
 			"to reset your password." +
 			"<br/><br/>" +
 			"If you did not try to reset your password, then please delete this email.";

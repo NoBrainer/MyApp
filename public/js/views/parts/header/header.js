@@ -119,7 +119,7 @@ app.view.part.Header = Backbone.View.extend({
 			// Build ajax options
 			var options = {
 				type : 'POST',
-				url : "https://localhost:3000/api/users/login", //TODO: build base url dynamically
+				url : "/api/users/login", //TODO: build base url dynamically
 				cache : false,
 				contentType : 'application/json',
 				dataType : 'json',
@@ -230,7 +230,7 @@ app.view.part.Header = Backbone.View.extend({
 			// Build ajax options
 			var options = {
 				type : 'POST',
-				url : "https://localhost:3000/api/users/register", //TODO: build base url dynamically
+				url : "/api/users/register", //TODO: build base url dynamically
 				cache : false,
 				contentType : 'application/json',
 				dataType : 'json',
@@ -315,7 +315,7 @@ app.view.part.Header = Backbone.View.extend({
 			// Build ajax options
 			var options = {
 				type : 'POST',
-				url : "https://localhost:3000/api/users/update", //TODO: build base url dynamically
+				url : "/api/users/update", //TODO: build base url dynamically
 				cache : false,
 				contentType : 'application/json',
 				dataType : 'json',
@@ -406,7 +406,7 @@ app.view.part.Header = Backbone.View.extend({
 			// Build ajax options
 			var options = {
 				type : 'POST',
-				url : "https://localhost:3000/api/users/startPasswordReset", //TODO: build base url dynamically
+				url : "/api/users/startPasswordReset", //TODO: build base url dynamically
 				cache : false,
 				contentType : 'application/json',
 				dataType : 'json',
@@ -459,7 +459,7 @@ app.view.part.Header = Backbone.View.extend({
 		// Build ajax options
 		var options = {
 			type : 'GET',
-			url : "https://localhost:3000/api/users/login", //TODO: build base url dynamically
+			url : "/api/users/login", //TODO: build base url dynamically
 			cache : false,
 			contentType : 'application/json'
 		};
@@ -538,7 +538,7 @@ app.view.part.Header = Backbone.View.extend({
 		// Build ajax options
 		var options = {
 			type : 'POST',
-			url : "https://localhost:3000/api/users/logout", //TODO: build base url dynamically
+			url : "/api/users/logout", //TODO: build base url dynamically
 			cache : false,
 			contentType : 'application/json'
 		};
