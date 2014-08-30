@@ -45,6 +45,24 @@ a.footer_link {
   padding-right: 5px;
   padding-top: 83px;
 }
+#content .jumbotron {
+  padding: 5px 0 5px 0;
+}
+#content .jumbotron_image {
+  background-position: center;
+  background-size: cover;
+  display: inline-block;
+  height: 300px;
+  width: 50%;
+}
+#content .jumbotron_left {
+  background-image: url(/resources/instagram1.jpg);
+  margin-right: -2px;
+}
+#content .jumbotron_right {
+  background-image: url(/resources/instagram2.jpg);
+  margin-left: -2px;
+}
 #header {
   top: 0;
   left: 0;
