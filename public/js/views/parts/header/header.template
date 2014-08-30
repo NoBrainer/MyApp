@@ -1,4 +1,9 @@
 <script type="text/template" id="header-template">
+	
+	<div id="site_logo">
+		<img src="/resources/logo.png">
+	</div>
+	
 	<nav class="navbar navbar-default navbar-fixed-top navbar-inverse center_on_page" role="navigation">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->

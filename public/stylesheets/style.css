@@ -1,9 +1,9 @@
 /* colors */
 /* page scaffold */
 body {
-  padding-top: 52px;
   color: #333333;
   background-color: #d0d0d0;
+  background-image: url(/resources/background-grey.png);
 }
 a {
   color: #333333;
@@ -22,8 +22,6 @@ a.footer_link {
 .center_on_page {
   max-width: 900px;
   margin: 0 auto;
-  padding-left: 20px;
-  padding-right: 20px;
 }
 .clear {
   clear: both;
@@ -42,13 +40,22 @@ a.footer_link {
 }
 #content {
   background-color: #FFFFFF;
+  box-shadow: 0 0 10px 10px #000000;
   padding-left: 5px;
   padding-right: 5px;
+  padding-top: 83px;
 }
 #header {
   top: 0;
   left: 0;
   width: 100%;
+}
+#header .navbar {
+  background-color: #720000;
+  border-color: #720000;
+}
+#header .navbar-header {
+  min-height: 83px;
 }
 #header #header_logo {
   font-size: 59px;
@@ -57,11 +64,22 @@ a.footer_link {
   padding-left: 0;
   padding-top: 0;
 }
-#header #header_brand {
-  margin-left: -15px;
-}
 #header .modal {
   color: #333333;
+}
+#site_logo {
+  position: fixed;
+  top: 0;
+  z-index: 9000;
+}
+#site_logo > img {
+  height: 170px;
+  width: auto;
+  left: 50%;
+  margin-left: -65px;
+  /*half of the width*/
+  position: fixed;
+  top: -2px;
 }
 #app_list {
   margin-left: 30px;

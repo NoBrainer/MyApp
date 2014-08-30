@@ -1,4 +1,5 @@
 /* colors */
+@header_color: #720000;
 @body_background: #D0D0D0;
 @body_color: #333333;
 @link_color: @body_color;
@@ -6,13 +7,12 @@
 @success_color: #000000;
 
 /* page scaffold */
-@side_padding: 20px;
-@header_height: 52px;
+@header_height: 83px;
 
 body {
-	padding-top: @header_height;
 	color: @body_color;
 	background-color: @body_background;
+	background-image: url(/resources/background-grey.png);
 }
 
 a {
@@ -33,8 +33,6 @@ a.footer_link {
 .center_on_page {
 	max-width: 900px;
 	margin: 0 auto;
-	padding-left: @side_padding;
-	padding-right: @side_padding;
 }
 .clear {
 	clear: both;
@@ -55,14 +53,25 @@ a.footer_link {
 
 #content {
 	background-color: #FFFFFF;
+	box-shadow: 0 0 10px 10px #000000;
 	padding-left: 5px;
 	padding-right: 5px;
+	padding-top: @header_height;
 }
 
 #header {
 	top: 0;
 	left: 0;
 	width: 100%;
+	
+	.navbar {
+		background-color: @header_color;
+		border-color: @header_color;
+	}
+	
+	.navbar-header {
+		min-height: @header_height;
+	}
 	
 	#header_logo {
 		font-size: 59px;
@@ -71,13 +80,24 @@ a.footer_link {
 		padding-left: 0;
 		padding-top: 0;
 	}
-	
-	#header_brand {
-		margin-left: -15px;
-	}
 }
 #header .modal {
 	color: @body_color;
+}
+
+#site_logo {
+	position: fixed;
+	top: 0;
+	z-index: 9000;
+	
+	> img {
+		height: 170px;
+		width: auto;
+		left: 50%;
+		margin-left: -65px; /*half of the width*/
+		position: fixed;
+		top: -2px;
+	}
 }
 
 #app_list {

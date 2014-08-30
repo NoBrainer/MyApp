@@ -48,9 +48,60 @@ app.view.part.Header = Backbone.View.extend({
 		var self = this;
 		
 		return self
+				.initLogoHandlers()	// Initialize handlers for the logo
 				.initModals()		// Initialize modals
 				.initLoginStatus()	// Check if user is already logged in
 		;
+	}
+	
+	/**
+	 * 
+	 */
+	,initLogoHandlers : function(){
+		var self = this;
+		
+		var isCollapsed = false;
+		var $headerNavbar = $('#header .navbar-header');
+		var $siteLogo = $('#site_logo > img');
+		var $content = $('#content');
+		
+		// 
+		$(window).on('scroll', function(e){
+			var scrollTop = $('html').scrollTop();
+			var interval = 500;
+			
+			if(isCollapsed && scrollTop === 0){
+				// Expand when we scroll to the top of the screen
+				isCollapsed = false;
+				$headerNavbar.animate({
+					minHeight : "83px"
+				}, interval);
+				$siteLogo.animate({
+					height : "170px",
+					marginLeft : "-65px"
+				}, interval);
+				$content.animate({
+					paddingTop : "83px"
+				}, interval);
+				return false;
+			}else if(!isCollapsed && scrollTop > 0){
+				// Collapse when we leave the top of the screen
+				isCollapsed = true;
+				$headerNavbar.animate({
+					minHeight : "50px"
+				}, interval);
+				$siteLogo.animate({
+					height : "105px",
+					marginLeft : "-40px"
+				}, interval);
+				$content.animate({
+					paddingTop : "50px"
+				}, interval);
+				return false;
+			}
+		});
+		
+		return self;
 	}
 	
 	/**
