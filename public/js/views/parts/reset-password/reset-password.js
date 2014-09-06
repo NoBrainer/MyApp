@@ -25,8 +25,6 @@ app.view.part.ResetPassword = Backbone.View.extend({
 		}else{
 			throw "must send id to app.view.part.ResetPassword constructor";
 		}
-		
-		this.render();
 	}
 	
 	/**

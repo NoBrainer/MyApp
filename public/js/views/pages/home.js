@@ -5,13 +5,8 @@ app.view.page.Home = Backbone.View.extend({
 	/**
 	 * Constructor
 	 */
-	,initialize : function(opts){
-		opts = opts || {};
+	,initialize : function(){
 		
-		//TODO: make a separate view for password reset
-		this.mode = opts.mode || 'default';
-		this.username = opts.username || "invalid_username";
-		this.id = opts.id || null;
 	}
 	
 	/**
@@ -23,18 +18,9 @@ app.view.page.Home = Backbone.View.extend({
 		// Clear the page
 		self.$el.empty();
 		
-		if(self.mode === 'reset-password'){
-			// Render the reset-password pieces of the page
-			var resetPassword = new app.view.part.ResetPassword({
-				el : self.el,
-				username : self.username,
-				id : self.id
-			});
-		}else{
-			// Render the page content
-			var contentScaffold = new app.view.part.ContentScaffold({ el : self.el });
-			contentScaffold.render();
-		}
+		// Render the page content
+		var contentScaffold = new app.view.part.ContentScaffold({ el : self.el });
+		contentScaffold.render();
 		
 		return self;
 	}
