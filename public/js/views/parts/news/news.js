@@ -6,7 +6,33 @@ app.view.part.News = Backbone.View.extend({
 	 * Constructor
 	 */
 	,initialize : function(){
+		this.stubData = [
+			{
+				title :	"Soft Opening",
+				date :	"",
+				body :	"Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin " +
+						"commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum " +
+						"nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus."
+			},
+			{
+				title :	"Grand Opening",
+				date :	"",
+				body :	"Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin " +
+						"commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum " +
+						"nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus."
+			}
+		];
+	}
+	
+	/**
+	 * Get the data
+	 */
+	,sync : function(){
+		var self = this;
 		
+		//TODO: make a database call rather than using the stub data
+		
+		return self;
 	}
 	
 	/**
@@ -15,8 +41,12 @@ app.view.part.News = Backbone.View.extend({
 	,render : function(){
 		var self = this;
 		
+		//TODO: sync first
+		
 		// Add the html to the page
-		var params = {}
+		var params = {
+			news : self.data || self.stubData
+		}
 		var template = app.util.TemplateCache.get("#news-template");
 		var html = template(params);
 		self.$el.html(html);
@@ -32,7 +62,12 @@ app.view.part.News = Backbone.View.extend({
 	 */
 	,initHandlers : function(){
 		var self = this;
-		//TODO
+		
+		// Add toggle functionality to the truncated text
+		$('.news_toggle').on('click', function(e){
+			$(this).parent().find('.news_toggle').toggle();
+		});
+		
 		return self;
 	}
 });

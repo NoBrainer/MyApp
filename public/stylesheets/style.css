@@ -117,3 +117,6 @@ a.footer_link {
 #social_media_list li:hover a {
   padding: 3px 10px;
 }
+#news_content .news_toggle {
+  cursor: pointer;
+}
