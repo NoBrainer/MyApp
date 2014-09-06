@@ -1,5 +1,5 @@
-<script type="text/template" id="app-list-template">
-	<ul id="app_list" class="nav nav-pills">
+<script type="text/template" id="social-media-template">
+	<ul id="social_media_list" class="nav nav-pills">
 		<li>
 			<a>
 				<i class="fa fa-twitter-square" title="Twitter"></i>

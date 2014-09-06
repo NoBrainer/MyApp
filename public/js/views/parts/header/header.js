@@ -45,9 +45,7 @@ app.view.part.Header = Backbone.View.extend({
 	 * Initialize handlers
 	 */
 	,initHandlers : function(){
-		var self = this;
-		
-		return self
+		return this
 				.initLogoHandlers()	// Initialize handlers for the logo
 				.initModals()		// Initialize modals
 				.initLoginStatus()	// Check if user is already logged in
@@ -55,7 +53,7 @@ app.view.part.Header = Backbone.View.extend({
 	}
 	
 	/**
-	 * 
+	 * Initialize logo handlers
 	 */
 	,initLogoHandlers : function(){
 		var self = this;
@@ -65,7 +63,7 @@ app.view.part.Header = Backbone.View.extend({
 		var $siteLogo = $('#site_logo > img');
 		var $content = $('#content');
 		
-		// 
+		// Scroll handler to detect if we should resize the header & logo
 		$(window).on('scroll', function(e){
 			var scrollTop = $('html').scrollTop();
 			var interval = 500;
@@ -449,7 +447,7 @@ app.view.part.Header = Backbone.View.extend({
 			var username = $forgotPasswordUsername.val().trim();
 			
 			// Validate input
-			if(!username.match(/^[\w\.\-\+]+[@][\w\.\-\+]+\.[\w\.\-\+]+$/)){
+			if(!username.match(/^[\w\.\-\+]+[@][\w\.\-\+]+\.[\w\.\-\+]+$/)){ //TODO: make a regex util
 				$forgotPasswordError.text("Please enter a valid email address for your username");
 				return false;
 			}

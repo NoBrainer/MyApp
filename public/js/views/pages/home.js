@@ -31,9 +31,9 @@ app.view.page.Home = Backbone.View.extend({
 				id : self.id
 			});
 		}else{
-			// Render the default pieces of the page
-			var sampleContent = new app.view.part.SampleContent({ el : self.el });
-			sampleContent.render();
+			// Render the page content
+			var contentScaffold = new app.view.part.ContentScaffold({ el : self.el });
+			contentScaffold.render();
 		}
 		
 		return self;

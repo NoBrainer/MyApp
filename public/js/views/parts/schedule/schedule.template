@@ -1,0 +1,11 @@
+<script type="text/template" id="schedule-template">
+	<div class="panel-heading">
+		<h3>
+			Schedule
+		</h3>
+	</div>
+	<div class="panel-body">
+		<i class="fa fa-wrench"></i>
+		UNDER CONSTRUCTION
+	</div>
+</script>

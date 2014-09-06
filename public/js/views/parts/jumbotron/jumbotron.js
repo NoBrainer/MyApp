@@ -1,4 +1,4 @@
-app.view.part.AppList = Backbone.View.extend({
+app.view.part.Jumbotron = Backbone.View.extend({
 	
 	el : ""
 	
@@ -15,11 +15,11 @@ app.view.part.AppList = Backbone.View.extend({
 	,render : function(){
 		var self = this;
 		
-		// Render html from template
+		// Add the html to the page
 		var params = {}
-		var template = app.util.TemplateCache.get("#app-list-template");
+		var template = app.util.TemplateCache.get("#jumbotron-template");
 		var html = template(params);
-		self.$el.append(html);
+		self.$el.html(html);
 		
 		// Initialize handlers
 		self.initHandlers();
@@ -31,6 +31,8 @@ app.view.part.AppList = Backbone.View.extend({
 	 * Initialize handlers
 	 */
 	,initHandlers : function(){
-		
+		var self = this;
+		//TODO
+		return self;
 	}
 });

@@ -1,0 +1,7 @@
+<script type="text/template" id="content-scaffold-template">
+	<div id="jumbotron_content" class="jumbotron"></div>
+	<div id="social_media_content"></div>
+	<div id="news_content" class="panel panel-default"></div>
+	<div id="schedule_content" class="panel panel-default"></div>
+	<div id="menu_content" class="panel panel-default"></div>
+</script>

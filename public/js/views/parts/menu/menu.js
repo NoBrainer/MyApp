@@ -1,4 +1,4 @@
-app.view.part.SampleContent = Backbone.View.extend({
+app.view.part.Menu = Backbone.View.extend({
 	
 	el : ""
 	
@@ -15,15 +15,11 @@ app.view.part.SampleContent = Backbone.View.extend({
 	,render : function(){
 		var self = this;
 		
-		// Render html from template
+		// Add the html to the page
 		var params = {}
-		var template = app.util.TemplateCache.get("#sample-content-template");
+		var template = app.util.TemplateCache.get("#menu-template");
 		var html = template(params);
-		self.$el.append(html);
-		
-		// Add an app list to its placeholder div
-		var appList = new app.view.part.AppList({ el : "#app-list-placeholder" });
-		appList.render();
+		self.$el.html(html);
 		
 		// Initialize handlers
 		self.initHandlers();
@@ -35,6 +31,8 @@ app.view.part.SampleContent = Backbone.View.extend({
 	 * Initialize handlers
 	 */
 	,initHandlers : function(){
-		
+		var self = this;
+		//TODO
+		return self;
 	}
 });

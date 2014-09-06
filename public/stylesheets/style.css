@@ -99,10 +99,10 @@ a.footer_link {
   position: fixed;
   top: -2px;
 }
-#app_list {
+#social_media_list {
   margin-left: 30px;
 }
-#app_list li {
+#social_media_list li {
   font-size: 25px;
   display: inline;
   height: 56px;
@@ -111,9 +111,9 @@ a.footer_link {
   max-width: 51px;
   width: 51px;
 }
-#app_list li:hover {
+#social_media_list li:hover {
   font-size: 35px;
 }
-#app_list li:hover a {
+#social_media_list li:hover a {
   padding: 3px 10px;
 }
