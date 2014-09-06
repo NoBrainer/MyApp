@@ -120,3 +120,7 @@ a.footer_link {
 #news_content .news_toggle {
   cursor: pointer;
 }
+#news_content .news_posted {
+  color: #4d4d4d;
+  font-size: 12px;
+}

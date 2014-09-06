@@ -9,8 +9,10 @@
 			<% _.each(news, function(item){ %>
 				<%
 					var title = item.title || "Undefined_Title";
-					var date = item.date || "TBD";
 					var body = item.body || "Undefined_Body";
+					
+					// Determine the date to display
+					var postedDateStr = app.util.Date.toString(item.postedDate);
 					
 					// Truncate the body if necessary
 					var maxLength = 200;
@@ -27,7 +29,10 @@
 					-->
 					<div class="media-body">
 						<h4 class="media-heading">
-							<%= title %> - <%= date %>
+							<%= title %>
+							<span class="news_posted">
+								(Posted: <%= postedDateStr %>)
+							</span>
 						</h4>
 						<% if(hasTruncatedForm){ %>
 							<p class="news_toggle">
