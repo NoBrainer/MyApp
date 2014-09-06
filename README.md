@@ -65,15 +65,28 @@
 
 
 ## Developing
-General:
-- REST resources
-- setup deployment that auto-restarts at server boot
+User Creation/Management
+- Admin approval in the UI
+- Setup the bot email address
 
-Specific:
-- add user login functionality
-- add menu posting functionality
-- add schedule posting functionality
-- rss, twitter, facebook/instagram, google plus integration
+Jumbotron Images
+- Automatically pull latest from instagram
+
+Social Media Buttons
+- Update the URLs for eachs ite
+
+News
+- Get stub data
+- Setup data model
+- Setup edit/save functionality for admins
+
+Schedule
+- Make the UI functional with stub data
+- Setup data model
+- Setup edit/save functionality for admins
+
+Menu
+- Setup admin uploading
 
 
 ### Tools

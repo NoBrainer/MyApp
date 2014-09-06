@@ -52,4 +52,28 @@
 			</ul>
 		</div>
 	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3>
+				Schedule
+			</h3>
+		</div>
+		<div class="panel-body">
+			<i class="fa fa-wrench"></i>
+			UNDER CONSTRUCTION
+		</div>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3>
+				Menu
+			</h3>
+		</div>
+		<div class="panel-body">
+			<i class="fa fa-wrench"></i>
+			UNDER CONSTRUCTION
+		</div>
+	</div>
 </script>
