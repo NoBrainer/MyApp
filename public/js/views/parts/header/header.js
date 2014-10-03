@@ -4,6 +4,7 @@ app.view.part.Header = Backbone.View.extend({
 	
 	/**
 	 * Constructor
+	 * @memberOf app.view.part.Header
 	 */
 	,initialize : function(){
 		

@@ -4,6 +4,7 @@ app.view.part.News = Backbone.View.extend({
 	
 	/**
 	 * Constructor
+	 * @memberOf app.view.part.News
 	 */
 	,initialize : function(){
 		this.stubData = [

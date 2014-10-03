@@ -4,6 +4,7 @@ app.view.part.Menu = Backbone.View.extend({
 	
 	/**
 	 * Constructor
+	 * @memberOf app.view.part.Menu
 	 */
 	,initialize : function(){
 		

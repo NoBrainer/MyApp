@@ -1,9 +1,12 @@
 app.Router = Backbone.Router.extend({
 	
+	defaults : {}
+	
 	/**
 	 * Constructor
+	 * @memberOf app.Router
 	 */
-	initialize : function(opts){
+	,initialize : function(opts){
 		this.route(/^.*/, "goDefault");
 		this.route(/^home/, "goHome");
 		this.route(/^employee/, "goEmployee");
@@ -37,8 +40,9 @@ app.Router = Backbone.Router.extend({
 	,goEmployee : function(){
 		console.log("employee page");
 		this.setupHeader();
-		var page = new app.view.page.Employee();
+		var page = new app.view.page.Home();
 		page.render();
+		page.setupEmployeeMode();
 	}
 	
 	/**
@@ -47,16 +51,17 @@ app.Router = Backbone.Router.extend({
 	,goAdmin : function(){
 		console.log("admin page");
 		this.setupHeader();
-		var page = new app.view.page.Admin();
+		var page = new app.view.page.Home();
 		page.render();
+		page.setupAdminMode();
 	}
 	
 	/**
 	 * Reset Password page
 	 */
 	,goResetPassword : function(id){
-		var self = this;
 		console.log("password reset page");
+		var self = this;
 		self.setupHeader();
 		
 		// Check if we are setup to reset the password

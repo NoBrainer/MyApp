@@ -3,6 +3,7 @@ app.util.Date = {
 	/**
 	 * Display the date as "hh:mmPER DAY, DD MONTH YYYY" (month and day are abbreviated)
 	 * Ex: "7:20pm Sat, 6 Sept 2014"
+	 * @memberOf app.util.Date
 	 */
 	toString : function toString(date){
 		if(!_.isDate(date)){
@@ -40,6 +41,7 @@ app.util.Date = {
 	/**
 	 * Display the date as "hh:mmPER DAY, DD MONTH YYYY"
 	 * Ex: "7:20pm Saturday, 6 September 2014"
+	 * @memberOf app.util.Date
 	 */
 	,toStringVerbose : function toStringVerbose(date){
 		if(!_.isDate(date)){
@@ -77,6 +79,7 @@ app.util.Date = {
 	/**
 	 * Display the date as "DAY, MM/DD"
 	 * Ex: "Sat, 9/6"
+	 * @memberOf app.util.Date
 	 */
 	,toStringShort : function toStringShort(date){
 		if(!_.isDate(date)){
@@ -97,6 +100,7 @@ app.util.Date = {
 	
 	/**
 	 * Get the date object with hours/minutes/seconds/milliseconds set to zero
+	 * @memberOf app.util.Date
 	 */
 	,startOfDay : function startOfDay(date){
 		if(!_.isDate(date)){
@@ -113,6 +117,7 @@ app.util.Date = {
 	
 	/**
 	 * Get the date object with the date number incremented
+	 * @memberOf app.util.Date
 	 */
 	,nextDay : function nextDay(date){
 		if(!_.isDate(date)){
@@ -126,6 +131,7 @@ app.util.Date = {
 	
 	/**
 	 * Get the date object with the date number decremented
+	 * @memberOf app.util.Date
 	 */
 	,prevDay : function prevDay(date){
 		if(!_.isDate(date)){

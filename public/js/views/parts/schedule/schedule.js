@@ -4,6 +4,7 @@ app.view.part.Schedule = Backbone.View.extend({
 	
 	/**
 	 * Constructor
+	 * @memberOf app.view.part.Schedule
 	 */
 	,initialize : function(){
 		// Helper function to create random data for the stub data

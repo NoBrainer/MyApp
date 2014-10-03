@@ -4,6 +4,7 @@ app.view.part.ContentScaffold = Backbone.View.extend({
 	
 	/**
 	 * Constructor
+	 * @memberOf app.view.part.ContentScaffold
 	 */
 	,initialize : function(){
 		

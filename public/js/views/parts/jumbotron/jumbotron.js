@@ -4,6 +4,7 @@ app.view.part.Jumbotron = Backbone.View.extend({
 	
 	/**
 	 * Constructor
+	 * @memberOf app.view.part.Jumbotron
 	 */
 	,initialize : function(){
 		

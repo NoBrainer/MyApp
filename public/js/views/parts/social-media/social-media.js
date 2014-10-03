@@ -4,6 +4,7 @@ app.view.part.SocialMedia = Backbone.View.extend({
 	
 	/**
 	 * Constructor
+	 * @memberOf app.view.part.SocialMedia
 	 */
 	,initialize : function(){
 		

@@ -4,6 +4,7 @@ app.view.page.ResetPassword = Backbone.View.extend({
 	
 	/**
 	 * Constructor
+	 * @memberOf app.view.page.ResetPassword
 	 */
 	,initialize : function(opts){
 		opts = opts || {};
