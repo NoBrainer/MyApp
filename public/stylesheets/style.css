@@ -126,6 +126,31 @@ a.footer_link {
 }
 #schedule_content {
   width: 100%;
+  /*
+	.expanding_btn {
+		li {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+	
+	.expanding_btn.expanded  {
+		height: auto;
+		left: 0;
+		margin-left: 0;
+		padding-left: 0;
+		padding-right: 0;
+		position: absolute;
+		top: 0;
+		width: auto;
+		z-index: 1;
+		
+		li {
+			white-space: normal;
+		}
+	}
+	*/
 }
 #schedule_content > .panel-body {
   width: 100%;
@@ -142,23 +167,4 @@ a.footer_link {
   list-style-type: none;
   overflow: visible;
   width: 100%;
-}
-#schedule_content .expanding_btn li {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-#schedule_content .expanding_btn.expanded {
-  height: auto;
-  left: 0;
-  margin-left: 0;
-  padding-left: 0;
-  padding-right: 0;
-  position: absolute;
-  top: 0;
-  width: auto;
-  z-index: 1;
-}
-#schedule_content .expanding_btn.expanded li {
-  white-space: normal;
 }
