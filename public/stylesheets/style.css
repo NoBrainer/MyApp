@@ -99,6 +99,10 @@ a.footer_link {
   position: fixed;
   top: -2px;
 }
+.panel-heading .panel_right {
+  float: right;
+  font-size: 14px;
+}
 #social_media_list {
   margin-left: 30px;
 }
@@ -126,43 +130,44 @@ a.footer_link {
 }
 #schedule_content {
   width: 100%;
-  /*
-	.expanding_btn {
-		li {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-	}
-	
-	.expanding_btn.expanded  {
-		height: auto;
-		left: 0;
-		margin-left: 0;
-		padding-left: 0;
-		padding-right: 0;
-		position: absolute;
-		top: 0;
-		width: auto;
-		z-index: 1;
-		
-		li {
-			white-space: normal;
-		}
-	}
-	*/
 }
 #schedule_content > .panel-body {
   width: 100%;
+  /*
+		.title {
+			text-align: left;
+			padding-left: 10px;
+		}
+		.list {
+			text-align: left;
+		}
+		
+		.expanding_btn {
+			li {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+		}
+		
+		.expanding_btn.expanded  {
+			height: auto;
+			left: 0;
+			margin-left: 0;
+			padding-left: 0;
+			padding-right: 0;
+			position: absolute;
+			top: 0;
+			width: auto;
+			z-index: 1;
+			
+			li {
+				white-space: normal;
+			}
+		}
+		*/
 }
-#schedule_content .title {
-  text-align: left;
-  padding-left: 10px;
-}
-#schedule_content .list {
-  text-align: left;
-}
-#schedule_content li {
+#schedule_content > .panel-body li {
   float: left;
   list-style-type: none;
   overflow: visible;
