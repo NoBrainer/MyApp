@@ -5,7 +5,61 @@
 		</h3>
 	</div>
 	<div class="panel-body">
-		<i class="fa fa-wrench"></i>
-		UNDER CONSTRUCTION
+		<div>
+			<i class="fa fa-wrench"></i>
+			UNDER CONSTRUCTION
+		</div>
+		
+		<table class="table">
+			<tr>
+				<% _.each(items, function(item){ %>
+					<td>
+						<%= item.label %>
+					</td>
+				<% }); %>
+			</tr>
+			<tr>
+				<% _.each(items, function(item){ %>
+					<td>
+						<ul>
+							<% var people = item.people; %>
+							<% _.each(people, function(person){ %>
+								<li>
+									<%= person %>
+								</li>
+							<% }); %>
+						</ul>
+					</td>
+				<% }); %>
+			</tr>
+		</table>
+		
+		<!--
+		<div class="btn-group btn-group-justified">
+			<% _.each(items, function(item){ %>
+				<div class="btn-group">
+					<%
+						// Create the id for the expanded version of the button
+						var id = "expanded_btn_"+item.label;
+						id = id.replace(/\W/g, "_");
+					%>
+					<button type="button" class="btn btn-default expanding_btn" target="#<%= id %>">
+						<div class="title">
+							<%= item.label %>
+						</div>
+						<ul class="list">
+							<% var people = item.people; %>
+							<% _.each(people, function(person){ %>
+								<li>
+									<%= person %>
+								</li>
+							<% }); %>
+						</ul>
+					</button>
+					<div id="<%= id %>" class="placeholder_div" style="display:none;"></div>
+				</div>
+			<% }); %>
+		</div>
+		-->
 	</div>
 </script>

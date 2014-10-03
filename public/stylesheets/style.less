@@ -150,3 +150,50 @@ a.footer_link {
 		font-size: 12px;
 	}
 }
+
+#schedule_content {
+	width: 100%;
+	
+	> .panel-body {
+		width: 100%;
+	}
+	
+	.title {
+		text-align: left;
+		padding-left: 10px;
+	}
+	.list {
+		text-align: left;
+	}
+	
+	li {
+		float: left;
+		list-style-type: none;
+		overflow: visible;
+		width: 100%;
+	}
+	
+	.expanding_btn {
+		li {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+	
+	.expanding_btn.expanded  {
+		height: auto;
+		left: 0;
+		margin-left: 0;
+		padding-left: 0;
+		padding-right: 0;
+		position: absolute;
+		top: 0;
+		width: auto;
+		z-index: 1;
+		
+		li {
+			white-space: normal;
+		}
+	}
+}

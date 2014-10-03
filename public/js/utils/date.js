@@ -1,9 +1,10 @@
 app.util.Date = {
 	
 	/**
-	 * Display the date as "hh:mmPER on DAY, DD MONTH YYYY" (month and day are abbreviated)
+	 * Display the date as "hh:mmPER DAY, DD MONTH YYYY" (month and day are abbreviated)
+	 * Ex: "7:20pm Sat, 6 Sept 2014"
 	 */
-	toString : function(date){
+	toString : function toString(date){
 		if(!_.isDate(date)){
 			return "UNDEFINED";
 		}
@@ -26,7 +27,7 @@ app.util.Date = {
 		}
 		
 		// Build the date string
-		return "hh:mmPER on DAY, DD MONTH YYYY"
+		return "hh:mmPER DAY, DD MONTH YYYY"
 				.replace(/hh/, hour)
 				.replace(/mm/, minute)
 				.replace(/PER/, period)
@@ -37,9 +38,10 @@ app.util.Date = {
 	}
 	
 	/**
-	 * Display the date as "hh:mmPER on DAY, DD MONTH YYYY"
+	 * Display the date as "hh:mmPER DAY, DD MONTH YYYY"
+	 * Ex: "7:20pm Saturday, 6 September 2014"
 	 */
-	,toStringVerbose : function(date){
+	,toStringVerbose : function toStringVerbose(date){
 		if(!_.isDate(date)){
 			return "UNDEFINED";
 		}
@@ -62,7 +64,7 @@ app.util.Date = {
 		}
 		
 		// Build the date string
-		return "hh:mmPER on DAY, DD MONTH YYYY"
+		return "hh:mmPER DAY, DD MONTH YYYY"
 				.replace(/hh/, hour)
 				.replace(/mm/, minute)
 				.replace(/PER/, period)
@@ -70,6 +72,69 @@ app.util.Date = {
 				.replace(/DD/, day)
 				.replace(/MONTH/, month)
 				.replace(/YYYY/, year);
+	}
+	
+	/**
+	 * Display the date as "DAY, MM/DD"
+	 * Ex: "Sat, 9/6"
+	 */
+	,toStringShort : function toStringShort(date){
+		if(!_.isDate(date)){
+			return "UNDEFINED";
+		}
+		
+		// Pull data out of date object
+		var dayOfWeek = dayOfWeekShort[date.getDay()];
+		var day = date.getDate();
+		var month = date.getMonth()+1;
+		
+		// Build the date string
+		return "DAY, MM/DD"
+				.replace(/DAY/, dayOfWeek)
+				.replace(/MM/, month)
+				.replace(/DD/, day);
+	}
+	
+	/**
+	 * Get the date object with hours/minutes/seconds/milliseconds set to zero
+	 */
+	,startOfDay : function startOfDay(date){
+		if(!_.isDate(date)){
+			date = new Date(); //default to now
+		}
+		
+		date.setHours(0);
+		date.setMinutes(0);
+		date.setSeconds(0);
+		date.setMilliseconds(0);
+		
+		return date;
+	}
+	
+	/**
+	 * Get the date object with the date number incremented
+	 */
+	,nextDay : function nextDay(date){
+		if(!_.isDate(date)){
+			date = new Date(); //default to now
+		}
+		
+		// Increment the date
+		date.setDate(date.getDate()+1);
+		return date;
+	}
+	
+	/**
+	 * Get the date object with the date number decremented
+	 */
+	,prevDay : function prevDay(date){
+		if(!_.isDate(date)){
+			date = new Date();//default to now
+		}
+		
+		// Decrement the date
+		date.setDate(date.getDate()-1);
+		return date;
 	}
 };
 

@@ -73,10 +73,9 @@ Jumbotron Images
 - Automatically pull latest from instagram
 
 Social Media Buttons
-- Update the URLs for eachs ite
+- Update the URLs for each site
 
 News
-- Get stub data
 - Setup data model
 - Setup edit/save functionality for admins
 
@@ -84,6 +83,7 @@ Schedule
 - Make the UI functional with stub data
 - Setup data model
 - Setup edit/save functionality for admins
+- Optimize for mobile
 
 Menu
 - Setup admin uploading

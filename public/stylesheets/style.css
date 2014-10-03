@@ -124,3 +124,41 @@ a.footer_link {
   color: #4d4d4d;
   font-size: 12px;
 }
+#schedule_content {
+  width: 100%;
+}
+#schedule_content > .panel-body {
+  width: 100%;
+}
+#schedule_content .title {
+  text-align: left;
+  padding-left: 10px;
+}
+#schedule_content .list {
+  text-align: left;
+}
+#schedule_content li {
+  float: left;
+  list-style-type: none;
+  overflow: visible;
+  width: 100%;
+}
+#schedule_content .expanding_btn li {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#schedule_content .expanding_btn.expanded {
+  height: auto;
+  left: 0;
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+  position: absolute;
+  top: 0;
+  width: auto;
+  z-index: 1;
+}
+#schedule_content .expanding_btn.expanded li {
+  white-space: normal;
+}
