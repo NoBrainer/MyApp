@@ -6,7 +6,7 @@ app.view.part.ResetPassword = Backbone.View.extend({
 	 * Constructor
 	 * @memberOf app.view.part.ResetPassword
 	 */
-	,initialize : function(opts){
+	,initialize : function initialize(opts){
 		opts = opts || {};
 		
 		if(opts.el){
@@ -31,7 +31,7 @@ app.view.part.ResetPassword = Backbone.View.extend({
 	/**
 	 * Render
 	 */
-	,render : function(){
+	,render : function render(){
 		var self = this;
 		
 		// Render html from template
@@ -51,7 +51,7 @@ app.view.part.ResetPassword = Backbone.View.extend({
 	/**
 	 * Initialize handlers
 	 */
-	,initHandlers : function(){
+	,initHandlers : function initHandlers(){
 		var self = this;
 		
 		var $submitButton = $('#password_reset_submit');

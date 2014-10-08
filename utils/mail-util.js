@@ -22,7 +22,7 @@ var defaultOptions = {
  * @param opts.html - {String} the email content
  * @param callback - {function} called after sending the email
  */
-exports.sendEmail = function(opts, callback){
+exports.sendEmail = function sendEmail(opts, callback){
 	var opts = opts || {};
 	
 	// Always send emails from the bot

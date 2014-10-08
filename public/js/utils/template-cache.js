@@ -4,7 +4,7 @@ app.util.TemplateCache = {
 	 * Setup templates by putting the text from the aggregate template file into the html of the page
 	 * @memberOf app.util.TemplateCache
 	 */
-	setup : function(){
+	setup : function setup(){
 		var opts = { url: "aggregate.template" };
 		return $.ajax(opts)
 			.done(function(data, textStatus, jqxhr){
@@ -20,7 +20,7 @@ app.util.TemplateCache = {
 	 * Get template html (at most once per selector)
 	 * @memberOf app.util.TemplateCache
 	 */
-	,get : function(selector){
+	,get : function get(selector){
 		app.util.TemplateCache.templates = app.util.TemplateCache.templates || {};
 		
 		var template = app.util.TemplateCache.templates[selector];

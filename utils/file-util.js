@@ -7,7 +7,7 @@ var path = require('path');
  * @param cond - callback for determining whether or not to keep file
  * @param done - callback for what to do with results
  */
-var walk = function(dir, cond, done){
+var walk = function walk(dir, cond, done){
 	var results = [];
 	fs.readdir(dir, function(err, list){
 		if(err){
@@ -43,7 +43,7 @@ var walk = function(dir, cond, done){
  * @param targetFile - file to print to (full path)
  * @param strictOrder - (optional) boolean whether or not to enforce order
  */
-var createAggregate = function(fileArr, targetFile, strictOrder){
+var createAggregate = function createAggregate(fileArr, targetFile, strictOrder){
 	if(!fileArr || fileArr.length<1){
 		return;
 	}
@@ -77,7 +77,7 @@ var createAggregate = function(fileArr, targetFile, strictOrder){
  * @param targetDir - directory to look in (full path)
  * @param targetFile - file to print to (full path)
  */
-exports.aggregateTemplates = function(targetDir, targetFile){
+exports.aggregateTemplates = function aggregateTemplates(targetDir, targetFile){
 	// Determine what kind of files we care about
 	var isTemplate = function(file){
 		return file.match(/.+\.template$/);
@@ -97,7 +97,7 @@ exports.aggregateTemplates = function(targetDir, targetFile){
  * @param targetFile - file to print to (full path)
  * @param libDir - directory with JavaScript libraries (full path)
  */
-exports.aggregateJavaScript = function(targetDir, targetFile, libDir){
+exports.aggregateJavaScript = function aggregateJavaScript(targetDir, targetFile, libDir){
 	// Array of libraries to import (order matters)
 	var libArray = [ "jquery/js/jquery.js", "underscore/js/underscore.js", "backbone/js/backbone.js", "bootstrap/js/bootstrap.js" ];
 	libArray = _.map(libArray, function(item){
@@ -132,7 +132,7 @@ exports.aggregateJavaScript = function(targetDir, targetFile, libDir){
  * @param targetFile - file to print to (full path)
  * @param publicDir - public directory (full path)
  */
-exports.aggregateCss = function(targetFile, publicDir){
+exports.aggregateCss = function aggregateCss(targetFile, publicDir){
 	// Array of css files to import (order matters)
 	var fileArr = [ "lib/bootstrap/css/bootstrap.css", "lib/bootstrap/css/bootstrap-custom.css", "lib/font-awesome/css/font-awesome.css", "stylesheets/style.css", "stylesheets/style-responsive.css" ];
 	fileArr = _.map(fileArr, function(item){

@@ -6,7 +6,7 @@ app.view.part.Schedule = Backbone.View.extend({
 	 * Constructor
 	 * @memberOf app.view.part.Schedule
 	 */
-	,initialize : function(){
+	,initialize : function initialize(){
 		// Helper function to create random data for the stub data
 		var names = ["Devin", "Bob", "Jennifer", "Carl", "Lauren", "Scott"];
 		var shifts = ["10am-close", "12pm-4pm", "4pm-midnight", "2pm-8pm"];
@@ -40,7 +40,7 @@ app.view.part.Schedule = Backbone.View.extend({
 	/**
 	 * Render
 	 */
-	,render : function(){
+	,render : function render(){
 		var self = this;
 		
 		//TODO: sync
@@ -60,7 +60,7 @@ app.view.part.Schedule = Backbone.View.extend({
 	/**
 	 * Initialize handlers
 	 */
-	,initHandlers : function(){
+	,initHandlers : function initHandlers(){
 		var self = this;
 		
 //		//TODO: remove this if we settle on the table version
@@ -83,7 +83,6 @@ app.view.part.Schedule = Backbone.View.extend({
 //		self.$el.find('.expanded_btn').on('click', function(){
 //			$(this).hide();
 //		});
-		
 		
 		return self;
 	}

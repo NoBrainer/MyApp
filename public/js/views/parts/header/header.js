@@ -6,14 +6,14 @@ app.view.part.Header = Backbone.View.extend({
 	 * Constructor
 	 * @memberOf app.view.part.Header
 	 */
-	,initialize : function(){
+	,initialize : function initialize(){
 		
 	}
 	
 	/**
 	 * Render
 	 */
-	,render : function(){
+	,render : function render(){
 		var self = this;
 		
 		// Render html from template
@@ -45,7 +45,7 @@ app.view.part.Header = Backbone.View.extend({
 	/**
 	 * Initialize handlers
 	 */
-	,initHandlers : function(){
+	,initHandlers : function initHandlers(){
 		return this
 				.initLogoHandlers()	// Initialize handlers for the logo
 				.initModals()		// Initialize modals
@@ -56,7 +56,7 @@ app.view.part.Header = Backbone.View.extend({
 	/**
 	 * Initialize logo handlers
 	 */
-	,initLogoHandlers : function(){
+	,initLogoHandlers : function initLogoHandlers(){
 		var self = this;
 		
 		var isCollapsed = false;
@@ -106,7 +106,7 @@ app.view.part.Header = Backbone.View.extend({
 	/**
 	 * Initialize modal handlers
 	 */
-	,initModals : function(){
+	,initModals : function initModals(){
 		var self = this;
 		
 		// UI parts for header
@@ -503,7 +503,7 @@ app.view.part.Header = Backbone.View.extend({
 	/**
 	 * Initialize the site to have the user logged in if applicable
 	 */
-	,initLoginStatus : function(){
+	,initLoginStatus : function initLoginStatus(){
 		var self = this;
 		
 		// Build ajax options
@@ -535,7 +535,7 @@ app.view.part.Header = Backbone.View.extend({
 	/**
 	 * After successful login, setup UI to be in a logged in state
 	 */
-	,updateLogin : function(resp){
+	,updateLogin : function updateLogin(resp){
 		var self = this;
 		
 		// Extract data from the response
@@ -569,7 +569,7 @@ app.view.part.Header = Backbone.View.extend({
 	/**
 	 * Logout then setup UI to be in a logged out state
 	 */
-	,updateLogout : function(){
+	,updateLogout : function updateLogout(){
 		var self = this;
 		
 		// Update the login state

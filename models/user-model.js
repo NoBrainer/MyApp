@@ -9,7 +9,9 @@ var LOCK_TIME = 5 * 60 * 1000; //5min
 var DEFAULT_NAME = "Default Name";
 var DEFAULT_PASSWORD = "password";
 
-// Initialize schema
+/**
+ * Initialize schema
+ */
 var UserSchema = mongoose.Schema({
 	username : {
 		type : String,
@@ -51,20 +53,26 @@ var UserSchema = mongoose.Schema({
 	}
 });
 
-// Add virtual property to determine if the user account is locked
+/**
+ * Add virtual property to determine if the user account is locked
+ */
 UserSchema.virtual('isLocked').get(function(){
 	// Check for a future lockUntil timestamp
 	return (this.lockUntil && this.lockUntil > Date.now());
 });
 
-// Enum for authentication failure reasons
+/**
+ * Enum for authentication failure reasons
+ */
 var reasons = UserSchema.statics.failedLogin = {
 	NOT_FOUND : 0,
 	PASSWORD_INCORRECT : 1,
 	MAX_ATTEMPTS : 2
 };
 
-// Make sure usernames are unique
+/**
+ * Make sure usernames are unique
+ */
 UserSchema.pre('save', function(next, done){
 	var self = this;
 	
@@ -95,7 +103,9 @@ UserSchema.pre('save', function(next, done){
 	});
 });
 
-// Hash the password when saving
+/**
+ * Hash the password when saving
+ */
 UserSchema.pre('save', function(next){
 	var self = this;
 	
@@ -124,8 +134,10 @@ UserSchema.pre('save', function(next){
 	});
 });
 
-// Update with a hook to encrypt the password beforehand
-UserSchema.methods.updateWithPasswordEncryption = function(query, updates, done){
+/**
+ * Update with a hook to encrypt the password beforehand
+ */
+UserSchema.methods.updateWithPasswordEncryption = function updateWithPasswordEncryption(query, updates, done){
 	var self = this;
 	
 	// Setup the next function to be updating if there is no error
@@ -160,8 +172,10 @@ UserSchema.methods.updateWithPasswordEncryption = function(query, updates, done)
 	}
 };
 
-// Send a confirmation email after saving a user
-var sendConfirmationEmail = function(){
+/**
+ * Send a confirmation email after saving a user
+ */
+var sendConfirmationEmail = function sendConfirmationEmail(){
 	var self = this;
 	
 	// Do nothing if the user is already confirmed
@@ -210,16 +224,20 @@ var sendConfirmationEmail = function(){
 UserSchema.post('save', sendConfirmationEmail);
 UserSchema.post('update', sendConfirmationEmail);
 
-// Add a method to the schema for comparing passwords
-UserSchema.methods.comparePassword = function(candidate, done){
+/**
+ * Add a method to the schema for comparing passwords
+ */
+UserSchema.methods.comparePassword = function comparePassword(candidate, done){
 	bcrypt.compare(candidate, this.password, function(err, isMatch){
 		if(err) return done(err);
 		done(null, isMatch);
 	});
 };
 
-// Increment the login attempts
-UserSchema.methods.incrementLoginAttempts = function(done){
+/**
+ * Increment the login attempts
+ */
+UserSchema.methods.incrementLoginAttempts = function incrementLoginAttempts(done){
 	// If it's locked and it has expired, reset
 	if(this.lockUntil && this.lockUntil < Date.now()){
 		return this.update({
@@ -243,8 +261,10 @@ UserSchema.methods.incrementLoginAttempts = function(done){
 	return this.update(updates, done);
 };
 
-// Try to authenticate user
-UserSchema.statics.getAuthenticated = function(username, password, done){
+/**
+ * Try to authenticate user
+ */
+UserSchema.statics.getAuthenticated = function getAuthenticated(username, password, done){
 	var query = {
 		username : username
 	};
@@ -303,8 +323,10 @@ UserSchema.statics.getAuthenticated = function(username, password, done){
 	});
 };
 
-// Try to send a password reset email
-UserSchema.methods.sendPasswordResetEmail = function(id, done){
+/**
+ * Try to send a password reset email
+ */
+UserSchema.methods.sendPasswordResetEmail = function sendPasswordResetEmail(id, done){
 	try{
 		// Generate the email html
 		var emailContent = 

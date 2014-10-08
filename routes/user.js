@@ -4,17 +4,17 @@ var User = require('../models/user-model');
 var mailUtil = require('../utils/mail-util');
 
 // Helper functions to check user privileges
-var isDeveloper = function(req){
+var isDeveloper = function isDeveloper(req){
 	var type = req.session.type || "";
 	var matches = type.match(/developer/);
 	return !(_.isNull(matches) || _.isUndefined(matches));
 };
-var isAdmin = function(req){
+var isAdmin = function isAdmin(req){
 	var type = req.session.type || "";
 	var matches = type.match(/(admin|developer)/);
 	return !(_.isNull(matches) || _.isUndefined(matches));
 };
-var isEmployee = function(req){
+var isEmployee = function isEmployee(req){
 	var type = req.session.type || "";
 	var matches = type.match(/(employee|admin|developer)/);
 	return !(_.isNull(matches) || _.isUndefined(matches));
@@ -23,7 +23,7 @@ var isEmployee = function(req){
 /**
  * GET - Check if a user exists
  */
-exports.exists = function(req, res){
+exports.exists = function exists(req, res){
 	//TODO: validate req.params
 	var username = req.params.username;
 	
@@ -51,7 +51,7 @@ exports.exists = function(req, res){
 /**
  * GET - A list of all users
  */
-exports.getAll = function(req, res){
+exports.getAll = function getAll(req, res){
 	// Default response template
 	var responseObject = {
 		error : null,
@@ -82,7 +82,7 @@ exports.getAll = function(req, res){
 /**
  * GET - check login state
  */
-exports.isLoggedIn = function(req, res){
+exports.isLoggedIn = function isLoggedIn(req, res){
 	// Default response template
 	var responseObject = {
 		error : null,
@@ -110,7 +110,7 @@ exports.isLoggedIn = function(req, res){
 /**
  * POST - attempt user login
  */
-exports.login = function(req, res){
+exports.login = function login(req, res){
 	//TODO: validate req.params
 	
 	var username = req.body.username;
@@ -174,7 +174,7 @@ exports.login = function(req, res){
 /**
  * POST - attempt user logout
  */
-exports.logout = function(req, res){
+exports.logout = function logout(req, res){
 	// Default response template
 	var responseObject = {
 		error : null,
@@ -199,7 +199,7 @@ exports.logout = function(req, res){
 /**
  * POST - attempt user registration
  */
-exports.register = function(req, res){
+exports.register = function register(req, res){
 	// Default response template
 	var responseObject = {
 		error : null,
@@ -249,7 +249,7 @@ exports.register = function(req, res){
 /**
  * POST - attempt user registration
  */
-exports.confirmation = function(req, res){
+exports.confirmation = function confirmation(req, res){
 	var params = req.params || {};
 	var id = params.id || "";
 	
@@ -296,7 +296,7 @@ exports.confirmation = function(req, res){
 /**
  * POST - approve a user (creates a new entry if one doesn't exist)
  */
-exports.approveUser = function(req, res){
+exports.approveUser = function approveUser(req, res){
 	// Default response template
 	var responseObject = {
 		error : null,
@@ -400,7 +400,7 @@ exports.approveUser = function(req, res){
 /**
  * POST - update the user
  */
-exports.updateUser = function(req, res){
+exports.updateUser = function updateUser(req, res){
 	// Default response template
 	var responseObject = {
 		error : null,
@@ -507,7 +507,7 @@ exports.updateUser = function(req, res){
 /**
  * POST - Start a password reset
  */
-exports.startPasswordReset = function(req, res){
+exports.startPasswordReset = function startPasswordReset(req, res){
 	var body = req.body || {};
 	var username = body.username || "";
 	
@@ -574,7 +574,7 @@ exports.startPasswordReset = function(req, res){
 /**
  * GET - Checks if the user can reset the password
  */
-exports.isAbleToResetPassword = function(req, res){
+exports.isAbleToResetPassword = function isAbleToResetPassword(req, res){
 	// Default response template
 	var responseObject = {
 		error : null,
@@ -596,7 +596,7 @@ exports.isAbleToResetPassword = function(req, res){
 /**
  * POST - Reset the password
  */
-exports.resetPassword = function(req, res){
+exports.resetPassword = function resetPassword(req, res){
 	var body = req.body || {};
 	var newPassword = body.password || "";
 	var id = body.id || "";

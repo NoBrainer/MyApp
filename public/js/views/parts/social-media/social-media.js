@@ -6,14 +6,14 @@ app.view.part.SocialMedia = Backbone.View.extend({
 	 * Constructor
 	 * @memberOf app.view.part.SocialMedia
 	 */
-	,initialize : function(){
+	,initialize : function initialize(){
 		
 	}
 	
 	/**
 	 * Render
 	 */
-	,render : function(){
+	,render : function render(){
 		var self = this;
 		
 		// Add the html to the page
@@ -31,7 +31,7 @@ app.view.part.SocialMedia = Backbone.View.extend({
 	/**
 	 * Initialize handlers
 	 */
-	,initHandlers : function(){
+	,initHandlers : function initHandlers(){
 		var self = this;
 		//TODO
 		return self;

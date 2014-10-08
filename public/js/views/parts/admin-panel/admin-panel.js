@@ -6,14 +6,14 @@ app.view.part.AdminPanel = Backbone.View.extend({
 	 * Constructor
 	 * @memberOf app.view.part.AdminPanel
 	 */
-	,initialize : function(){
+	,initialize : function initialize(){
 		
 	}
 	
 	/**
 	 * Get the data
 	 */
-	,sync : function(){
+	,sync : function sync(){
 		var self = this;
 		//TODO
 		return self;
@@ -22,7 +22,7 @@ app.view.part.AdminPanel = Backbone.View.extend({
 	/**
 	 * Render
 	 */
-	,render : function(){
+	,render : function render(){
 		var self = this;
 		
 		//TODO: sync first
@@ -42,7 +42,7 @@ app.view.part.AdminPanel = Backbone.View.extend({
 	/**
 	 * Initialize handlers
 	 */
-	,initHandlers : function(){
+	,initHandlers : function initHandlers(){
 		var self = this;
 		//TODO
 		return self;
@@ -53,7 +53,7 @@ app.view.part.AdminPanel = Backbone.View.extend({
  * Factory method for the admin controls section
  * @memberOf app.view.part.AdminPanel
  */
-app.view.part.AdminPanel.setup = function(el){
+app.view.part.AdminPanel.setup = function setup(el){
 	if(!app.util.Login.isAdmin()){
 		return false;
 	}

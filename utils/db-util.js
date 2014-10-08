@@ -8,7 +8,7 @@ var db = undefined;
 /**
  * Setup the mongo database
  */
-exports.setup = function(){
+exports.setup = function setup(){
 	// Setup the database
 	var mongoOptions = {
 //		user : config.props.MONGO_USERNAME,

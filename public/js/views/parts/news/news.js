@@ -6,7 +6,7 @@ app.view.part.News = Backbone.View.extend({
 	 * Constructor
 	 * @memberOf app.view.part.News
 	 */
-	,initialize : function(){
+	,initialize : function initialize(){
 		this.stubData = [
 			{
 				postedDate : new Date(1410045634906),
@@ -28,7 +28,7 @@ app.view.part.News = Backbone.View.extend({
 	/**
 	 * Get the data
 	 */
-	,sync : function(){
+	,sync : function sync(){
 		var self = this;
 		
 		//TODO: make a database call rather than using the stub data
@@ -39,7 +39,7 @@ app.view.part.News = Backbone.View.extend({
 	/**
 	 * Render
 	 */
-	,render : function(){
+	,render : function render(){
 		var self = this;
 		
 		//TODO: sync first
@@ -61,7 +61,7 @@ app.view.part.News = Backbone.View.extend({
 	/**
 	 * Initialize handlers
 	 */
-	,initHandlers : function(){
+	,initHandlers : function initHandlers(){
 		var self = this;
 		
 		// Add toggle functionality to the truncated text

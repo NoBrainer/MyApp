@@ -6,14 +6,14 @@ app.view.part.ContentScaffold = Backbone.View.extend({
 	 * Constructor
 	 * @memberOf app.view.part.ContentScaffold
 	 */
-	,initialize : function(){
+	,initialize : function initialize(){
 		
 	}
 	
 	/**
 	 * Render
 	 */
-	,render : function(){
+	,render : function render(){
 		var self = this;
 		
 		// Add the scaffold to the html content
@@ -31,7 +31,7 @@ app.view.part.ContentScaffold = Backbone.View.extend({
 	/**
 	 * Populate the scaffold with its content
 	 */
-	,populate : function(){
+	,populate : function populate(){
 		var self = this;
 		
 		// Jumbotron

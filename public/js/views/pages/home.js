@@ -6,14 +6,14 @@ app.view.page.Home = Backbone.View.extend({
 	 * Constructor
 	 * @memberOf app.view.page.Home
 	 */
-	,initialize : function(){
+	,initialize : function initialize(){
 		
 	}
 	
 	/**
 	 * Render
 	 */
-	,render : function(){
+	,render : function render(){
 		var self = this;
 		
 		// Clear the page
@@ -29,7 +29,7 @@ app.view.page.Home = Backbone.View.extend({
 	/**
 	 * Setup employee mode
 	 */
-	,setupEmployeeMode : function(){
+	,setupEmployeeMode : function setupEmployeeMode(){
 		var self = this;
 		
 		if(!app.util.Login.isEmployee()){
@@ -46,7 +46,7 @@ app.view.page.Home = Backbone.View.extend({
 	/**
 	 * Setup admin mode
 	 */
-	,setupAdminMode : function(){
+	,setupAdminMode : function setupAdminMode(){
 		var self = this;
 		
 		if(!app.util.Login.isAdmin()){
