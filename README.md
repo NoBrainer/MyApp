@@ -66,7 +66,7 @@
 
 ## Developing
 User Creation/Management
-- Admin approval in the UI
+- Admin approval in the UI (via the admin panel)
 - Setup the bot email address
 
 Jumbotron Images
@@ -84,6 +84,7 @@ Schedule
 - Setup data model
 - Setup edit/save functionality for admins
 - Optimize for mobile
+- Make expanded view for employees
 
 Menu
 - Setup admin uploading

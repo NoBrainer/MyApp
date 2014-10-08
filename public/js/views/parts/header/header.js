@@ -559,18 +559,9 @@ app.view.part.Header = Backbone.View.extend({
 		$settingsName.val(name || "");
 		$settingsUsername.val(username || "");
 		
-		if(type==='developer'){
-			//TODO: developer-specific things
-			self.goHome();
-		}else if(type==='admin'){
-			//TODO: admin-specific things
-			self.goHome();
-		}else if(type==='employee'){
-			//TODO: employee-specific things
-			self.goHome();
-		}else{
-			self.updateLogout();
-		}
+		// Update the login state
+		app.state.login = type;
+		app.util.Login.routeToMax();
 		
 		return self;
 	}
@@ -580,6 +571,9 @@ app.view.part.Header = Backbone.View.extend({
 	 */
 	,updateLogout : function(){
 		var self = this;
+		
+		// Update the login state
+		app.state.login = "";
 		
 		var $showOnLogout = $('.show_on_logout');
 		var $showOnLogin = $('.show_on_login');
@@ -599,7 +593,7 @@ app.view.part.Header = Backbone.View.extend({
 				$showOnLogin.hide();
 				$userName.text("");
 				if(!window.location.hash.match(/resetPassword/)){
-					self.goHome();
+					app.router.routeHome();
 				}
 			}else if(resp.message){
 				alert(resp.message);
@@ -615,15 +609,5 @@ app.view.part.Header = Backbone.View.extend({
 		$.ajax(options);
 		
 		return self;
-	}
-	
-	/**
-	 * Go to the homepage
-	 */
-	,goHome : function(){
-		app.router.navigate("#home", {
-			trigger : true,
-			replace : false
-		});
 	}
 });

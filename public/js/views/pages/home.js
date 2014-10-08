@@ -32,7 +32,11 @@ app.view.page.Home = Backbone.View.extend({
 	,setupEmployeeMode : function(){
 		var self = this;
 		
-		//TODO: return self if not employee mode
+		if(!app.util.Login.isEmployee()){
+			app.router.routeHome();
+			return self;
+		}
+		app.router.setPath("#employee");
 		
 		//TODO: do employee-specific things
 		
@@ -45,10 +49,17 @@ app.view.page.Home = Backbone.View.extend({
 	,setupAdminMode : function(){
 		var self = this;
 		
-		//TODO: return self if not admin mode
+		if(!app.util.Login.isAdmin()){
+			app.router.routeHome();
+			return self;
+		}
+		app.router.setPath("#admin");
 		
 		// Show admin controls
 		$('.admin_controls').show();
+		
+		// Setup the admin panel
+		app.view.part.AdminPanel.setup(self.el);
 		
 		return self;
 	}

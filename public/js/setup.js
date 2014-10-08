@@ -7,6 +7,9 @@
 			view : {
 				page : {},
 				part : {}
+			},
+			state : {
+				login : ""
 			}
 	};
 })();

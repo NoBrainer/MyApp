@@ -1,0 +1,10 @@
+<script type="text/template" id="admin-panel-template">
+	<div class="panel-heading">
+		<h3>
+			Admin Controls
+		</h3>
+	</div>
+	<div class="panel-body">
+		Placeholder text for admin things.
+	</div>
+</script>
