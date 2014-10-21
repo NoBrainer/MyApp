@@ -8,6 +8,7 @@
 
 /* page scaffold */
 @header_height: 83px;
+@jumbotron_height: 300px;
 
 body {
 	color: @body_color;
@@ -52,20 +53,20 @@ a.footer_link {
 }
 
 #content {
-	background-color: #FFFFFF;
-	box-shadow: 0 0 10px 10px #000000;
-	padding-left: 5px;
-	padding-right: 5px;
+	background-color: transparent;
 	padding-top: @header_height;
 	
 	.jumbotron {
-		padding: 5px 0 5px 0;
+		background-color: transparent;
+		height: @jumbotron_height;
+		margin-bottom: 20px;
+		padding: 0;
 	}
 	.jumbotron_image {
 		background-position: center;
 		background-size: cover;
 		display: inline-block;
-		height: 300px;
+		height: @jumbotron_height;
 		width: 50%;
 	}
 	.jumbotron_left {
@@ -86,6 +87,15 @@ a.footer_link {
 	.navbar {
 		background-color: @header_color;
 		border-color: @header_color;
+		box-shadow: 0 -10px 10px 8px #000000;
+		
+		#navbar-collapse {
+			padding-top: 15px;
+			
+			i {
+				font-size: 20px;
+			}
+		}
 	}
 	
 	.navbar-header {
@@ -126,8 +136,14 @@ a.footer_link {
 	}
 }
 
+.panel,
+.panel_shadow {
+	box-shadow: 0 5px 10px 5px #000000;
+}
+
 #social_media_list {
-	margin-left: 30px;
+	margin: 0 auto;
+	width: 185px;
 	
 	li {
 		font-size: 25px;
@@ -137,6 +153,10 @@ a.footer_link {
 		max-height: 56px;
 		max-width: 51px;
 		width: 51px;
+		
+		i {
+			color: @header_color;
+		}
 	}
 	li:hover {
 		font-size: 35px;
@@ -144,6 +164,9 @@ a.footer_link {
 		a {
 			padding: 3px 10px;
 		}
+	}
+	li:last-child {
+		margin: 0;
 	}
 }
 

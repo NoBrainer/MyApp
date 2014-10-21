@@ -39,14 +39,14 @@ a.footer_link {
   margin-left: -15px;
 }
 #content {
-  background-color: #FFFFFF;
-  box-shadow: 0 0 10px 10px #000000;
-  padding-left: 5px;
-  padding-right: 5px;
+  background-color: transparent;
   padding-top: 83px;
 }
 #content .jumbotron {
-  padding: 5px 0 5px 0;
+  background-color: transparent;
+  height: 300px;
+  margin-bottom: 20px;
+  padding: 0;
 }
 #content .jumbotron_image {
   background-position: center;
@@ -71,6 +71,13 @@ a.footer_link {
 #header .navbar {
   background-color: #720000;
   border-color: #720000;
+  box-shadow: 0 -10px 10px 8px #000000;
+}
+#header .navbar #navbar-collapse {
+  padding-top: 15px;
+}
+#header .navbar #navbar-collapse i {
+  font-size: 20px;
 }
 #header .navbar-header {
   min-height: 83px;
@@ -103,8 +110,13 @@ a.footer_link {
   float: right;
   font-size: 14px;
 }
+.panel,
+.panel_shadow {
+  box-shadow: 0 5px 10px 5px #000000;
+}
 #social_media_list {
-  margin-left: 30px;
+  margin: 0 auto;
+  width: 185px;
 }
 #social_media_list li {
   font-size: 25px;
@@ -115,11 +127,17 @@ a.footer_link {
   max-width: 51px;
   width: 51px;
 }
+#social_media_list li i {
+  color: #720000;
+}
 #social_media_list li:hover {
   font-size: 35px;
 }
 #social_media_list li:hover a {
   padding: 3px 10px;
+}
+#social_media_list li:last-child {
+  margin: 0;
 }
 #news_content .news_toggle {
   cursor: pointer;

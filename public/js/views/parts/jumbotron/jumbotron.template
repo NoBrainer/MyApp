@@ -1,9 +1,4 @@
 <script type="text/template" id="jumbotron-template">
-	<h1>Copycat Co.</h1>
 	<div class="jumbotron_image jumbotron_left"></div>
 	<div class="jumbotron_image jumbotron_right"></div>
-	<p style="margin-left:10px; margin-top:10px;">
-		<i class="fa fa-wrench"></i>
-		UNDER CONSTRUCTION
-	</p>
 </script>
