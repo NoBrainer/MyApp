@@ -4,4 +4,5 @@
 	<div id="news_content" class="panel panel-default"></div>
 	<div id="schedule_content" class="panel panel-default"></div>
 	<div id="menu_content" class="panel panel-default"></div>
+	<div id="admin_content" class="panel panel-default"></div>
 </script>

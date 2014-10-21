@@ -59,7 +59,7 @@ app.view.page.Home = Backbone.View.extend({
 		$('.admin_controls').show();
 		
 		// Setup the admin panel
-		app.view.part.AdminPanel.setup(self.el);
+		app.view.part.AdminPanel.setup("#admin_content");
 		
 		return self;
 	}

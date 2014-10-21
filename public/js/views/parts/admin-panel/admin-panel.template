@@ -5,6 +5,53 @@
 		</h3>
 	</div>
 	<div class="panel-body">
-		Placeholder text for admin things.
+		<h4>
+			Current Users
+		</h4>
+		<table class="table">
+			<tr>
+				<% _.each(tableHeaders, function(header){ %>
+					<th>
+						<%= header %>
+					</th>
+				<% }); %>
+			</tr>
+			<% _.each(users, function(user){ %>
+				<tr>
+					<% _.each(tableHeaders, function(header){ %>
+						<td>
+							<% var value = user[header]; %>
+							<% if(header === "type"){ %>
+								<select>
+									<% if(value === "pending-approval"){ %>
+										<!-- Only show this option if it's selected -->
+										<option value="pending-approval" selected>
+											pending-approval
+										</option>
+									<% } %>
+									<option value="employee"<%= value==='employee' ? ' selected' : '' %>>
+										employee
+									</option>
+									<option value="admin"<%= value==='admin' ? ' selected' : '' %>>
+										admin
+									</option>
+								</select>
+							<% }else{ %>
+								<%= value %>
+							<% } %>
+						</td>
+					<% }); %>
+				</tr>
+			<% }); %>
+		</table>
+		<h4>
+			Pre-approve Users
+		</h4>
+		<input type="text" placeholder="Enter an email address">
+		<select>
+			<option value="employee">employee</option>
+			<option value="admin">admin</option>
+		</select>
+		<button>Submit</button>
 	</div>
 </script>

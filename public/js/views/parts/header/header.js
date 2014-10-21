@@ -458,7 +458,7 @@ app.view.part.Header = Backbone.View.extend({
 		// Build ajax options
 		var options = {
 			type : 'GET',
-			url : "/api/users/login", //TODO: build base url dynamically
+			url : "/api/users/login",
 			cache : false,
 			contentType : 'application/json'
 		};

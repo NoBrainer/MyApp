@@ -72,6 +72,10 @@ exports.getAll = function getAll(req, res){
 						type : user.type,
 						name : user.name
 				};
+				if(isAdmin(req)){
+					obj.isConfirmed = user.isConfirmed || false;
+					obj.isLocked = user.isLocked || false;
+				}
 				return obj;
 			});
 		}

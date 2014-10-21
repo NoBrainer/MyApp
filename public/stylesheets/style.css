@@ -114,6 +114,9 @@ a.footer_link {
 .panel_shadow {
   box-shadow: 0 5px 10px 5px #000000;
 }
+.panel:empty {
+  border-width: 0;
+}
 #social_media_list {
   margin: 0 auto;
   width: 185px;
