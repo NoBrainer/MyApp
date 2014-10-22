@@ -19,10 +19,10 @@
 			<% _.each(users, function(user){ %>
 				<tr>
 					<% _.each(tableHeaders, function(header){ %>
-						<td>
+						<td field="<%= header %>">
 							<% var value = user[header]; %>
 							<% if(header === "type"){ %>
-								<select>
+								<select class="user_type_updater">
 									<% if(value === "pending-approval"){ %>
 										<!-- Only show this option if it's selected -->
 										<option value="pending-approval" selected>

@@ -314,7 +314,7 @@ app.view.part.Header = Backbone.View.extend({
 			// Build ajax options
 			var options = {
 				type : 'POST',
-				url : "/api/users/update", //TODO: build base url dynamically
+				url : "/api/users/update",
 				cache : false,
 				contentType : 'application/json',
 				dataType : 'json',

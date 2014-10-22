@@ -143,13 +143,63 @@ app.view.part.AdminPanel = Backbone.View.extend({
 	}
 	
 	/**
+	 * Update the user's type
+	 */
+	,updateUserType : function updateUserType(username, type){
+		var self = this;
+		
+		// Build ajax options
+		var options = {
+			type : 'POST',
+			url : "/api/users/updateType",
+			cache : false,
+			contentType : 'application/json',
+			data : JSON.stringify({
+				username : username,
+				type : type
+			})
+		};
+		options.success = function(resp){
+			if(_.isNull(resp.error)){
+				if(resp.successful){
+					// Do nothing if the approval succeeded
+				}else{
+					// Alert the user if there's an error
+					var message = resp.message || "No users updated";
+					self.renderError(message);
+				}
+			}else{
+				self.renderError(resp.error);
+			}
+		};
+		options.error = function(resp){
+			self.renderError("Failure to communicate with site. Try again later.");
+		};
+		
+		// Make the ajax call
+		$.ajax(options);
+		
+		return self;
+	}
+	
+	/**
 	 * Initialize handlers
 	 */
 	,initHandlers : function initHandlers(){
 		var self = this;
 		
 		//TODO: wire up pre-approval
-		//TODO: wire up type updating
+		
+		// Update the user type
+		$('.user_type_updater').on('change', function(e){
+			var $this = $(this);
+			
+			// Get the username and its new type
+			var type = $this.val();
+			var username = $this.parents('tr').find('[field="username"]').text().trim();
+			
+			self.updateUserType(username, type);
+		});
 		
 		return self;
 	}

@@ -22,6 +22,7 @@ var isEmployee = function isEmployee(req){
 
 /**
  * GET - Check if a user exists
+ * @memberOf User
  */
 exports.exists = function exists(req, res){
 	//TODO: validate req.params
@@ -50,6 +51,7 @@ exports.exists = function exists(req, res){
 
 /**
  * GET - A list of all users
+ * @memberOf User
  */
 exports.getAll = function getAll(req, res){
 	// Default response template
@@ -85,6 +87,7 @@ exports.getAll = function getAll(req, res){
 
 /**
  * GET - check login state
+ * @memberOf User
  */
 exports.isLoggedIn = function isLoggedIn(req, res){
 	// Default response template
@@ -113,6 +116,7 @@ exports.isLoggedIn = function isLoggedIn(req, res){
 
 /**
  * POST - attempt user login
+ * @memberOf User
  */
 exports.login = function login(req, res){
 	//TODO: validate req.params
@@ -177,6 +181,7 @@ exports.login = function login(req, res){
 
 /**
  * POST - attempt user logout
+ * @memberOf User
  */
 exports.logout = function logout(req, res){
 	// Default response template
@@ -202,6 +207,7 @@ exports.logout = function logout(req, res){
 
 /**
  * POST - attempt user registration
+ * @memberOf User
  */
 exports.register = function register(req, res){
 	// Default response template
@@ -252,6 +258,7 @@ exports.register = function register(req, res){
 
 /**
  * POST - attempt user registration
+ * @memberOf User
  */
 exports.confirmation = function confirmation(req, res){
 	var params = req.params || {};
@@ -299,6 +306,7 @@ exports.confirmation = function confirmation(req, res){
 
 /**
  * POST - approve a user (creates a new entry if one doesn't exist)
+ * @memberOf User
  */
 exports.approveUser = function approveUser(req, res){
 	// Default response template
@@ -403,6 +411,7 @@ exports.approveUser = function approveUser(req, res){
 
 /**
  * POST - update the user
+ * @memberOf User
  */
 exports.updateUser = function updateUser(req, res){
 	// Default response template
@@ -509,7 +518,80 @@ exports.updateUser = function updateUser(req, res){
 };
 
 /**
+ * POST - update the user type
+ * @memberOf User
+ */
+exports.updateUserType = function updateUserType(req, res){
+	// Default response template
+	var responseObject = {
+		error : null,
+		successful : false,
+		message : null
+	};
+	
+	// Verify admin status
+	if(!isAdmin(req)){
+		responseObject.message = "Not authorized to update users"
+		res.send(responseObject);
+		return;
+	}
+	
+	// Get variables from request body
+	var body = req.body || {};
+	body.username = body.username || "";
+	body.type = body.type || "";
+	
+	// Require a username
+	if(_.isEmpty(body.username)){
+		responseObject.message = "Invalid username";
+		res.send(responseObject);
+		return;
+	}
+	
+	// Require a type
+	if(_.isEmpty(body.type)){
+		responseObject.message = "Invalid type";
+		res.send(responseObject);
+		return;
+	}
+	
+	// Create the mongo update object
+	var updates = {
+		type : body.type
+	};
+	
+	// Build the query
+	var query = {
+		username : body.username
+	};
+	
+	// Find the user to update
+	User.findOne(query, function(err, user){
+		if(err){
+			responseObject.error = err;
+			responseObject.message = err.message;
+			console.error(responseObject.message);
+			res.send(responseObject);
+			return;
+		}else if(user){
+			// Update the user
+			User.update(query, updates, function(err, savedObj){
+				if(err){
+					responseObject.error = err;
+					responseObject.message = err.message;
+					console.error(responseObject.message);
+				}else{
+					responseObject.successful = true;
+				}
+				res.send(responseObject);
+			});
+		}
+	});
+};
+
+/**
  * POST - Start a password reset
+ * @memberOf User
  */
 exports.startPasswordReset = function startPasswordReset(req, res){
 	var body = req.body || {};
@@ -577,6 +659,7 @@ exports.startPasswordReset = function startPasswordReset(req, res){
 
 /**
  * GET - Checks if the user can reset the password
+ * @memberOf User
  */
 exports.isAbleToResetPassword = function isAbleToResetPassword(req, res){
 	// Default response template
@@ -599,6 +682,7 @@ exports.isAbleToResetPassword = function isAbleToResetPassword(req, res){
 
 /**
  * POST - Reset the password
+ * @memberOf User
  */
 exports.resetPassword = function resetPassword(req, res){
 	var body = req.body || {};
