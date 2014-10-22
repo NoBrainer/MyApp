@@ -1,14 +1,29 @@
 
 //Create config.js at same level as this file with the following content:
 //exports.props = {
-//		ENV : 'development',
 //		MONGO_USERNAME : 'my_username',
 //		MONGO_PASSWORD : 'my_password',
-//		MONGO_LOCATION : 'mongodb://localhost/test_db',
+//		MONGO_LOCATION : 'mongodb://localhost:27017/test_db',
+//		DATABASE : {
+//			db : 'test_db',
+//			host : 'localhost',
+//			port : '27017'
+//		}
 //		KEY_PATH : '/location/to/key.pem',
 //		CERT_PATH : '/location/to/cert.pem',
 //		HTTP_PORT : 8080,
-//		HTTPS_PORT : 8000
+//		HTTPS_PORT : 8443,
+//		ENV : 'development',
+//		SECRET : 'random_string_of_chars',
+//		APP_IP : '1.1.1.1',
+//		APP_DOMAIN : 'mydomain.com',
+//		EMAIL_OPTS : {
+//			service : 'Gmail',
+//			auth : {
+//				user : 'username',
+//				pass : 'password'
+//			}
+//		}
 //};
 
 // Imports

@@ -1,16 +1,11 @@
 var nodemailer = require('nodemailer');
+var smtpTransport = require('nodemailer-smtp-transport');
 
-var smtpTransport = nodemailer.createTransport("SMTP", {
-	service : config.props.EMAIL_SERVICE,
-	auth : {
-		user : config.props.EMAIL_USERNAME,
-		pass : config.props.EMAIL_PASSWORD
-	}
-});
+var transport = nodemailer.createTransport(smtpTransport(config.props.EMAIL_OPTS));
 
 var defaultOptions = {
-	from : "Email Bot <{0}>".replace("{0}", config.props.EMAIL_USERNAME),
-	to : config.props.EMAIL_USERNAME,
+	from : "Email Bot <{0}>".replace("{0}", config.props.EMAIL_OPTS.auth.user),
+	to : config.props.EMAIL_OPTS.auth.user,
 	subject : "Default Subject",
 	html : "Silly developer forgot to update <b>mail-util's defaultOptions.html!</b>"
 };
@@ -42,5 +37,5 @@ exports.sendEmail = function sendEmail(opts, callback){
 	};
 	
 	// Send the email
-	smtpTransport.sendMail(opts, callback);
+	transport.sendMail(opts, callback);
 };
