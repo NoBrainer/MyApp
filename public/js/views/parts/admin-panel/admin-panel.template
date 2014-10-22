@@ -47,11 +47,11 @@
 		<h4>
 			Pre-approve Users
 		</h4>
-		<input type="text" placeholder="Enter an email address">
-		<select>
+		<input id="pre_approve_user_email" type="text" placeholder="Enter an email address">
+		<select id="pre_approve_user_type">
 			<option value="employee">employee</option>
 			<option value="admin">admin</option>
 		</select>
-		<button>Submit</button>
+		<button id="pre_approve_user">Submit</button>
 	</div>
 </script>

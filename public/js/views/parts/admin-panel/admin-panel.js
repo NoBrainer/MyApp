@@ -188,16 +188,24 @@ app.view.part.AdminPanel = Backbone.View.extend({
 	,initHandlers : function initHandlers(){
 		var self = this;
 		
-		//TODO: wire up pre-approval
+		// Pre-approve the user
+		$('#pre_approve_user').on('click', function(e){
+			// Get the username and type from the form
+			var username = $('#pre_approve_user_email').val().trim();
+			var type = $('#pre_approve_user_type').val().trim();
+
+			// Make the call
+			self.preApproveUser(username, type);
+		});
 		
 		// Update the user type
 		$('.user_type_updater').on('change', function(e){
+			// Get the username and its new type from the table
 			var $this = $(this);
-			
-			// Get the username and its new type
 			var type = $this.val();
 			var username = $this.parents('tr').find('[field="username"]').text().trim();
 			
+			// Make the call
 			self.updateUserType(username, type);
 		});
 		

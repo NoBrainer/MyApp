@@ -202,7 +202,7 @@ var sendConfirmationEmail = function sendConfirmationEmail(){
 	}else{
 		// If the user has been pre-approved, send a modified confirmation email
 		emailContent = "You have been approved for an account. Click this link to confirm your registration: " +
-				"<a target='_blank' href='/api/users/confirmation/_ID_'>_ID_</a>" +
+				"<a target='_blank' href='_HOST_/api/users/confirmation/_ID_'>_ID_</a>" +
 				"<br/><br/>" +
 				"Then login with these credentials and reset your password:" +
 				"<br/>" +
