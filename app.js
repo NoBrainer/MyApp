@@ -11,6 +11,7 @@
 //		}
 //		KEY_PATH : '/location/to/key.pem',
 //		CERT_PATH : '/location/to/cert.pem',
+//		HOST : 'http://localhost:8080',
 //		HTTP_PORT : 8080,
 //		HTTPS_PORT : 8443,
 //		ENV : 'development',
