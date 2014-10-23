@@ -145,6 +145,11 @@ server.listen(app.get('port'), function(){
 	console.log('Express server listening on port ' + app.get('port'));
 });
 
+// If the node process ends, close the mongo connection
+process
+	.on('SIGINT', dbUtil.close)
+	.on('SIGTERM', dbUtil.close)
+	.on('exit', dbUtil.close);
 
 //// Start the server
 //var certOpts = {
