@@ -78,6 +78,11 @@ a.footer_link {
 #header .navbar #navbar-collapse i {
   font-size: 20px;
 }
+#header .navbar #navbar-collapse .address {
+  font-size: 12px;
+  margin-top: -8px;
+  text-decoration: none;
+}
 #header .navbar-header {
   min-height: 83px;
 }
