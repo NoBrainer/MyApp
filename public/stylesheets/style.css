@@ -80,6 +80,7 @@ a.footer_link {
 }
 #header .navbar #navbar-collapse .address {
   font-size: 12px;
+  margin-bottom: -25px;
   margin-top: -8px;
   text-decoration: none;
 }
