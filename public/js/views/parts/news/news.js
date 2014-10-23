@@ -10,17 +10,17 @@ app.view.part.News = Backbone.View.extend({
 		this.stubData = [
 			{
 				postedDate : new Date(1410045634906),
-				title :	"Soft Opening",
-				body :	"Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin " +
-						"commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum " +
-						"nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus."
+				title :		"Soft Opening",
+				content :	"Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin " +
+							"commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum " +
+							"nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus."
 			},
 			{
 				postedDate : new Date(1410045134906),
-				title :	"Grand Opening",
-				body :	"Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin " +
-						"commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum " +
-						"nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus."
+				title :		"Grand Opening",
+				content :	"Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin " +
+							"commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum " +
+							"nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus."
 			}
 		];
 	}

@@ -14,16 +14,16 @@
 			<% _.each(news, function(item){ %>
 				<%
 					var title = item.title || "Undefined_Title";
-					var body = item.body || "Undefined_Body";
+					var content = item.content || "Undefined_Content";
 					
 					// Determine the date to display
 					var postedDateStr = app.util.Date.toString(item.postedDate);
 					
-					// Truncate the body if necessary
+					// Truncate the content if necessary
 					var maxLength = 200;
-					var hasTruncatedForm = (body.length > maxLength);
+					var hasTruncatedForm = (content.length > maxLength);
 					if(hasTruncatedForm){
-						var truncatedBody = "BODY... [MORE]".replace("BODY", body.substring(0, maxLength));
+						var truncatedContent = "CONTENT... [MORE]".replace("CONTENT", content.substring(0, maxLength));
 					}
 				%>
 				<li class="media">
@@ -41,14 +41,14 @@
 						</h4>
 						<% if(hasTruncatedForm){ %>
 							<p class="news_toggle">
-								<%= truncatedBody %>
+								<%= truncatedContent %>
 							</p>
 							<p class="news_toggle" style="display:none;">
-								<%= body %>
+								<%= content %>
 							</p>
 						<% }else{ %>
 							<p>
-								<%= body %>
+								<%= content %>
 							</p>
 						<% } %>
 					</div>

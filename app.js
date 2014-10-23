@@ -49,6 +49,7 @@ config = require('./config');
 // Local imports
 var routes = require('./routes');
 var user = require('./routes/user');
+var news = require('./routes/news');
 var fileUtil = require('./utils/file-util');
 var dbUtil = require('./utils/db-util');
 
@@ -111,6 +112,7 @@ if(isDevelopment){
 var router = express.Router();
 app.use('/api', router);
 router.get('/', routes.index);
+// Users
 router.route('/users')
 	.get(user.getAll);
 router.route('/users/login')
@@ -135,6 +137,17 @@ router.route('/users/resetPassword')
 	.post(user.resetPassword);
 router.route('/users/:username')
 	.get(user.exists);
+// News
+router.route('/news')
+	.get(news.getAll);
+router.route('/news/create')
+	.post(news.create);
+router.route('/news/archive')
+	.post(news.archive);
+router.route('/news/update')
+	.post(news.update);
+router.route('/news/remove')
+	.post(news.remove);
 
 // Start the server
 console.log("Creating server...");
