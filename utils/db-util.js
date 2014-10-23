@@ -13,7 +13,7 @@ exports.setup = function setup(){
 	var mongoOptions = {
 //		user : config.props.MONGO_USERNAME,
 //		pass : config.props.MONGO_PASSWORD,
-		replset : {
+		server : {
 			auto_connect : false,
 			poolSize : 50,
 			socketOptions : {
@@ -22,9 +22,6 @@ exports.setup = function setup(){
 			ssl : true,
 			sslKey : fs.readFileSync(config.props.KEY_PATH),
 			sslCert : fs.readFileSync(config.props.CERT_PATH)*/
-		},
-		server : {
-			poolSize : 50
 		}
 	};
 	mongoose.connect(config.props.MONGO_LOCATION, mongoOptions);

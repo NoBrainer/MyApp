@@ -147,8 +147,7 @@ server.listen(app.get('port'), function(){
 
 // If the node process ends, close the mongo connection
 process
-	.on('SIGINT', dbUtil.close)
-	.on('SIGTERM', dbUtil.close)
+	.on('SIGINT SIGTERM SIGKILL', dbUtil.close)
 	.on('exit', dbUtil.close);
 
 //// Start the server
