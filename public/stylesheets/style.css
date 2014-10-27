@@ -32,6 +32,12 @@ a.footer_link {
 .success_text {
   color: #000000;
 }
+.border_top {
+  border-top: 1px solid black;
+}
+.pointer {
+  cursor: pointer;
+}
 .modal_med {
   width: 325px;
 }
@@ -145,6 +151,22 @@ a.footer_link {
 #news_content .news_posted {
   color: #4d4d4d;
   font-size: 12px;
+}
+#news_content #news_add_more {
+  cursor: pointer;
+}
+#news_content #news_add_more i {
+  font-size: 16px;
+}
+#news_content .news_edit_entry {
+  border-bottom: 1px solid black;
+  margin-bottom: 10px;
+}
+#news_content .news_edit_entry .news_edit_title {
+  width: 100%;
+}
+#news_content .news_edit_entry .news_edit_content {
+  width: 100%;
 }
 #schedule_content {
   width: 100%;

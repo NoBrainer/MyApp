@@ -45,7 +45,7 @@ exports.getAll = function getAll(req, res){
 						isArchived : item.isArchived
 				};
 				if(isAdmin(req)){
-					obj._id = item._id
+					obj.id = item._id
 				}
 				return obj;
 			});
@@ -66,16 +66,17 @@ exports.create = function create(req, res){
 		message : null
 	};
 	
-	//TODO: validate req.body
 	var body = req.body || {};
 	body.title = body.title || "";
 	body.content = body.content || "";
+	body.isArchived = body.isArchived || false;
 	
 	// Create instance of a news item
 	var currentItem = new News({
 		title : body.title,
 		content : body.content,
-		postedDate : new Date()
+		postedDate : new Date(),
+		isArchived : body.isArchived
 	});
 	
 	// Save it
@@ -112,13 +113,14 @@ exports.update = function update(req, res){
 	
 	// Get variables from request body
 	var body = req.body || {};
-	body._id = body._id || "";
+	body.id = body.id || "";
 	body.title = body.title || "";
 	body.content = body.content || "";
+	body.isArchived = body.isArchived || false;
 	
 	// The id is required
-	if(_.isEmpty(body._id)){
-		responseObject.message = "Cannot update news without _id";
+	if(_.isEmpty(body.id)){
+		responseObject.message = "Cannot update news without id";
 		res.send(responseObject);
 		return;
 	}
@@ -126,12 +128,13 @@ exports.update = function update(req, res){
 	// Build the update object
 	var updates = {
 		title : body.title,
-		content : body.content
+		content : body.content,
+		isArchived : body.isArchived
 	};
 	
 	// Build the query
 	var query = {
-		_id : body._id
+		_id : body.id
 	};
 	
 	// Find the news item to update
@@ -154,7 +157,7 @@ exports.update = function update(req, res){
 				res.send(responseObject);
 			});
 		}else{
-			responseObject.message = "No news item with _id = "+_id;
+			responseObject.message = "No news item with id = "+id;
 			console.error(responseObject.message);
 			res.send(responseObject);
 		}
@@ -181,9 +184,10 @@ exports.archive = function archive(req, res){
 	}
 	
 	// Get variables from request body
+	var body = req.body || {};
 	body.ids = body.ids || [];
 	if(!_.isArray(body.ids)){
-		// If given a single _id, put it in an array
+		// If given a single id, put it in an array
 		body.ids = [body.ids];
 	}
 	
@@ -253,9 +257,10 @@ exports.remove = function remove(req, res){
 	}
 	
 	// Get variables from request body
+	var body = req.body || {};
 	body.ids = body.ids || [];
 	if(!_.isArray(body.ids)){
-		// If given a single _id, put it in an array
+		// If given a single id, put it in an array
 		body.ids = [body.ids];
 	}
 	

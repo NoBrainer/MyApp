@@ -163,4 +163,19 @@ app.Router = Backbone.Router.extend({
 			replace : replace
 		});
 	}
+	
+	/**
+	 * Helper function to reload the page
+	 */
+	,reloadPage : function reloadPage(){
+		var hash = window.location.hash;
+		this.navigate("junkUrlThatIWouldNeverUse", {
+			trigger : false,
+			replace : true
+		});
+		this.navigate(hash, {
+			trigger : true,
+			replace: true
+		});
+	}
 });

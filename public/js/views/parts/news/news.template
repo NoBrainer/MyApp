@@ -3,21 +3,29 @@
 		<h3>
 			News
 			<ul class="nav nav-pills panel_right admin_controls" style="display:none;">
-				<li>
+				<li class="admin_edit_toggle">
 					<a id="edit_news">Edit</a>
+				</li>
+				<li class="admin_edit_toggle" style="display:none;">
+					<a id="cancel_news">Cancel</a>
+				</li>
+				<li class="admin_edit_toggle" style="display:none;">
+					<a id="save_news">Save</a>
 				</li>
 			</ul>
 		</h3>
 	</div>
 	<div class="panel-body">
-		<ul class="media-list">
+		<ul class="media-list admin_edit_toggle">
 			<% _.each(news, function(item){ %>
 				<%
+					var dbId = item.id || ("not_admin_"+_.uniqueId());
 					var title = item.title || "Undefined_Title";
 					var content = item.content || "Undefined_Content";
 					
 					// Determine the date to display
-					var postedDateStr = app.util.Date.toString(item.postedDate);
+					var dateObj = new Date(item.postedDate);
+					var postedDateStr = app.util.Date.toString(dateObj);
 					
 					// Truncate the content if necessary
 					var maxLength = 200;
@@ -32,9 +40,11 @@
 							<img alt="64x64" data-src="holder.js/64x64" class="media-object" style="width: 64px; height: 64px;" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+">
 						</a>
 					-->
-					<div class="media-body">
+					<div class="media-body" db-id="<%= dbId %>">
 						<h4 class="media-heading">
-							<%= title %>
+							<span class="news_title">
+								<%= title %>
+							</span>
 							<span class="news_posted">
 								(Posted: <%= postedDateStr %>)
 							</span>
@@ -43,11 +53,11 @@
 							<p class="news_toggle">
 								<%= truncatedContent %>
 							</p>
-							<p class="news_toggle" style="display:none;">
+							<p class="news_toggle news_content" style="display:none;">
 								<%= content %>
 							</p>
 						<% }else{ %>
-							<p>
+							<p class="news_content">
 								<%= content %>
 							</p>
 						<% } %>
@@ -55,5 +65,59 @@
 				</li>
 			<% }); %>
 		</ul>
+		<div id="news_edit_form" class="admin_edit_toggle" style="display:none;"></div>
 	</div>
+</script>
+
+<script type="text/template" id="news-edit-form-template">
+	<div>
+		NOTE: Changes are only submitted when you hit the 'Save' button.
+	</div>
+	<% _.each(entries, function(entry, i){ %>
+		<%= entry %>
+	<% }); %>
+	<div id="news_add_more">
+		<i class="fa fa-plus-circle"></i>
+		New Entry
+	</div>
+</script>
+
+<script type="text/template" id="news-edit-entry-template">
+	<% var checked = (isArchived ? "checked='checked'" : ""); %>
+	<table db-id="<%= id %>" class="table news_edit_entry">
+		<tr>
+			<td>
+				Title:
+			</td>
+			<td>
+				<input class="news_edit_title" type="text" placeholder="Enter title for the news entry" value="<%= title %>">
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Content:
+			</td>
+			<td>
+				<textarea class="news_edit_content" placeholder="Enter content for the news entry"><%= content %></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Archived:
+			</td>
+			<td>
+				<input class="news_edit_archived pointer" type="checkbox" <%= checked %>>
+				(Archived entries don't show up unless editing.)
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Delete:
+			</td>
+			<td>
+				<input class="news_edit_delete pointer" type="checkbox">
+				(Deleted entries are gone FOREVER.)
+			</td>
+		</tr>
+	</table>
 </script>

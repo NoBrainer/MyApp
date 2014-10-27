@@ -44,7 +44,7 @@ app.view.part.ContentScaffold = Backbone.View.extend({
 		
 		// News section
 		var news = new app.view.part.News({ el : "#news_content" });
-		news.render();
+		news.syncAndRender();
 		
 		// Schedule section
 		var schedule = new app.view.part.Schedule({ el : "#schedule_content" });

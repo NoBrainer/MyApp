@@ -6,7 +6,8 @@ var mongoose = require('mongoose');
 var NewsSchema = mongoose.Schema({
 	postedDate : {
 		type : Date,
-		required : true
+		required : true,
+		default: Date.now
 	},
 	title : {
 		type : String,

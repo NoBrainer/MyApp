@@ -44,6 +44,12 @@ a.footer_link {
 .success_text {
 	color: @success_color;
 }
+.border_top {
+	border-top: 1px solid black;
+}
+.pointer {
+	cursor: pointer;
+}
 
 .modal_med {
 	width: 325px;
@@ -178,6 +184,27 @@ a.footer_link {
 	.news_posted {
 		color: lighten(@body_color, 10%);
 		font-size: 12px;
+	}
+	
+	#news_add_more {
+		cursor: pointer;
+		
+		i {
+			font-size: 16px;
+		}
+	}
+	
+	.news_edit_entry {
+		border-bottom: 1px solid black;
+		margin-bottom: 10px;
+		
+		.news_edit_title {
+			width: 100%;
+		}
+		
+		.news_edit_content {
+			width: 100%;
+		}
 	}
 }
 
