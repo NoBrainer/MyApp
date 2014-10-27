@@ -27,6 +27,11 @@ app.util.Date = {
 			period = "pm";
 		}
 		
+		// Handle leading zeroes
+		if(minute < 10){
+			minute = "0"+minute;
+		}
+		
 		// Build the date string
 		return "hh:mmPER DAY, DD MONTH YYYY"
 				.replace(/hh/, hour)
@@ -63,6 +68,11 @@ app.util.Date = {
 			period = "pm"
 		}else if(hour === 12){
 			period = "pm";
+		}
+		
+		// Handle leading zeroes
+		if(minute < 10){
+			minute = "0"+minute;
 		}
 		
 		// Build the date string
