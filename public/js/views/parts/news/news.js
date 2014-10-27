@@ -62,6 +62,12 @@ app.view.part.News = Backbone.View.extend({
 	,render : function render(news){
 		var self = this;
 		
+		// Replace all newline characters with <br>
+		news = _.map(news, function(entry){
+			entry.content = entry.content.replace(/\n/g, "<br>");
+			return entry;
+		});
+		
 		// Add the html to the page
 		var params = {
 			news : news
@@ -203,6 +209,7 @@ app.view.part.News = Backbone.View.extend({
 			obj.id= $this.attr('db-id') || "";
 			obj.title = ($this.find('.news_edit_title').val() || "").trim();
 			obj.content = ($this.find('.news_edit_content').val() || "").trim();
+			obj.content.replace(/\n/g, "<br>");
 			obj.isArchived = ($this.find('.news_edit_archived').is(':checked') || false);
 			obj.deleted = ($this.find('.news_edit_delete').is(':checked') || false);
 			return obj;
@@ -222,7 +229,8 @@ app.view.part.News = Backbone.View.extend({
 		
 		// Build the html for each entry
 		var entries = _.map(self.news, function(item){
-			item.id = item.id;
+			item.id = item.id || "new";
+			item.content = item.content.replace(/<br>/g, "\n");
 			return entryTemplate(item);
 		});
 		
