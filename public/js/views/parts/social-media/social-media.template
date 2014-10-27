@@ -2,17 +2,17 @@
 	<div class="panel-body">
 		<ul id="social_media_list" class="nav nav-pills">
 			<li>
-				<a>
+				<a href="https://twitter.com/Copycat_Co" target="_blank">
 					<i class="fa fa-twitter-square" title="Twitter"></i>
 				</a>
 			</li>
 			<li>
-				<a>
+				<a href="https://www.facebook.com/copycatcompany" target="_blank">
 					<i class="fa fa-facebook-square" title="Facebook"></i>
 				</a>
 			</li>
 			<li>
-				<a>
+				<a href="http://instagram.com/copycatco" target="_blank">
 					<i class="fa fa-instagram" title="Instagram"></i>
 				</a>
 			</li>
