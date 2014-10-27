@@ -29,23 +29,23 @@ exports.getAll = function getAll(req, res){
 		news : null
 	};
 	
-	// Search for all news items
+	// Search for all news entries
 	var query = {};
 	News.find(query, function(err, data){
 		if(err){
 			responseObject.error = err;
 			console.error(err);
 		}else{
-			responseObject.news = _.map(data, function(item){
+			responseObject.news = _.map(data, function(entry){
 				// Filter the attributes returned
 				var obj = {
-						postedDate : item.postedDate,
-						title : item.title,
-						content : item.content,
-						isArchived : item.isArchived
+						postedDate : entry.postedDate,
+						title : entry.title,
+						content : entry.content,
+						isArchived : entry.isArchived
 				};
 				if(isAdmin(req)){
-					obj.id = item._id
+					obj.id = entry._id
 				}
 				return obj;
 			});
@@ -55,7 +55,7 @@ exports.getAll = function getAll(req, res){
 };
 
 /**
- * POST - create a news item
+ * POST - create a news entry
  * @memberOf News
  */
 exports.create = function create(req, res){
@@ -66,12 +66,19 @@ exports.create = function create(req, res){
 		message : null
 	};
 	
+	// Verify admin status
+	if(!isAdmin(req)){
+		responseObject.message = "Not authorized to create news";
+		res.send(responseObject);
+		return;
+	}
+	
 	var body = req.body || {};
 	body.title = body.title || "";
 	body.content = body.content || "";
 	body.isArchived = body.isArchived || false;
 	
-	// Create instance of a news item
+	// Create instance of a news entry
 	var currentItem = new News({
 		title : body.title,
 		content : body.content,
@@ -93,7 +100,7 @@ exports.create = function create(req, res){
 };
 
 /**
- * POST - update a news item
+ * POST - update a news entry
  * @memberOf News
  */
 exports.update = function update(req, res){
@@ -137,15 +144,15 @@ exports.update = function update(req, res){
 		_id : body.id
 	};
 	
-	// Find the news item to update
-	News.findOne(query, function(err, item){
+	// Find the news entry to update
+	News.findOne(query, function(err, entry){
 		if(err){
 			responseObject.error = err;
 			responseObject.message = err.message;
 			console.error(responseObject.message);
 			res.send(responseObject);
-		}else if(item){
-			// Update the news item
+		}else if(entry){
+			// Update the news entry
 			News.update(query, updates, function(err, numAffected){
 				if(err){
 					responseObject.error = err;
@@ -157,7 +164,7 @@ exports.update = function update(req, res){
 				res.send(responseObject);
 			});
 		}else{
-			responseObject.message = "No news item with id = "+id;
+			responseObject.message = "No news entry with id = "+id;
 			console.error(responseObject.message);
 			res.send(responseObject);
 		}
@@ -165,7 +172,7 @@ exports.update = function update(req, res){
 };
 
 /**
- * POST - archive news items
+ * POST - archive news entries
  * @memberOf News
  */
 exports.archive = function archive(req, res){
@@ -178,7 +185,7 @@ exports.archive = function archive(req, res){
 	
 	// Verify admin status
 	if(!isAdmin(req)){
-		responseObject.message = "Not authorized to archive news items";
+		responseObject.message = "Not authorized to archive news entries";
 		res.send(responseObject);
 		return;
 	}
@@ -210,7 +217,7 @@ exports.archive = function archive(req, res){
 		}
 	};
 	
-	// Find the news item to archive
+	// Find the news entry to archive
 	News.find(query, function(err, docs){
 		if(err){
 			responseObject.error = err;
@@ -218,7 +225,7 @@ exports.archive = function archive(req, res){
 			console.error(responseObject.message);
 			res.send(responseObject);
 		}else if(docs){
-			// Archive the news item
+			// Archive the news entry
 			News.update(query, updates, function(err, numAffected){
 				if(err){
 					responseObject.error = err;
@@ -230,7 +237,7 @@ exports.archive = function archive(req, res){
 				res.send(responseObject);
 			});
 		}else{
-			responseObject.message = "No news item found";
+			responseObject.message = "No news entry found";
 			console.error(responseObject.message);
 			res.send(responseObject);
 		}
@@ -238,7 +245,7 @@ exports.archive = function archive(req, res){
 };
 
 /**
- * POST - delete news items
+ * POST - delete news entries
  * @memberOf News
  */
 exports.remove = function remove(req, res){
@@ -251,7 +258,7 @@ exports.remove = function remove(req, res){
 	
 	// Verify admin status
 	if(!isAdmin(req)){
-		responseObject.message = "Not authorized to delete news items";
+		responseObject.message = "Not authorized to delete news entries";
 		res.send(responseObject);
 		return;
 	}
@@ -278,7 +285,7 @@ exports.remove = function remove(req, res){
 		}
 	};
 	
-	// Remove the news item(s)
+	// Remove the news entries
 	News.remove(query, function(err){
 		if(err){
 			responseObject.error = err;
