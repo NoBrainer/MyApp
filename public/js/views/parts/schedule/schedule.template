@@ -3,19 +3,20 @@
 		<h3>
 			Schedule
 			<ul class="nav nav-pills panel_right admin_controls" style="display:none;">
-				<li>
+				<li class="admin_edit_toggle">
 					<a id="edit_schedule">Edit</a>
+				</li>
+				<li class="admin_edit_toggle" style="display:none;">
+					<a id="cancel_schedule">Cancel</a>
+				</li>
+				<li class="admin_edit_toggle" style="display:none;">
+					<a id="save_schedule">Save</a>
 				</li>
 			</ul>
 		</h3>
 	</div>
 	<div class="panel-body">
-		<div>
-			<i class="fa fa-wrench"></i>
-			UNDER CONSTRUCTION
-		</div>
-		
-		<table class="table">
+		<table class="table admin_edit_toggle">
 			<tr>
 				<% _.each(items, function(item){ %>
 					<td>
@@ -38,6 +39,7 @@
 				<% }); %>
 			</tr>
 		</table>
+		<div id="schedule_edit_form" class="admin_edit_toggle" style="display:none;"></div>
 		
 		<!--
 		<div class="btn-group btn-group-justified">
@@ -66,5 +68,48 @@
 			<% }); %>
 		</div>
 		-->
+	</div>
+</script>
+
+<script type="text/template" id="schedule-edit-form-template">
+	<div>
+		<span>
+			Date:
+		</span>
+		<span>
+			<div id="schedule_date_picker" class="input-append date">
+				<input data-format="MM/dd/yyyy" type="text">
+				<span class="add-on">
+					<i class="fa fa-calendar" data-date-icon="fa-calendar"></i>
+				</span>
+			</div>
+		</span>
+	</div>
+	<% _.each(entries, function(entry){ %>
+		<%= entry %>
+	<% }); %>
+	<div id="schedule_add_person">
+		<i class="fa fa-plus-circle"></i>
+		New Entry
+	</div>
+</script>
+
+<script type="text/template" id="schedule-edit-entry-template">
+	<div class="schedule_entry">
+		<select class="user_selection">
+			<option value="">-- Select a Person --</option>
+			<% _.each(users, function(user){ %>
+				<option value="<%= user.username %>"><%= user.name %></option>
+			<% }); %>
+		</select>
+		<select class="shift_selection">
+			<option value="">-- Select the Shift --</option>
+			<option value="barback">Barback</option>
+			<option value="open">Open</option>
+			<option value="close">Close</option>
+		</select>
+		<span class="remove_person">
+			<i class="fa fa-minus-circle"></i>
+		</span>
 	</div>
 </script>

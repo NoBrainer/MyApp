@@ -48,7 +48,7 @@ app.view.part.ContentScaffold = Backbone.View.extend({
 		
 		// Schedule section
 		var schedule = new app.view.part.Schedule({ el : "#schedule_content" });
-		schedule.render();
+		schedule.syncAndRender();
 		
 		// Menu section
 		var menu = new app.view.part.Menu({ el : "#menu_content" });

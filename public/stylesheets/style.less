@@ -58,6 +58,14 @@ a.footer_link {
 	margin-left: -15px;
 }
 
+.input-append {
+	display: inline-block;
+	
+	.add-on {
+		display: inline-block;
+	}
+}
+
 #content {
 	background-color: transparent;
 	padding-top: @header_height;
@@ -214,6 +222,25 @@ a.footer_link {
 	
 	> .panel-body {
 		width: 100%;
+		
+		#schedule_edit_form {
+			select {
+				margin-right: 10px;
+			}
+			
+			> div {
+				margin-bottom: 10px;
+			}
+		}
+		
+		#schedule_add_person,
+		.remove_person {
+			cursor: pointer;
+			
+			i {
+				font-size: 16px;
+			}
+		}
 		
 		li {
 			float: left;

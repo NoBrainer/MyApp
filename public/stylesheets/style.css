@@ -44,6 +44,12 @@ a.footer_link {
 .nav.navbar-nav:first-child {
   margin-left: -15px;
 }
+.input-append {
+  display: inline-block;
+}
+.input-append .add-on {
+  display: inline-block;
+}
 #content {
   background-color: transparent;
   padding-top: 83px;
@@ -174,6 +180,20 @@ a.footer_link {
 }
 #schedule_content > .panel-body {
   width: 100%;
+}
+#schedule_content > .panel-body #schedule_edit_form select {
+  margin-right: 10px;
+}
+#schedule_content > .panel-body #schedule_edit_form > div {
+  margin-bottom: 10px;
+}
+#schedule_content > .panel-body #schedule_add_person,
+#schedule_content > .panel-body .remove_person {
+  cursor: pointer;
+}
+#schedule_content > .panel-body #schedule_add_person i,
+#schedule_content > .panel-body .remove_person i {
+  font-size: 16px;
 }
 #schedule_content > .panel-body li {
   float: left;
