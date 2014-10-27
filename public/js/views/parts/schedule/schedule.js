@@ -63,6 +63,9 @@ app.view.part.Schedule = Backbone.View.extend({
 	,initHandlers : function initHandlers(){
 		var self = this;
 		
+		// Setup the admin mode if the user is an admin
+		self.setupAdminMode();
+		
 //		//TODO: remove this if we settle on the table version
 //		// Click handler to show the expanded version
 //		self.$el.find('.expanding_btn').on('click', function(){
@@ -83,6 +86,21 @@ app.view.part.Schedule = Backbone.View.extend({
 //		self.$el.find('.expanded_btn').on('click', function(){
 //			$(this).hide();
 //		});
+		
+		return self;
+	}
+	
+	/**
+	 * Setup the admin mode if the user is an admin
+	 */
+	,setupAdminMode : function setupAdminMode(){
+		if(!app.util.Login.isAdmin()){
+			return self;
+		}
+		var self = this;
+		
+		// Show admin controls
+		self.$el.find('.admin_controls').show();
 		
 		return self;
 	}

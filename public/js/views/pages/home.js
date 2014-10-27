@@ -55,9 +55,6 @@ app.view.page.Home = Backbone.View.extend({
 		}
 		app.router.setPath("#admin");
 		
-		// Show admin controls
-		$('.admin_controls').show();
-		
 		// Setup the admin panel
 		app.view.part.AdminPanel.setup("#admin_content");
 		

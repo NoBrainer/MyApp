@@ -33,7 +33,25 @@ app.view.part.Menu = Backbone.View.extend({
 	 */
 	,initHandlers : function initHandlers(){
 		var self = this;
-		//TODO
+		
+		// Setup the admin mode if the user is an admin
+		self.setupAdminMode();
+		
+		return self;
+	}
+	
+	/**
+	 * Setup the admin mode if the user is an admin
+	 */
+	,setupAdminMode : function setupAdminMode(){
+		if(!app.util.Login.isAdmin()){
+			return self;
+		}
+		var self = this;
+		
+		// Show admin controls
+		self.$el.find('.admin_controls').show();
+		
 		return self;
 	}
 });
