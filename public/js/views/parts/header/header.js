@@ -118,7 +118,7 @@ app.view.part.Header = Backbone.View.extend({
 			// Build ajax options
 			var options = {
 				type : 'POST',
-				url : "/api/users/login", //TODO: build base url dynamically
+				url : "/api/users/login",
 				cache : false,
 				contentType : 'application/json',
 				dataType : 'json',
@@ -229,7 +229,7 @@ app.view.part.Header = Backbone.View.extend({
 			// Build ajax options
 			var options = {
 				type : 'POST',
-				url : "/api/users/register", //TODO: build base url dynamically
+				url : "/api/users/register",
 				cache : false,
 				contentType : 'application/json',
 				dataType : 'json',
@@ -322,25 +322,8 @@ app.view.part.Header = Backbone.View.extend({
 			};
 			options.success = function(resp){
 				if(resp.successful){
-					//TODO: make a date util
-					// Display a success message
-					var now = new Date();
-					var hours = now.getHours();
-					if(hours < 10){
-						hours = "0"+hours;
-					}
-					var minutes = now.getMinutes();
-					if(minutes < 10){
-						minutes = "0"+minutes;
-					}
-					var seconds = now.getSeconds();
-					if(seconds < 10){
-						seconds = "0"+seconds;
-					}
-					var time = "hour:min:sec"
-							.replace("hour", hours)
-							.replace("min", minutes)
-							.replace("sec", seconds);
+					var now = new Date(Date.now());
+					var time = app.util.Date.toString(now);
 					var msg = "Updated [_TIME_]".replace(/_TIME_/, time);
 					$settingsSuccess.text(msg);
 				}else if(resp.message){
@@ -405,7 +388,7 @@ app.view.part.Header = Backbone.View.extend({
 			// Build ajax options
 			var options = {
 				type : 'POST',
-				url : "/api/users/startPasswordReset", //TODO: build base url dynamically
+				url : "/api/users/startPasswordReset",
 				cache : false,
 				contentType : 'application/json',
 				dataType : 'json',
@@ -531,7 +514,7 @@ app.view.part.Header = Backbone.View.extend({
 		// Build ajax options
 		var options = {
 			type : 'POST',
-			url : "/api/users/logout", //TODO: build base url dynamically
+			url : "/api/users/logout",
 			cache : false,
 			contentType : 'application/json'
 		};

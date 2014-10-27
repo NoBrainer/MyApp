@@ -33,7 +33,6 @@ app.view.part.Jumbotron = Backbone.View.extend({
 	 */
 	,initHandlers : function initHandlers(){
 		var self = this;
-		//TODO
 		return self;
 	}
 });

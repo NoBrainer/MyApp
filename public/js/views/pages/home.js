@@ -38,8 +38,6 @@ app.view.page.Home = Backbone.View.extend({
 		}
 		app.router.setPath("#employee");
 		
-		//TODO: do employee-specific things
-		
 		return self;
 	}
 	

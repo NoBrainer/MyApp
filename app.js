@@ -132,15 +132,13 @@ router.route('/users/startPasswordReset')
 router.route('/users/resetPassword')
 	.get(user.isAbleToResetPassword)
 	.post(user.resetPassword);
-router.route('/users/:username')
+router.route('/users/:username') //TODO: investigate if this is needed
 	.get(user.exists);
 // News
 router.route('/news')
 	.get(news.getAll);
 router.route('/news/create')
 	.post(news.create);
-router.route('/news/archive')
-	.post(news.archive);
 router.route('/news/update')
 	.post(news.update);
 router.route('/news/remove')
