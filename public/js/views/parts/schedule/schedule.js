@@ -57,7 +57,6 @@ app.view.part.Schedule = Backbone.View.extend({
 			contentType : 'application/json'
 		};
 		options.success = function(resp){
-			console.log(resp);
 			if(_.isNull(resp.error)){
 				self.users = _.isEmpty(resp.users) ? [self.stubUser] : resp.users;
 				self.render(self.users);
@@ -247,7 +246,7 @@ app.view.part.Schedule = Backbone.View.extend({
 			});
 			$datePicker.find('input').on('click', function(e){
 				$datePicker.find('.add-on').click();
-			})
+			});
 			
 			self.$el.dequeue();
 		});

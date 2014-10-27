@@ -48,7 +48,7 @@ app.view.part.Header = Backbone.View.extend({
 	,initHandlers : function initHandlers(){
 		return this
 				.initModals()		// Initialize modals
-				.initLoginStatus()	// Check if user is already logged in
+				.updateLogin()		// Check if user is already logged in
 		;
 	}
 	
@@ -433,48 +433,28 @@ app.view.part.Header = Backbone.View.extend({
 	}
 	
 	/**
-	 * Initialize the site to have the user logged in if applicable
-	 */
-	,initLoginStatus : function initLoginStatus(){
-		var self = this;
-		
-		// Build ajax options
-		var options = {
-			type : 'GET',
-			url : "/api/users/login",
-			cache : false,
-			contentType : 'application/json'
-		};
-		options.success = function(resp){
-			if(resp.isLoggedIn){
-				// Update the login status
-				self.updateLogin(resp);
-			}else{
-				// Logout
-				self.updateLogout();
-			}
-		};
-		options.error = function(resp){
-			alert("Failure to communicate with site. Try again later.");
-		};
-		
-		// GET login status from the server
-		$.ajax(options);
-		
-		return self;
-	}
-	
-	/**
 	 * After successful login, setup UI to be in a logged in state
 	 */
 	,updateLogin : function updateLogin(resp){
 		var self = this;
-		
-		// Extract data from the response
 		resp = resp || {};
-		var name = resp.name || "";
-		var username = resp.username || "";
-		var type = resp.type || "";
+		
+		// Extract data from app.state.login
+		var name = app.state.login.name;
+		var username = app.state.login.username;
+		var type = app.state.login.type;
+		
+		// If a response was passed, use that instead of app.state.login
+		if(!_.isEmpty(resp)){
+			name = resp.name;
+			username = resp.username;
+			type = resp.type;
+		}
+		
+		// Logout if there is no type
+		if(_.isEmpty(type)){
+			return self.updateLogout();
+		}
 		
 		var $showOnLogout = $('.show_on_logout');
 		var $showOnLogin = $('.show_on_login');
@@ -491,8 +471,7 @@ app.view.part.Header = Backbone.View.extend({
 		$settingsName.val(name || "");
 		$settingsUsername.val(username || "");
 		
-		// Update the login state
-		app.state.login = type;
+		// Update the route depending on the login type
 		app.util.Login.routeToMax();
 		
 		return self;
@@ -505,7 +484,9 @@ app.view.part.Header = Backbone.View.extend({
 		var self = this;
 		
 		// Update the login state
-		app.state.login = "";
+		app.state.login.name = "";
+		app.state.login.username = "";
+		app.state.login.type = "";
 		
 		var $showOnLogout = $('.show_on_logout');
 		var $showOnLogin = $('.show_on_login');

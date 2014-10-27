@@ -9,7 +9,11 @@
 				part : {}
 			},
 			state : {
-				login : ""
+				login : {
+					type : "",
+					name : "",
+					username : ""
+				}
 			}
 	};
 })();

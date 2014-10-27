@@ -5,7 +5,7 @@ app.util.Login = {
 	 * @memberOf app.util.Login
 	 */
 	isDeveloper : function isDeveloper(){
-		if(app.state.login.match(/^developer/i)){
+		if(app.state.login.type.match(/^developer/i)){
 			return true;
 		}
 		return false;
@@ -16,7 +16,7 @@ app.util.Login = {
 	 * @memberOf app.util.Login
 	 */
 	,isAdmin : function isAdmin(){
-		if(app.state.login.match(/^admin/i) || app.util.Login.isDeveloper()){
+		if(app.state.login.type.match(/^admin/i) || app.util.Login.isDeveloper()){
 			return true;
 		}
 		return false;
@@ -27,7 +27,7 @@ app.util.Login = {
 	 * @memberOf app.util.Login
 	 */
 	,isEmployee : function isEmployee(){
-		if(app.state.login.match(/^employee$/i) || app.util.Login.isAdmin()){
+		if(app.state.login.type.match(/^employee$/i) || app.util.Login.isAdmin()){
 			return true;
 		}
 		return false;
@@ -45,6 +45,34 @@ app.util.Login = {
 		}else{
 			app.router.routeHome();
 		}
+	}
+	
+	/**
+	 * Check the login state and update app.state accordingly
+	 * @memberOf app.util.Login
+	 */
+	,checkLoginState : function checkLoginState(){
+		// Build ajax options
+		var options = {
+			type : 'GET',
+			url : "/api/users/login",
+			cache : false,
+			contentType : 'application/json'
+		};
+		options.success = function(resp){
+			if(resp.isLoggedIn){
+				// Update the login status
+				app.state.login.type = resp.type || "";
+				app.state.login.name = resp.name || "";
+				app.state.login.username = resp.username || "";
+			}
+		};
+		options.error = function(resp){
+			alert("Failure to communicate with site. Try again later.");
+		};
+		
+		// GET login status from the server
+		return $.ajax(options);
 	}
 };
 
