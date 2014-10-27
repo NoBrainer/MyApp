@@ -10,7 +10,7 @@
 					<a id="cancel_schedule">Cancel</a>
 				</li>
 				<li class="admin_edit_toggle" style="display:none;">
-					<a id="save_schedule">Save</a>
+					<a id="refresh_schedule">Refresh</a>
 				</li>
 			</ul>
 		</h3>
@@ -73,6 +73,9 @@
 
 <script type="text/template" id="schedule-edit-form-template">
 	<div>
+		You must hit 'Apply' to save your changes. Otherwise, changes are lost when switching dates.
+	</div>
+	<div>
 		<span>
 			Date:
 		</span>
@@ -88,10 +91,33 @@
 	<% _.each(entries, function(entry){ %>
 		<%= entry %>
 	<% }); %>
-	<div id="schedule_add_person">
-		<i class="fa fa-plus-circle"></i>
-		New Entry
+	<ul class="nav nav-pills">
+		<li>
+			<a id="schedule_add_person">
+				<i class="fa fa-plus-circle"></i>
+				New Entry
+			</a>
+		</li>
+		<li>
+			<a id="apply_schedule_changes">
+				<i class="fa fa-check-circle"></i>
+				Apply
+			</a>
+		</li>
+	</ul>
+	<!--
+	<div>
+		<span id="schedule_add_person">
+			<i class="fa fa-plus-circle"></i>
+			New Entry
+		</span>
+		<span id="apply_schedule_changes">
+			<a>
+				Apply Changes
+			</a>
+		</span>
 	</div>
+	-->
 </script>
 
 <script type="text/template" id="schedule-edit-entry-template">

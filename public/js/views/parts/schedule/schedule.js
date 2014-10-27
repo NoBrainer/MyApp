@@ -166,17 +166,22 @@ app.view.part.Schedule = Backbone.View.extend({
 			self.$el.find('.admin_edit_toggle').toggle();
 		});
 		
-		// Handler for saving edits
-		$('#save_schedule').on('click', function(e){
-//			$.when(self.saveChanges())
-//				.done(function(resp){
-//					app.router.reloadPage();
-//				})
-//				.fail(function(resp){
-//					console.log("Failed to save changes");
-//					console.log(resp);
-//					alert("Failed to save changes. Please try again.");
-//				});
+		// Handler for refreshing the page
+		$('#refresh_schedule').on('click', function(e){
+			app.router.reloadPage();
+		});
+		
+		// Handler for applying changes
+		$('#apply_schedule_changes').on('click', function(e){
+//		$.when(self.saveChanges())
+//			.done(function(resp){
+//				app.router.reloadPage();
+//			})
+//			.fail(function(resp){
+//				console.log("Failed to save changes");
+//				console.log(resp);
+//				alert("Failed to save changes. Please try again.");
+//			});
 		});
 		
 		// Handler for removing people from the schedule (NOTE: this is overridden when you add entries)
@@ -205,7 +210,7 @@ app.view.part.Schedule = Backbone.View.extend({
 				var entryHtml = entryTemplate(params);
 				
 				// Add it to the page before the add button
-				$this.before(entryHtml);
+				$this.parents('.nav').before(entryHtml);
 				
 				self.$el.dequeue();
 			});
