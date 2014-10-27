@@ -8,7 +8,7 @@ var db = undefined;
 /**
  * Setup the mongo database
  */
-exports.setup = function setup(){
+exports.setup = function setup(callback){
 	// Setup the database
 	var mongoOptions = {
 //		user : config.props.MONGO_USERNAME,
@@ -29,6 +29,12 @@ exports.setup = function setup(){
 	db.on('error', console.error.bind(console, 'connection error:'));
 	db.once('open', function(){
 		console.log('successfully opened database!');
+		
+		if(_.isFunction(callback)){
+			// Call this function if it's provided
+			// Thi prevents a race condition where the server is listening before it's connected to mongo
+			callback();
+		}
 	});
 };
 

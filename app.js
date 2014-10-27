@@ -75,9 +75,6 @@ app.use(session({
 	store : new MongoStore(config.props.DATABASE)
 }));
 
-// TODO: figure out where to put this when things are more fleshed out
-dbUtil.setup();
-
 // Do things when in development mode
 var isDevelopment = 'development' === app.get('env');
 if(isDevelopment){
@@ -149,19 +146,27 @@ router.route('/news/update')
 router.route('/news/remove')
 	.post(news.remove);
 
-// Start the server
-console.log("Creating server...");
-var server = http.createServer(app);
+var startListening = function startListening(){
+	// Start the server
+	console.log("Creating server...");
+	var server = http.createServer(app);
+	
+	console.log("Listening to port "+app.get('port'));
+	server.listen(app.get('port'), function(){
+		console.log('Express server listening on port ' + app.get('port'));
+	});
+	
+	// If the node process ends, close the mongo connection
+	process
+		.on('SIGINT SIGTERM SIGKILL', dbUtil.close)
+		.on('exit', dbUtil.close);
+}
 
-console.log("Listening to port "+app.get('port'));
-server.listen(app.get('port'), function(){
-	console.log('Express server listening on port ' + app.get('port'));
+// Setup the database then have the server start listening
+dbUtil.setup(function(){
+	// Make sure to have the server start listening after it's connected to mongo
+	startListening();
 });
-
-// If the node process ends, close the mongo connection
-process
-	.on('SIGINT SIGTERM SIGKILL', dbUtil.close)
-	.on('exit', dbUtil.close);
 
 //// Start the server
 //var certOpts = {
