@@ -62,11 +62,6 @@ app.view.part.News = Backbone.View.extend({
 	,render : function render(news){
 		var self = this;
 		
-		// Filter to only show un-archived news entries
-		news = _.filter(news, function(entry){
-			return (entry.isArchived === false);
-		});
-		
 		// Add the html to the page
 		var params = {
 			news : news
@@ -103,6 +98,12 @@ app.view.part.News = Backbone.View.extend({
 		// Add toggle functionality to the truncated text
 		$('.news_toggle').on('click', function(e){
 			$(this).parent().find('.news_toggle').toggle();
+		});
+		
+		// Add the ability to see all news entries (including archived)
+		$('#news_show_all').on('click', function(e){
+			$(this).hide();
+			$('.archived_news').show();
 		});
 		
 		// Setup the admin mode if the user is an admin

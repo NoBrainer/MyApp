@@ -109,7 +109,8 @@ a.footer_link {
   /*half of the width*/
   position: fixed;
 }
-.panel-heading .panel_right {
+.panel-heading .panel_right,
+.panel-body .panel_right {
   float: right;
   font-size: 14px;
 }

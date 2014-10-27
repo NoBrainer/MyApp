@@ -1,4 +1,7 @@
 <script type="text/template" id="news-template">
+	<%
+		var displayShowAllLink = false;
+	%>
 	<div class="panel-heading">
 		<h3>
 			News
@@ -22,6 +25,11 @@
 					var dbId = item.id || ("not_admin_"+_.uniqueId());
 					var title = item.title || "Undefined_Title";
 					var content = item.content || "Undefined_Content";
+					var isArchived = item.isArchived || false;
+					
+					if(isArchived){
+						displayShowAllLink = true;
+					}
 					
 					// Determine the date to display
 					var dateObj = new Date(item.postedDate);
@@ -40,7 +48,7 @@
 							<img alt="64x64" data-src="holder.js/64x64" class="media-object" style="width: 64px; height: 64px;" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+">
 						</a>
 					-->
-					<div class="media-body" db-id="<%= dbId %>">
+					<div class="media-body<%= (isArchived ? " archived_news" : "") %>" db-id="<%= dbId %>" <%= (isArchived ? "style='display:none;'" : "") %>>
 						<h4 class="media-heading">
 							<span class="news_title">
 								<%= title %>
@@ -65,6 +73,13 @@
 				</li>
 			<% }); %>
 		</ul>
+		<% if(displayShowAllLink){ %>
+			<ul class="nav nav-pills panel_right admin_edit_toggle">
+				<li>
+					<a id="news_show_all">Show All</a>
+				</li>
+			</ul>
+		<% } %>
 		<div id="news_edit_form" class="admin_edit_toggle" style="display:none;"></div>
 	</div>
 </script>
