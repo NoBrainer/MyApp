@@ -19,7 +19,7 @@ var ScheduleEntry = mongoose.Schema({
 		required : true,
 		default : ""
 	}
-});
+}, { _id : false });
 
 /**
  * Initialize schedule schema

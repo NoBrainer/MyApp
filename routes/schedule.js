@@ -21,6 +21,68 @@ var isEmployee = function isEmployee(req){
 };
 
 /**
+ * Generate the date string with format YYYY-MM-DD
+ */
+var generateDateString = function generateDateString(date){
+	date = (_.isDate(date) ? date : new Date(date));
+	
+	var year = date.getFullYear();
+	var month = date.getMonth()+1;
+	var day = date.getDate();
+	day = (day<10 ? "0"+day : day);
+	var id = "YYYY-MM-DD"
+			.replace(/YYYY/, year)
+			.replace(/MM/, month)
+			.replace(/DD/, day);
+	
+	return id;
+}
+
+/**
+ * GET - A list of every schedule entry
+ * @memberOf Schedule
+ */
+exports.getAll = function getAll(req, res){
+	// Default response template
+	var responseObject = {
+		error : null,
+		schedule : null
+	};
+	
+	// Generate the query
+	var query = {};
+	
+	// Search for all schedule entries
+	Schedule.find(query, function(err, data){
+		if(err){
+			responseObject.error = err;
+			console.error(err);
+		}else{
+			// Filter the attributes returned
+			responseObject.schedule = _.map(data, function(item){
+				return {
+						dateString : item.dateString,
+						date : item.date,
+						entries : _.map(item.entries, function(entry){
+							var obj = {
+									username : entry.username,
+									name : entry.name,
+									dateString : entry.dateString,
+									shift : ""
+							};
+							if(isAdmin(req)){
+								obj.shift = entry.shift;
+							}
+							return obj;
+						})
+				};
+			});
+		}
+		res.send(responseObject);
+	});
+};
+
+/**
  * POST - A list of the schedule between startDate and endDate
  * @memberOf Schedule
  */
@@ -77,7 +139,7 @@ exports.getRange = function getRange(req, res){
 		}
 	};
 	
-	// Search for all news entries
+	// Search for all schedule entries
 	Schedule.find(query, function(err, data){
 		if(err){
 			responseObject.error = err;
@@ -166,7 +228,7 @@ exports.update = function update(req, res){
 			res.send(responseObject);
 		}else if(item){
 			//TODO: see if we can just save instead of update
-			// Update the news entry
+			// Update the schedule entry
 			Schedule.update(query, updates, function(err, numAffected){
 				if(err){
 					responseObject.error = err;
@@ -199,22 +261,3 @@ exports.update = function update(req, res){
 		}
 	});
 };
-
-
-/**
- * Generate the date string with format YYYY-MM-DD
- */
-var generateDateString = function generateDateString(date){
-	date = (_.isDate(date) ? date : new Date(date));
-	
-	var year = date.getFullYear();
-	var month = date.getMonth()+1;
-	var day = date.getDate();
-	day = (day<10 ? "0"+day : day);
-	var id = "YYYY-MM-DD"
-			.replace(/YYYY/, year)
-			.replace(/MM/, month)
-			.replace(/DD/, day);
-	
-	return id;
-}

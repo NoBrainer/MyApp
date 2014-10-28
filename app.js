@@ -146,7 +146,7 @@ router.route('/news/remove')
 	.post(news.remove);
 // Schedule
 router.route('/schedule')
-//	.get(schedule.getAll)//TODO
+	.get(schedule.getAll)
 	.post(schedule.getRange);
 router.route('/schedule/update')
 	.post(schedule.update);
