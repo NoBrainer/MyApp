@@ -439,17 +439,17 @@ app.view.part.Header = Backbone.View.extend({
 		var self = this;
 		resp = resp || {};
 		
+		// If a response was passed, then update app.state.login
+		if(!_.isEmpty(resp)){
+			app.state.login.name = resp.name;
+			app.state.login.username = resp.username;
+			app.state.login.type = resp.type;
+		}
+		
 		// Extract data from app.state.login
 		var name = app.state.login.name;
 		var username = app.state.login.username;
 		var type = app.state.login.type;
-		
-		// If a response was passed, use that instead of app.state.login
-		if(!_.isEmpty(resp)){
-			name = resp.name;
-			username = resp.username;
-			type = resp.type;
-		}
 		
 		// Logout if there is no type
 		if(_.isEmpty(type)){
