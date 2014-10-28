@@ -7,10 +7,7 @@ var ScheduleEntry = mongoose.Schema({
 	username : {
 		type : String,
 		required : true,
-		default : "",
-		index : {
-			unique : true
-		}
+		default : ""
 	},
 	name : {
 		type : String,
@@ -28,6 +25,10 @@ var ScheduleEntry = mongoose.Schema({
  * Initialize schedule schema
  */
 var ScheduleSchema = mongoose.Schema({
+	dateString : {
+		type : String,
+		required : true
+	},
 	date : {
 		type : Date,
 		required : true

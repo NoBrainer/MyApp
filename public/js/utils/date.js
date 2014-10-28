@@ -129,13 +129,16 @@ app.util.Date = {
 	 * Get the date object with the date number incremented
 	 * @memberOf app.util.Date
 	 */
-	,nextDay : function nextDay(date){
+	,nextDay : function nextDay(date, num){
 		if(!_.isDate(date)){
 			date = new Date(); //default to now
 		}
+		if(!_.isNumber(num)){
+			num = 1;
+		}
 		
 		// Increment the date
-		date.setDate(date.getDate()+1);
+		date.setDate(date.getDate() + num);
 		return date;
 	}
 	
@@ -143,14 +146,35 @@ app.util.Date = {
 	 * Get the date object with the date number decremented
 	 * @memberOf app.util.Date
 	 */
-	,prevDay : function prevDay(date){
+	,prevDay : function prevDay(date, num){
 		if(!_.isDate(date)){
 			date = new Date();//default to now
 		}
+		if(!_.isNumber(num)){
+			num = 1;
+		}
 		
 		// Decrement the date
-		date.setDate(date.getDate()-1);
+		date.setDate(date.getDate() - num);
 		return date;
+	}
+	
+	/**
+	 * Get 7 days of dates
+	 * @memberOf app.util.Date
+	 */
+	,generateDatesForAWeek : function generateDatesForAWeek(start){
+		// Get the start time
+		var currentDay = app.util.Date.startOfDay(start);
+		
+		// Build the date array
+		var dates = [];
+		for(var i=0; i<7; i++){
+			dates.push(currentDay);
+			currentDay = new Date(app.util.Date.nextDay(currentDay).getTime());
+		}
+		
+		return dates;
 	}
 };
 

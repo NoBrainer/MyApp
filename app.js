@@ -50,6 +50,7 @@ config = require('./config');
 var routes = require('./routes');
 var user = require('./routes/user');
 var news = require('./routes/news');
+var schedule = require('./routes/schedule');
 var fileUtil = require('./utils/file-util');
 var dbUtil = require('./utils/db-util');
 
@@ -143,6 +144,12 @@ router.route('/news/update')
 	.post(news.update);
 router.route('/news/remove')
 	.post(news.remove);
+// Schedule
+router.route('/schedule')
+//	.get(schedule.getAll)//TODO
+	.post(schedule.getRange);
+router.route('/schedule/update')
+	.post(schedule.update);
 
 var startListening = function startListening(){
 	// Start the server

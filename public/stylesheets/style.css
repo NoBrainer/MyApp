@@ -201,8 +201,5 @@ a.footer_link {
   font-size: 16px;
 }
 #schedule_content > .panel-body li {
-  float: left;
   list-style-type: none;
-  overflow: visible;
-  width: 100%;
 }

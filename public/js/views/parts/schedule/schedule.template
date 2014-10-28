@@ -18,20 +18,24 @@
 	<div class="panel-body">
 		<table class="table admin_edit_toggle">
 			<tr>
-				<% _.each(items, function(item){ %>
+				<% _.each(scheduleList, function(item){ %>
 					<td>
 						<%= item.label %>
 					</td>
 				<% }); %>
 			</tr>
 			<tr>
-				<% _.each(items, function(item){ %>
+				<% _.each(scheduleList, function(item){ %>
 					<td>
 						<ul>
-							<% var people = item.people; %>
-							<% _.each(people, function(person){ %>
+							<% _.each(item.entries, function(entry){ %>
 								<li>
-									<%= person %>
+									<span>
+										<%= entry.name %>
+									</span>
+									<span>
+										<%= entry.shift %>
+									</span>
 								</li>
 							<% }); %>
 						</ul>
@@ -40,34 +44,6 @@
 			</tr>
 		</table>
 		<div id="schedule_edit_form" class="admin_edit_toggle" style="display:none;"></div>
-		
-		<!--
-		<div class="btn-group btn-group-justified">
-			<% _.each(items, function(item){ %>
-				<div class="btn-group">
-					<%
-						// Create the id for the expanded version of the button
-						var id = "expanded_btn_"+item.label;
-						id = id.replace(/\W/g, "_");
-					%>
-					<button type="button" class="btn btn-default expanding_btn" target="#<%= id %>">
-						<div class="title">
-							<%= item.label %>
-						</div>
-						<ul class="list">
-							<% var people = item.people; %>
-							<% _.each(people, function(person){ %>
-								<li>
-									<%= person %>
-								</li>
-							<% }); %>
-						</ul>
-					</button>
-					<div id="<%= id %>" class="placeholder_div" style="display:none;"></div>
-				</div>
-			<% }); %>
-		</div>
-		-->
 	</div>
 </script>
 
@@ -121,7 +97,7 @@
 </script>
 
 <script type="text/template" id="schedule-edit-entry-template">
-	<div class="schedule_entry">
+	<div class="schedule_edit_entry">
 		<select class="user_selection">
 			<option value="">-- Select a Person --</option>
 			<% _.each(users, function(user){ %>

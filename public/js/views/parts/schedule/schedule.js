@@ -35,6 +35,13 @@ app.view.part.Schedule = Backbone.View.extend({
 			// Switch to the next day
 			app.util.Date.nextDay(currentDay);
 		}
+		
+		// Stub data used if no users are returned
+		self.stubUser = {
+				username : "",
+				type : "",
+				name : "No Users Found"
+		};
 	}
 	
 	/**
@@ -43,33 +50,60 @@ app.view.part.Schedule = Backbone.View.extend({
 	,syncAndRender : function syncAndRender(){
 		var self = this;
 		
-		self.stubUser = {
-				username : "fake@email.com",
-				type : "employee",
-				name : "John Doe"
+		// Callback to render once ready
+		var numCalls = 2;
+		var renderIfReady = function renderIfReady(){
+			numCalls--;
+			if(numCalls === 0){
+				self.render();
+			}
 		};
 		
-		// Build ajax options
-		var options = {
+		// Build ajax options for getting the user list
+		var userOpts = {
 			type : 'GET',
 			url : "/api/users",
 			cache : false,
 			contentType : 'application/json'
 		};
-		options.success = function(resp){
+		userOpts.success = function(resp){
 			if(_.isNull(resp.error)){
 				self.users = _.isEmpty(resp.users) ? [self.stubUser] : resp.users;
-				self.render(self.users);
+				renderIfReady();
 			}else{
 				self.renderError(resp.error);
 			}
 		};
-		options.error = function(resp){
+		userOpts.error = function(resp){
 			self.renderError("Failure to communicate with site. Try again later.");
 		};
 		
-		// Make the ajax call
-		$.ajax(options);
+		// Build ajax options for getting the schedule list
+		var scheduleOpts = {
+			type : 'POST',
+			url : "/api/schedule",
+			cache : false,
+			contentType : 'application/json',
+			data : JSON.stringify({
+					startDate : app.util.Date.startOfDay(),	//TODO: change the startDate
+					endDate : app.util.Date.nextDay(app.util.Date.startOfDay(), 6)
+			})
+		};
+		scheduleOpts.success = function(resp){
+			if(_.isNull(resp.error)){
+				self.schedule = _.isEmpty(resp.schedule) ? [] : resp.schedule;
+				renderIfReady();
+			}else{
+				self.renderError(resp.error);
+			}
+		};
+		scheduleOpts.error = function(resp){
+			self.renderError("Failure to communicate with site. Try again later.");
+		};
+		
+		// Make the ajax calls
+		$.ajax(userOpts);
+		$.ajax(scheduleOpts);
 		
 		return self;
 	}
@@ -80,10 +114,17 @@ app.view.part.Schedule = Backbone.View.extend({
 	,render : function render(){
 		var self = this;
 		
-		//TODO: sync data from mongo
+		// Massage the data
+		var scheduleList = _.map(self.schedule, function(item){
+			var date = new Date(item.date);
+			item.label = app.util.Date.toStringShort(date);
+			return item;
+		});
 		
 		// Add the html to the page
-		var params = self.data || self.stubData;
+		var params = {
+				scheduleList : scheduleList
+		};
 		var template = app.util.TemplateCache.get("#schedule-template");
 		var html = template(params);
 		self.$el.html(html);
@@ -172,21 +213,21 @@ app.view.part.Schedule = Backbone.View.extend({
 		
 		// Handler for applying changes
 		$('#apply_schedule_changes').on('click', function(e){
-//		$.when(self.saveChanges())
-//			.done(function(resp){
-//				app.router.reloadPage();
-//			})
-//			.fail(function(resp){
-//				console.log("Failed to save changes");
-//				console.log(resp);
-//				alert("Failed to save changes. Please try again.");
-//			});
+			$.when(self.applyChanges())
+				.done(function(resp){
+					alert("Success!");
+				})
+				.fail(function(resp){
+					console.log("Failed to save changes");
+					console.log(resp);
+					alert("Failed to save changes. Please try again.");
+				});
 		});
 		
 		// Handler for removing people from the schedule (NOTE: this is overridden when you add entries)
 		self.$el.find('.remove_person').off().on('click', function(e){
 			var $target = $(this);
-			var $entry = $target.parents('.schedule_entry');
+			var $entry = $target.parents('.schedule_edit_entry');
 			$entry.remove();
 		});
 		
@@ -218,7 +259,7 @@ app.view.part.Schedule = Backbone.View.extend({
 				var $removePeople = $this.parent().find('.remove_person');
 				$removePeople.off().on('click', function(e){
 					var $target = $(this);
-					var $entry = $target.parents('.schedule_entry');
+					var $entry = $target.parents('.schedule_edit_entry');
 					$entry.remove();
 				});
 				
@@ -252,6 +293,41 @@ app.view.part.Schedule = Backbone.View.extend({
 		});
 		
 		return self;
+	}
+	
+	/**
+	 * Extracts the changes on the form
+	 */
+	,extractFormData : function extractFormData(){
+		var self = this;
+		
+		// Get the date
+		var picker = $('#schedule_date_picker').data('datetimepicker');
+		var date = app.util.Date.startOfDay(picker.getDate());
+		
+		// Get the complete entries
+		var $entries = $('#schedule_edit_form .schedule_edit_entry');
+		var entries = _.chain($entries)
+			.map(function(entry){
+				var $this = $(entry);
+				var obj = {};
+				obj.username = ($this.find('.user_selection').val() || "").trim();
+				obj.name = ($this.find('.user_selection > :selected').text() || "").trim();
+				obj.shift = ($this.find('.shift_selection').val() || "").trim();
+				return obj;
+			})
+			.filter(function(entry){
+				return !_.isEmpty(entry) && !_.isEmpty(entry.name) && !_.isEmpty(entry.username) && !_.isEmpty(entry.shift);
+			})
+			.value();
+		
+		// Build the data
+		var data = {
+			date : date,
+			entries : entries
+		};
+		
+		return data;
 	}
 	
 	/**
@@ -290,5 +366,27 @@ app.view.part.Schedule = Backbone.View.extend({
 		});
 		
 		return self;
+	}
+	
+	/**
+	 * Apply changes for the current day
+	 */
+	,applyChanges : function applyChanges(){
+		var self = this;
+		
+		// Get the data from the form
+		var data = self.extractFormData();
+		
+		// Build ajax options
+		var options = {
+			type : 'POST',
+			url : "/api/schedule/update",
+			cache : false,
+			contentType : 'application/json',
+			data : JSON.stringify(data)
+		};
+		
+		// Make the ajax call
+		return $.ajax(options);
 	}
 });
