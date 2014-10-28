@@ -70,7 +70,8 @@ UserSchema.virtual('isLocked').get(function(){
 var reasons = UserSchema.statics.failedLogin = {
 	NOT_FOUND : 0,
 	PASSWORD_INCORRECT : 1,
-	MAX_ATTEMPTS : 2
+	MAX_ATTEMPTS : 2,
+	NOT_CONFIRMED : 3
 };
 
 /**
@@ -280,6 +281,11 @@ UserSchema.statics.getAuthenticated = function getAuthenticated(username, passwo
 		// Check if user was found
 		if(!user){
 			return done(null, null, reasons.NOT_FOUND);
+		}
+		
+		// Check if the account has been confirmed
+		if(!user.isConfirmed){
+			return done(null, null, reasons.NOT_CONFIRMED);
 		}
 		
 		// Check if the account is already locked

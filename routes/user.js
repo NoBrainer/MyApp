@@ -25,18 +25,26 @@ var isEmployee = function isEmployee(req){
  * @memberOf User
  */
 exports.exists = function exists(req, res){
-	//TODO: validate req.params
-	var username = req.params.username;
-	
 	// Default response template
 	var responseObject = {
-		error : null,
-		found : false
+			error : null,
+			found : false,
+			message : null
 	};
+	
+	var params = req.params || {};
+	var username = params.username || "";
+	
+	// Input validation
+	if(_.isEmpty(username)){
+		responseObject.message = "Username is required";
+		res.send(responseObject);
+		return;
+	}
 	
 	// Search for a single user based on username
 	var query = {
-		username : username
+			username : username
 	};
 	User.findOne(query, function(err, user){
 		if(err){
@@ -56,8 +64,8 @@ exports.exists = function exists(req, res){
 exports.getAll = function getAll(req, res){
 	// Default response template
 	var responseObject = {
-		error : null,
-		users : null
+			error : null,
+			users : null
 	};
 	
 	// Search for all users
@@ -92,12 +100,12 @@ exports.getAll = function getAll(req, res){
 exports.isLoggedIn = function isLoggedIn(req, res){
 	// Default response template
 	var responseObject = {
-		error : null,
-		isLoggedIn : false,
-		message : null,
-		type : null,
-		username : null,
-		name : null
+			error : null,
+			isLoggedIn : false,
+			message : null,
+			type : null,
+			username : null,
+			name : null
 	};
 	
 	try{
@@ -119,20 +127,30 @@ exports.isLoggedIn = function isLoggedIn(req, res){
  * @memberOf User
  */
 exports.login = function login(req, res){
-	//TODO: validate req.params
-	
-	var username = req.body.username;
-	var password = req.body.password;
-	
 	// Default response template
 	var responseObject = {
-		error : null,
-		successful : false,
-		message : null,
-		type : null,
-		username : username,
-		name : null
+			error : null,
+			successful : false,
+			message : null,
+			type : null,
+			username : username,
+			name : null
 	};
+	
+	var body = req.body || {};
+	var username = body.username || "";
+	var password = body.password || "";
+	
+	// Input validation
+	if(_.isEmpty(username)){
+		responseObject.message = "Username is required to login";
+		res.send(responseObject);
+		return;
+	}else if(_.isEmpty(password)){
+		responseObject.message = "Password is required to login";
+		res.send(responseObject);
+		return;
+	}
 	
 	// Attempt to authenticate user
 	User.getAuthenticated(username, password, function(err, user, reason){
@@ -164,16 +182,19 @@ exports.login = function login(req, res){
 		var reasons = User.failedLogin;
 		switch(reason){
 			case reasons.NOT_FOUND:
-				responseObject.message = "username not found";
+				responseObject.message = "Username not found";
 				break;
 			case reasons.PASSWORD_INCORRECT:
-				responseObject.message = "password incorrect";
+				responseObject.message = "Password incorrect";
 				break;
 			case reasons.MAX_ATTEMPTS:
-				responseObject.message = "max attempts exceeded, account locked for 5 minutes";
+				responseObject.message = "Max attempts exceeded, account locked for 5 minutes";
+				break;
+			case reasons.NOT_CONFIRMED:
+				responseObject.message = "Username has not been confirmed. Contact an admin for another confirmation email.";
 				break;
 			default:
-				responseObject.message = "unexpected error occurred";
+				responseObject.message = "Unexpected error occurred";
 		}
 		res.send(responseObject);
 	});
@@ -186,9 +207,9 @@ exports.login = function login(req, res){
 exports.logout = function logout(req, res){
 	// Default response template
 	var responseObject = {
-		error : null,
-		successful : false,
-		message : null
+			error : null,
+			successful : false,
+			message : null
 	};
 	
 	try{
@@ -212,13 +233,30 @@ exports.logout = function logout(req, res){
 exports.register = function register(req, res){
 	// Default response template
 	var responseObject = {
-		error : null,
-		successful : false,
-		message : null
+			error : null,
+			successful : false,
+			message : null
 	};
 	
-	//TODO: validate req.body
 	var body = req.body || {};
+	var username = body.username || "";
+	var password = body.password || "";
+	var name = body.name || "";
+	
+	// Input validation
+	if(_.isEmpty(username)){
+		responseObject.message = "Username is required to register";
+		res.send(responseObject);
+		return;
+	}else if(_.isEmpty(password)){
+		responseObject.message = "Password is required to register";
+		res.send(responseObject);
+		return;
+	}else if(_.isEmpty(name)){
+		responseObject.message = "Name is required to register";
+		res.send(responseObject);
+		return;
+	}
 	
 	// Generate a confirmation hash
 	crypto.randomBytes(24, function(err, buf){
@@ -236,10 +274,10 @@ exports.register = function register(req, res){
 		
 		// Create instance of a User
 		var currentUser = new User({
-			username : body.username,
-			password : body.password,
-			name : body.name || "",
-			confirmation : hash
+				username : username,
+				password : password,
+				name : name || "",
+				confirmation : hash
 		});
 		
 		// Save it
@@ -268,7 +306,7 @@ exports.confirmation = function confirmation(req, res){
 	
 	// Generate a query
 	var query = {
-		confirmation : id
+			confirmation : id
 	};
 	
 	// Search for a single user based on confirmation id
@@ -284,8 +322,8 @@ exports.confirmation = function confirmation(req, res){
 		}else if(user && user.isConfirmed===false){
 			// Mark user as confirmed
 			var update = {
-				confirmation : null,
-				isConfirmed : true
+					confirmation : null,
+					isConfirmed : true
 			};
 			User.findOneAndUpdate(query, update, function(err, user){
 				if(err){
@@ -311,9 +349,9 @@ exports.confirmation = function confirmation(req, res){
 exports.approveUser = function approveUser(req, res){
 	// Default response template
 	var responseObject = {
-		error : null,
-		approved : false,
-		message : null
+			error : null,
+			approved : false,
+			message : null
 	};
 	
 	// Verify admin status
@@ -328,21 +366,21 @@ exports.approveUser = function approveUser(req, res){
 	var username = body.username || "";
 	var type = body.type || 'employee';
 	
-	// Validate input
-	if(!username){
-		responseObject.message = "req.body.username required to approve users"
+	// Input validation
+	if(_.isEmpty(username)){
+		responseObject.message = "Username is required to approve users";
 		res.send(responseObject);
 		return;
 	}
 	
 	// Generate query
 	var query = {
-		username : username
+			username : username
 	};
 	
 	// Generate update
 	var update = {
-		type : type
+			type : type
 	};
 	
 	// Check if the user exists
@@ -351,6 +389,7 @@ exports.approveUser = function approveUser(req, res){
 			responseObject.error = err;
 			responseObject.message = "Error checking if user exists";
 			console.error(responseObject.message);
+			res.send(responseObject);
 		}else if(user){
 			if(user.type === 'pending-approval'){
 				// If user already exists & isn't approved, update its type
@@ -388,9 +427,9 @@ exports.approveUser = function approveUser(req, res){
 				
 				// Create a new user
 				var newUser = new User({
-					username : username,
-					type : type,
-					confirmation : hash
+						username : username,
+						type : type,
+						confirmation : hash
 				});
 				
 				// Save it
@@ -416,9 +455,9 @@ exports.approveUser = function approveUser(req, res){
 exports.updateUser = function updateUser(req, res){
 	// Default response template
 	var responseObject = {
-		error : null,
-		successful : false,
-		message : null
+			error : null,
+			successful : false,
+			message : null
 	};
 	
 	// Get variables from request body
@@ -454,7 +493,7 @@ exports.updateUser = function updateUser(req, res){
 	
 	// Build the query
 	var query = {
-		username : req.session.username || ""
+			username : req.session.username || ""
 	};
 	
 	// Find the user to update
@@ -524,9 +563,9 @@ exports.updateUser = function updateUser(req, res){
 exports.updateUserType = function updateUserType(req, res){
 	// Default response template
 	var responseObject = {
-		error : null,
-		successful : false,
-		message : null
+			error : null,
+			successful : false,
+			message : null
 	};
 	
 	// Verify admin status
@@ -538,31 +577,28 @@ exports.updateUserType = function updateUserType(req, res){
 	
 	// Get variables from request body
 	var body = req.body || {};
-	body.username = body.username || "";
-	body.type = body.type || "";
+	var username = body.username || "";
+	var type = body.type || "";
 	
-	// Require a username
-	if(_.isEmpty(body.username)){
-		responseObject.message = "Invalid username";
+	// Input validation
+	if(_.isEmpty(username)){
+		responseObject.message = "Username is required the update a user's type";
 		res.send(responseObject);
 		return;
-	}
-	
-	// Require a type
-	if(_.isEmpty(body.type)){
-		responseObject.message = "Invalid type";
+	}else if(_.isEmpty(type)){
+		responseObject.message = "Type is required to update a users's type";
 		res.send(responseObject);
 		return;
 	}
 	
 	// Create the mongo update object
 	var updates = {
-		type : body.type
+			type : type
 	};
 	
 	// Build the query
 	var query = {
-		username : body.username
+			username : username
 	};
 	
 	// Find the user to update
@@ -594,19 +630,26 @@ exports.updateUserType = function updateUserType(req, res){
  * @memberOf User
  */
 exports.startPasswordReset = function startPasswordReset(req, res){
+	// Default response template
+	var responseObject = {
+			error : null,
+			sentToUser : false,
+			message : null
+	};
+	
 	var body = req.body || {};
 	var username = body.username || "";
 	
-	// Default response template
-	var responseObject = {
-		error : null,
-		sentToUser : false,
-		message : null
-	};
+	// Input validation
+	if(_.isEmpty(username)){
+		responseObject.message = "Username is required to start a password reset";
+		res.send(responseObject);
+		return;
+	}
 	
 	// Generate a query
 	var query = {
-		username : username
+			username : username
 	};
 	
 	// Search for a single user based on confirmation id
@@ -664,10 +707,10 @@ exports.startPasswordReset = function startPasswordReset(req, res){
 exports.isAbleToResetPassword = function isAbleToResetPassword(req, res){
 	// Default response template
 	var responseObject = {
-		error : null,
-		isAble : false,
-		message : null,
-		username : req.session.passwordResetUsername
+			error : null,
+			isAble : false,
+			message : null,
+			username : req.session.passwordResetUsername
 	};
 	
 	try{
@@ -685,45 +728,39 @@ exports.isAbleToResetPassword = function isAbleToResetPassword(req, res){
  * @memberOf User
  */
 exports.resetPassword = function resetPassword(req, res){
+	// Default response template
+	var responseObject = {
+			error : null,
+			successful : false,
+			message : null
+	};
+	
 	var body = req.body || {};
 	var newPassword = body.password || "";
 	var id = body.id || "";
 	var username = req.session.passwordResetUsername;
 	
-	// Default response template
-	var responseObject = {
-		error : null,
-		successful : false,
-		message : null
-	};
-	
-	// Validate input
-	if(!username || _.isEmpty(username)){
+	// Input validation
+	if(_.isEmpty(username)){
 		responseObject.message = "Invalid username while confirming password reset";
-		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
 		res.send(responseObject);
 		return;
-	}else if(!newPassword || _.isEmpty(newPassword)){
+	}else if(_.isEmpty(newPassword)){
 		responseObject.message = "Invalid password provided while confirming password reset";
-		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
 		res.send(responseObject);
 		return;
-	}else if(!id || _.isEmpty(id) || id !== req.session.passwordResetId){
+	}else if(_.isEmpty(id) || id !== req.session.passwordResetId){
 		responseObject.message = "Invalid id provided while confirming password reset";
-		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
 		res.send(responseObject);
 		return;
 	}
 	
 	// Generate query and updates
 	var query = {
-		username : username
+			username : username
 	};
 	var updates = {
-		password : newPassword
+			password : newPassword
 	};
 	
 	// Search for the user for a password reset
