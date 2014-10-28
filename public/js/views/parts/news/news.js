@@ -106,10 +106,16 @@ app.view.part.News = Backbone.View.extend({
 			$(this).parent().find('.news_toggle').toggle();
 		});
 		
-		// Add the ability to see all news entries (including archived)
+		// Add the ability to see archived news entries
 		$('#news_show_all').on('click', function(e){
-			$(this).hide();
+			$('.news_archive_toggle').toggle();
 			$('.archived_news').show();
+		});
+		
+		// Add the ability to see hide archived news entries
+		$('#news_hide_archived').on('click', function(e){
+			$('.news_archive_toggle').toggle();
+			$('.archived_news').hide();
 		});
 		
 		// Setup the admin mode if the user is an admin
@@ -143,8 +149,13 @@ app.view.part.News = Backbone.View.extend({
 			self.$el.find('.admin_edit_toggle').toggle();
 		});
 		
-		// Handler for saving edits
-		$('#save_news').on('click', function(e){
+		// Handler for refreshing the page
+		$('#refresh_news').on('click', function(e){
+			app.router.reloadPage();
+		});
+		
+		// Handler for applying changes
+		$('#apply_news_changes').on('click', function(e){
 			$.when(self.saveChanges())
 				.done(function(resp){
 					app.router.reloadPage();

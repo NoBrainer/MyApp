@@ -13,7 +13,7 @@
 					<a id="cancel_news">Cancel</a>
 				</li>
 				<li class="admin_edit_toggle" style="display:none;">
-					<a id="save_news">Save</a>
+					<a id="refresh_news">Refresh</a>
 				</li>
 			</ul>
 		</h3>
@@ -76,7 +76,8 @@
 		<% if(displayShowAllLink){ %>
 			<ul class="nav nav-pills panel_right admin_edit_toggle">
 				<li>
-					<a id="news_show_all">Show All</a>
+					<a id="news_show_all" class="news_archive_toggle">Show All</a>
+					<a id="news_hide_archived" class="news_archive_toggle" style="display:none;">Hide Archived</a>
 				</li>
 			</ul>
 		<% } %>
@@ -86,15 +87,25 @@
 
 <script type="text/template" id="news-edit-form-template">
 	<div>
-		NOTE: Changes are only submitted when you hit the 'Save' button.
+		NOTE: Changes are only submitted when you hit the 'Apply' button.
 	</div>
 	<% _.each(entries, function(entry, i){ %>
 		<%= entry %>
 	<% }); %>
-	<div id="news_add_more">
-		<i class="fa fa-plus-circle"></i>
-		New Entry
-	</div>
+	<ul class="nav nav-pills">
+		<li>
+			<a id="news_add_more">
+				<i class="fa fa-plus-circle"></i>
+				New Entry
+			</a>
+		</li>
+		<li>
+			<a id="apply_news_changes">
+				<i class="fa fa-check-circle"></i>
+				Apply
+			</a>
+		</li>
+	</ul>
 </script>
 
 <script type="text/template" id="news-edit-entry-template">
