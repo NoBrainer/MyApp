@@ -65,30 +65,29 @@
 
 
 ## Developing
+
+### PRIORITY 1
 User Creation/Management
-- Admin approval in the UI (via the admin panel)
-- Setup the bot email address
+- Improve UX
+
+Schedule
+- Improve UX
+
+General
+- Optimize for mobile
+
+### PRIORITY 2
+Schedule
+- Make expanded view for employees
+
+News
+- RSS feed
 
 Jumbotron Images
 - Automatically pull latest from instagram
 
-Social Media Buttons
-- Update the URLs for each site
-
-News
-- Setup data model
-- Setup edit/save functionality for admins
-
-Schedule
-- Make the UI functional with stub data
-- Setup data model
-- Setup edit/save functionality for admins
-- Optimize for mobile
-- Make expanded view for employees
-
 Menu
 - Setup admin uploading
-
 
 ### Tools
 
