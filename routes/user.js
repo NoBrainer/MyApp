@@ -166,9 +166,10 @@ exports.login = function login(req, res){
 			responseObject.successful = true;
 			responseObject.type = user.type;
 			responseObject.name = user.name;
+			responseObject.username = user.username;
 			
 			// Track username, name, & type in the session
-			req.session.username = username;
+			req.session.username = user.username;
 			req.session.name = user.name;
 			req.session.type = user.type;
 			req.session.passwordResetId = undefined;
