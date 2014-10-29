@@ -67,9 +67,6 @@
 ## Developing
 
 ### PRIORITY 1
-User Creation/Management
-- Improve UX
-
 Schedule
 - Improve UX
 
@@ -82,6 +79,12 @@ Schedule
 
 News
 - RSS feed
+
+Admin Panel
+- Deleting users
+- Changing user names
+- Unlocking user accounts
+- Improve UX
 
 Jumbotron Images
 - Automatically pull latest from instagram
