@@ -9,8 +9,8 @@ var LOCK_TIME = 5 * 60 * 1000; //5min
 var DEFAULT_NAME = "Default Name";
 var DEFAULT_PASSWORD = "password";
 
-// Get the host from the config
-var HOST = config.props.HOST;
+// Get the url root from the config
+var URL_ROOT = config.props.URL_ROOT;
 
 /**
  * Initialize schema
@@ -197,13 +197,13 @@ var sendConfirmationEmail = function sendConfirmationEmail(){
 	if(self.type === 'pending-approval'){
 		// If the user has not been approved yet, send the regular confirmation email
 		emailContent = "Click this link to confirm your registration: " +
-				"<a target='_blank' href='_HOST_/api/users/confirmation/_ID_'>_ID_</a>" +
+				"<a target='_blank' href='_URL_ROOT_/api/users/confirmation/_ID_'>_ID_</a>" +
 				"<br/><br/>" +
 				"You have not yet been approved. Please contact an admin to have them approve you.";
 	}else{
 		// If the user has been pre-approved, send a modified confirmation email
 		emailContent = "You have been approved for an account. Click this link to confirm your registration: " +
-				"<a target='_blank' href='_HOST_/api/users/confirmation/_ID_'>_ID_</a>" +
+				"<a target='_blank' href='_URL_ROOT_/api/users/confirmation/_ID_'>_ID_</a>" +
 				"<br/><br/>" +
 				"Then login with these credentials and reset your password:" +
 				"<br/>" +
@@ -214,7 +214,7 @@ var sendConfirmationEmail = function sendConfirmationEmail(){
 	
 	// Add the variable information to the email content
 	emailContent = emailContent
-			.replace(/_HOST_/g, HOST)
+			.replace(/_URL_ROOT_/g, URL_ROOT)
 			.replace(/_ID_/g, id)
 			.replace(/_USERNAME_/g, emailAddress)
 			.replace(/_PASSWORD_/g, DEFAULT_PASSWORD);
@@ -341,14 +341,14 @@ UserSchema.methods.sendPasswordResetEmail = function sendPasswordResetEmail(id, 
 		// Generate the email html
 		var emailContent = 
 			"Click this " +
-			"<a target='_blank' href='_HOST_/#resetPassword/_ID_'>link</a> " +
+			"<a target='_blank' href='_URL_ROOT_/#resetPassword/_ID_'>link</a> " +
 			"to reset your password." +
 			"<br/><br/>" +
 			"If you did not try to reset your password, then please delete this email.";
 		
 		// Add the variable information to the email content
 		emailContent = emailContent
-				.replace(/_HOST_/g, HOST)
+				.replace(/_URL_ROOT_/g, URL_ROOT)
 				.replace(/_ID_/g, id);
 		
 		// Build the params and send the email

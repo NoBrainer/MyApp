@@ -1,28 +1,34 @@
 
 //Create config.js at same level as this file with the following content:
 //exports.props = {
-//		MONGO_USERNAME : 'my_username',
-//		MONGO_PASSWORD : 'my_password',
+//		ENV : 'dev', //dev|prod
+//		APP_IP : '1.1.1.1', //#.#.#.#|localhost
+//		APP_DOMAIN : 'mydomain.com',
+//		URL_ROOT : 'http://localhost:8080',
+//		HTTP_PORT : 8080,
+//		HTTPS_PORT : 8443,
+//		
+//		// Database
+//		MONGO_USERNAME : 'username12345',
+//		MONGO_PASSWORD : 'password12345',
 //		MONGO_LOCATION : 'mongodb://localhost:27017/test_db',
 //		DATABASE : {
 //			db : 'test_db',
 //			host : 'localhost',
 //			port : '27017'
-//		}
-//		KEY_PATH : '/location/to/key.pem',
-//		CERT_PATH : '/location/to/cert.pem',
-//		HOST : 'http://localhost:8080',
-//		HTTP_PORT : 8080,
-//		HTTPS_PORT : 8443,
-//		ENV : 'development',
+//		},
+//		
+//		// Encryption
+//		KEY_PATH : '/path/to/key.pem',
+//		CERT_PATH : '/path/to/cert.pem',
 //		SECRET : 'random_string_of_chars',
-//		APP_IP : '1.1.1.1',
-//		APP_DOMAIN : 'mydomain.com',
+//		
+//		// Email
 //		EMAIL_OPTS : {
 //			service : 'Gmail',
 //			auth : {
-//				user : 'username',
-//				pass : 'password'
+//				user : 'username12345',
+//				pass : 'password12345'
 //			}
 //		}
 //};
@@ -44,7 +50,13 @@ var staticFavicon = require('static-favicon');
 
 // Global variables
 _ = require('./public/lib/underscore/js/underscore');
-config = require('./config');
+try{
+	// First try to use the config file in the properties directory
+	config = require('../../properties/config');
+}catch(e){
+	// Fallback to the config file with the app
+	config =  require('./config')
+}
 
 // Local imports
 var routes = require('./routes');
@@ -77,7 +89,7 @@ app.use(session({
 }));
 
 // Do things when in development mode
-var isDevelopment = 'development' === app.get('env');
+var isDevelopment = ('dev' === app.get('env'));
 if(isDevelopment){
 //	app.use(logger('dev'));
 	app.use(errorHandler());
