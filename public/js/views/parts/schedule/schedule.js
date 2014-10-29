@@ -7,37 +7,11 @@ app.view.part.Schedule = Backbone.View.extend({
 	 * @memberOf app.view.part.Schedule
 	 */
 	,initialize : function initialize(){
-		// Helper function to create random data for the stub data
-		var names = ["Devin", "Bob", "Jennifer", "Carl", "Lauren", "Scott"];
-		var shifts = ["10am-close", "12pm-4pm", "4pm-midnight", "2pm-8pm"];
-		var randomizeShifts = function(){
-			var arr = [];
-			names = _.shuffle(names);
-			shifts = _.shuffle(shifts);
-			for(var i=0; i<4; i++){
-				var str = names[i]+" "+shifts[i];
-				arr.push(str);
-			}
-			return arr;
-		};
-		
-		// Build the stub data
-		var currentDay = app.util.Date.startOfDay();
-		this.stubData = { items : [] };
-		for(var i=0; i<7; i++){
-			// Create the object and add it to the stub data
-			var obj = {};
-			obj.label = app.util.Date.toStringShort(currentDay);
-			obj.date = currentDay;
-			obj.people = randomizeShifts();
-			this.stubData.items.push(obj);
-			
-			// Switch to the next day
-			app.util.Date.nextDay(currentDay);
-		}
+		// Array of schedule entries
+		this.schedule = [];
 		
 		// Stub data used if no users are returned
-		self.stubUser = {
+		this.stubUser = {
 				username : "",
 				type : "",
 				name : "No Users Found"
@@ -59,51 +33,11 @@ app.view.part.Schedule = Backbone.View.extend({
 			}
 		};
 		
-		// Build ajax options for getting the user list
-		var userOpts = {
-			type : 'GET',
-			url : "/api/users",
-			cache : false,
-			contentType : 'application/json'
-		};
-		userOpts.success = function(resp){
-			if(_.isNull(resp.error)){
-				self.users = _.isEmpty(resp.users) ? [self.stubUser] : resp.users;
-				renderIfReady();
-			}else{
-				self.renderError(resp.error);
-			}
-		};
-		userOpts.error = function(resp){
-			self.renderError("Failure to communicate with site. Try again later.");
-		};
-		
-		// Build ajax options for getting the schedule list
-		var scheduleOpts = {
-			type : 'POST',
-			url : "/api/schedule",
-			cache : false,
-			contentType : 'application/json',
-			data : JSON.stringify({
-					startDate : app.util.Date.startOfDay(),	//TODO: change the startDate
-					endDate : app.util.Date.nextDay(app.util.Date.startOfDay(), 6)
-			})
-		};
-		scheduleOpts.success = function(resp){
-			if(_.isNull(resp.error)){
-				self.schedule = _.isEmpty(resp.schedule) ? [] : resp.schedule;
-				renderIfReady();
-			}else{
-				self.renderError(resp.error);
-			}
-		};
-		scheduleOpts.error = function(resp){
-			self.renderError("Failure to communicate with site. Try again later.");
-		};
-		
 		// Make the ajax calls
-		$.ajax(userOpts);
-		$.ajax(scheduleOpts);
+		self.getUserList()
+			.done(renderIfReady);
+		self.getScheduleEntries()
+			.done(renderIfReady);
 		
 		return self;
 	}
@@ -388,5 +322,90 @@ app.view.part.Schedule = Backbone.View.extend({
 		
 		// Make the ajax call
 		return $.ajax(options);
+	}
+	
+	/**
+	 * Get the list of users and update self.users
+	 */
+	,getUserList : function getUserList(){
+		var self = this;
+		
+		// Build ajax options for getting the user list
+		var userOpts = {
+			type : 'GET',
+			url : "/api/users",
+			cache : false,
+			contentType : 'application/json'
+		};
+		userOpts.success = function(resp){
+			if(_.isNull(resp.error)){
+				self.users = _.isEmpty(resp.users) ? [self.stubUser] : resp.users;
+			}else{
+				self.renderError(resp.error);
+			}
+		};
+		userOpts.error = function(resp){
+			self.renderError("Failure to communicate with site. Try again later. [app.view.part.Schedule.getUserList]");
+		};
+		
+		// Make the ajax calls
+		return $.ajax(userOpts);
+	}
+	
+	/**
+	 * Get schedule entries and merge them with self.schedule
+	 */
+	,getScheduleEntries : function getScheduleEntries(opts){
+		var self = this;
+		
+		opts = opts || {};
+		var start = opts.start || null;
+		var end = opts.end || null;
+		
+		if(_.isDate(start) && _.isDate(end)){
+			// Set hours/mins/seconds to zero
+			start = app.util.Date.startOfDay(start);
+			end = app.util.Date.startOfDay(end);
+		}else if(_.isEmpty(start) && _.isDate(end)){
+			// Calculate one week ending at the beginning of day 'end'
+			end = app.util.Date.startOfDay(end);
+			start = app.util.Date.prevDay(end, 6);
+		}else if(_.isDate(start) && _.isEmpty(end)){
+			// Calculate one week starting at the beginning of day 'start'
+			start = app.util.Date.startOfDay(start);
+			end = app.util.Date.nextDay(end, 6);
+		}else{
+			// Default to one week starting today
+			start = app.util.Date.startOfDay();
+			end = app.util.Date.nextDay(start, 6);
+		}
+		
+		// Build ajax options for getting the schedule list
+		var scheduleOpts = {
+			type : 'POST',
+			url : "/api/schedule",
+			cache : false,
+			contentType : 'application/json',
+			data : JSON.stringify({
+					startDate : start,
+					endDate : end
+			})
+		};
+		scheduleOpts.success = function(resp){
+			if(_.isNull(resp.error)){
+				// Update the schedule
+				resp.schedule = resp.schedule || [];
+				self.schedule = _.union(self.schedule, resp.schedule);
+				//TODO: prevent duplicates
+			}else{
+				self.renderError(resp.error);
+			}
+		};
+		scheduleOpts.error = function(resp){
+			self.renderError("Failure to communicate with site. Try again later. [app.view.part.Schedule.getScheduleEntries]");
+		};
+		
+		// Make the ajax calls
+		return $.ajax(scheduleOpts);
 	}
 });

@@ -81,19 +81,6 @@
 			</a>
 		</li>
 	</ul>
-	<!--
-	<div>
-		<span id="schedule_add_person">
-			<i class="fa fa-plus-circle"></i>
-			New Entry
-		</span>
-		<span id="apply_schedule_changes">
-			<a>
-				Apply Changes
-			</a>
-		</span>
-	</div>
-	-->
 </script>
 
 <script type="text/template" id="schedule-edit-entry-template">

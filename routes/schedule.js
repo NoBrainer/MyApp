@@ -36,7 +36,7 @@ var generateDateString = function generateDateString(date){
 			.replace(/DD/, day);
 	
 	return id;
-}
+};
 
 /**
  * GET - A list of every schedule entry

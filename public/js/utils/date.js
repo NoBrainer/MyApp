@@ -10,6 +10,9 @@ app.util.Date = {
 			return "UNDEFINED";
 		}
 		
+		// Prevent pass by reference
+		date = new Date(date.getTime());
+		
 		// Pull data out of date object
 		var dayOfWeek = dayOfWeekShort[date.getDay()];
 		var hour = date.getHours();
@@ -52,6 +55,9 @@ app.util.Date = {
 		if(!_.isDate(date)){
 			return "UNDEFINED";
 		}
+		
+		// Prevent pass by reference
+		date = new Date(date.getTime());
 		
 		// Pull data out of date object
 		var dayOfWeek = dayOfWeek[date.getDay()];
@@ -96,6 +102,9 @@ app.util.Date = {
 			return "UNDEFINED";
 		}
 		
+		// Prevent pass by reference
+		date = new Date(date.getTime());
+		
 		// Pull data out of date object
 		var dayOfWeek = dayOfWeekShort[date.getDay()];
 		var day = date.getDate();
@@ -117,6 +126,9 @@ app.util.Date = {
 			date = new Date(); //default to now
 		}
 		
+		// Prevent pass by reference
+		date = new Date(date.getTime());
+		
 		date.setHours(0);
 		date.setMinutes(0);
 		date.setSeconds(0);
@@ -137,6 +149,9 @@ app.util.Date = {
 			num = 1;
 		}
 		
+		// Prevent pass by reference
+		date = new Date(date.getTime());
+		
 		// Increment the date
 		date.setDate(date.getDate() + num);
 		return date;
@@ -154,6 +169,9 @@ app.util.Date = {
 			num = 1;
 		}
 		
+		// Prevent pass by reference
+		date = new Date(date.getTime());
+		
 		// Decrement the date
 		date.setDate(date.getDate() - num);
 		return date;
@@ -164,6 +182,9 @@ app.util.Date = {
 	 * @memberOf app.util.Date
 	 */
 	,generateDatesForAWeek : function generateDatesForAWeek(start){
+		// Prevent pass by reference
+		start = new Date(start.getTime());
+		
 		// Get the start time
 		var currentDay = app.util.Date.startOfDay(start);
 		
