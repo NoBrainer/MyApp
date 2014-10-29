@@ -72,6 +72,7 @@ Schedule
 
 General
 - Optimize for mobile
+- Setup SSL
 
 ### PRIORITY 2
 Schedule
