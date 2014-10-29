@@ -60,7 +60,7 @@ a.footer_link {
   padding: 0;
 }
 #content .jumbotron_image {
-  background-position: center;
+  background-position: center bottom;
   background-size: cover;
   display: inline-block;
   height: 300px;
