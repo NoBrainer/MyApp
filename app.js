@@ -46,7 +46,7 @@ var methodOverride = require('method-override');
 var path = require('path');
 var serveStatic = require('serve-static');
 var session = require('express-session');
-var staticFavicon = require('static-favicon');
+var favicon = require('serve-favicon');
 
 // Global variables
 _ = require('./public/lib/underscore/js/underscore');
@@ -75,7 +75,6 @@ app.set('env', config.props.ENV);
 app.set('port', port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(staticFavicon());
 app.use(bodyParser());
 app.use(methodOverride());
 
@@ -92,6 +91,7 @@ app.use(session({
 var isDevelopment = ('dev' === app.get('env'));
 if(isDevelopment){
 //	app.use(logger('dev'));
+	app.use(favicon(path.join(publicDir, 'logo.ico')));
 	app.use(errorHandler());
 	app.use(serveStatic(publicDir));
 	
@@ -101,6 +101,7 @@ if(isDevelopment){
 	fileUtil.aggregateTemplates(viewsDir, aggregateTemplateFile);
 }else{
 	app.use(serveStatic(prodPublicDir));
+	app.use(favicon(path.join(prodPublicDir, 'logo.ico')));
 	
 	// Create aggregate template file
 	var viewsDir = path.join(publicDir, 'js/views');
