@@ -44,6 +44,7 @@
 	- iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port ${HTTP_PORT}
 	- iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port ${HTTPS_PORT}
 	- service iptables save
+### Making a mongo service
 - Add mongod to chkconfig
 	- Make sure the mongo database is owned by mongod
 		- sudo chown -R mongod /var/lib/mongo
@@ -51,6 +52,7 @@
 		- sudo /sbin/chkconfig --level 345 mongod on
 	- Run the service
 		- sudo service mongod start
+### Making a service for the webapp
 - Setup init.d script for this webapp
 	- Setup the copycatco service
 		- sudo cp copycatco /etc/rc.d/init.d/
@@ -59,6 +61,11 @@
 		- sudo /sbin/chkconfig --level 345 copycatco on
 	- Run the service
 		- sudo service copycatco start
+### Rolling log files
+- Add an entry in /etc/logrotate.conf
+	- sudo vi /etc/logrotate.conf
+	- Use the contents in logrotate.conf in this project
+- The logrotate should happen from the cronjob at /etc/cron.daily/logrotate
 
 ## Usage
 
@@ -72,7 +79,7 @@ Schedule
 
 General
 - Optimize for mobile
-- Setup SSL
+- Setup SSL (one-way)
 
 ### PRIORITY 2
 Schedule
