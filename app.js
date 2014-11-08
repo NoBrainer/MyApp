@@ -117,6 +117,13 @@ if(isDevelopment){
 	// Create aggregate css file
 	var aggregateCssFile = path.join(prodPublicDir, 'css/aggregate.css');
 	fileUtil.aggregateCss(aggregateCssFile, publicDir);
+	
+	//TODO: finish
+//	// Copy over the resources directory
+//	var resourceDir = path.join(publicDir, 'resources');
+//	var prodResourceDir = path.join(prodPublicDir, 'resources');
+//	var preserveNesting = true;
+//	fileUtil.copyDirectory(resourceDir, prodResourceDir, preserveNesting);
 }
 
 // Initialize the REST routes

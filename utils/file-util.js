@@ -72,6 +72,53 @@ var createAggregate = function createAggregate(fileArr, targetFile, strictOrder)
 	}
 };
 
+//TODO: finish
+///**
+// * Copy files
+// * @param fileArr - array of files (full path)
+// * @param destDir - destination directory for copied files (full path)
+// * @param baseDir - (optional) base directory where files came from (full path)
+// * 					With this option, we preserve the directory nesting.
+// */
+//var copyFiles = function copyFiles(fileArr, destDir, baseDir){
+////	baseDir = false;
+//	if(!fileArr || fileArr.length<1){
+//		return;
+//	}
+//	for(var i=0; i<fileArr.length; i++){
+//		var file = fileArr[i];
+//		var fileName = file.substring(file.lastIndexOf('/'));
+//		
+//		// Figure out the new file path
+//		var newFile, nesting;
+//		if(baseDir){
+//			// Preserve the directory nesting
+//			newFile = file.replace(baseDir, destDir);
+//			
+//			// Figure out the nested directories
+//			nesting = file.replace(baseDir, "");
+//			nesting = nesting.substring(0, nesting.lastIndexOf('/'));
+//		}else{
+//			// Copy the file to the destDir without any directory nesting
+//			newFile = destDir + fileName;
+//		}
+//		
+//		console.log("~~~~~");
+//		console.log("before: [__]".replace("__", file));
+//		console.log("after : [__]".replace("__", newFile));
+//		console.log("nest  : [__]".replace("__", nesting));
+//		
+//		//TODO: fs.mkdir for parent dirs
+//		// http://stackoverflow.com/questions/16316330/how-to-write-file-if-parent-folder-dosent-exists
+//		
+//		// Write the file to its new location
+//		fs.readFile(file, function(err, data){
+//			if(err) throw err;
+//			fs.writeFileSync(newFile, data);
+//		});
+//	}
+//};
+
 /**
  * Create an aggregate template file
  * @param targetDir - directory to look in (full path)
@@ -142,3 +189,25 @@ exports.aggregateCss = function aggregateCss(targetFile, publicDir){
 	var strictOrder = true;
 	createAggregate(fileArr, targetFile, strictOrder);
 };
+
+//TODO: finish
+///**
+// * 
+// */
+//exports.copyDirectory = function copyResources(targetDir, destDir, preserveNesting){
+//	// Determine what kind of files we care about
+//	var isImage = function(file){
+//		return file.match(/.+\.(jpg|png|ico)$/i);
+//	};
+//	// Determine what we do with the results
+//	var done = function(err, result){
+//		if(err) throw err;
+//		if(preserveNesting){
+//			copyFiles(result, destDir, targetDir);
+//		}else{
+//			copyFiles(result, destDir);
+//		}
+//	};
+//	// Traverse the target directory
+//	walk(targetDir, isImage, done);
+//};
