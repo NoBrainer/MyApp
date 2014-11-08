@@ -50,30 +50,6 @@ a.footer_link {
 .input-append .add-on {
   display: inline-block;
 }
-#content {
-  background-color: transparent;
-  padding-top: 83px;
-}
-#content .jumbotron {
-  height: 300px;
-  margin-bottom: 20px;
-  padding: 0;
-}
-#content .jumbotron_image {
-  background-position: center bottom;
-  background-size: cover;
-  display: inline-block;
-  height: 300px;
-  width: 50%;
-}
-#content .jumbotron_left {
-  background-image: url(/resources/instagram1.jpg);
-  margin-right: -2px;
-}
-#content .jumbotron_right {
-  background-image: url(/resources/instagram2.jpg);
-  margin-left: -2px;
-}
 #header {
   top: 0;
   left: 0;
@@ -102,12 +78,12 @@ a.footer_link {
 #header .modal {
   color: #333333;
 }
-#site_logo {
+#header #site_logo {
   position: fixed;
   top: 0;
   z-index: 1031;
 }
-#site_logo > img {
+#header #site_logo > img {
   height: 170px;
   width: auto;
   left: 50%;
@@ -115,23 +91,47 @@ a.footer_link {
   /*half of the width*/
   position: fixed;
 }
-.panel-heading .panel_right,
-.panel-body .panel_right {
+#content {
+  background-color: transparent;
+  padding-top: 83px;
+}
+#content .panel-heading .panel_right,
+#content .panel-body .panel_right {
   float: right;
   font-size: 14px;
 }
-.panel,
-.panel_shadow {
+#content .panel,
+#content .panel_shadow {
   box-shadow: 0 5px 15px 3px #000000;
 }
-.panel:empty {
+#content .panel:empty {
   border-width: 0;
 }
-#social_media_list {
+#content .jumbotron {
+  height: 300px;
+  margin-bottom: 20px;
+  padding: 0;
+}
+#content .jumbotron_image {
+  background-position: center bottom;
+  background-size: cover;
+  display: inline-block;
+  height: 300px;
+  width: 50%;
+}
+#content .jumbotron_left {
+  background-image: url(/resources/instagram1.jpg);
+  margin-right: -2px;
+}
+#content .jumbotron_right {
+  background-image: url(/resources/instagram2.jpg);
+  margin-left: -2px;
+}
+#content #social_media_list {
   margin: 0 auto;
   width: 185px;
 }
-#social_media_list li {
+#content #social_media_list li {
   font-size: 25px;
   display: inline;
   height: 56px;
@@ -140,66 +140,70 @@ a.footer_link {
   max-width: 51px;
   width: 51px;
 }
-#social_media_list li i {
+#content #social_media_list li i {
   color: #720000;
 }
-#social_media_list li:hover {
+#content #social_media_list li:hover {
   font-size: 35px;
 }
-#social_media_list li:hover a {
+#content #social_media_list li:hover a {
   padding: 3px 10px;
 }
-#social_media_list li:last-child {
+#content #social_media_list li:last-child {
   margin: 0;
 }
-#news_content .news_toggle {
+#content #news_content .news_toggle {
   cursor: pointer;
 }
-#news_content .news_posted {
+#content #news_content .news_posted {
   color: #4d4d4d;
   font-size: 12px;
 }
-#news_content #news_add_more {
+#content #news_content #news_add_more {
   cursor: pointer;
 }
-#news_content #news_add_more i {
+#content #news_content #news_add_more i {
   font-size: 16px;
 }
-#news_content .news_edit_entry {
+#content #news_content .news_edit_entry {
   border-bottom: 1px solid black;
   margin-bottom: 10px;
 }
-#news_content .news_edit_entry .news_edit_title {
+#content #news_content .news_edit_entry .news_edit_title {
   width: 100%;
 }
-#news_content .news_edit_entry .news_edit_content {
+#content #news_content .news_edit_entry .news_edit_content {
   width: 100%;
 }
-#schedule_content {
+#content #schedule_content {
   width: 100%;
 }
-#schedule_content > .panel-body {
+#content #schedule_content > .panel-body {
   width: 100%;
 }
-#schedule_content > .panel-body #schedule_edit_form select {
+#content #schedule_content > .panel-body #schedule_edit_form select {
   margin-right: 10px;
 }
-#schedule_content > .panel-body #schedule_edit_form > div {
+#content #schedule_content > .panel-body #schedule_edit_form > div {
   margin-bottom: 10px;
 }
-#schedule_content > .panel-body #schedule_edit_form .nav li {
+#content #schedule_content > .panel-body #schedule_edit_form .nav li {
   width: auto;
 }
-#schedule_content > .panel-body #apply_schedule_changes,
-#schedule_content > .panel-body #schedule_add_person,
-#schedule_content > .panel-body .remove_person {
+#content #schedule_content > .panel-body #apply_schedule_changes,
+#content #schedule_content > .panel-body #schedule_add_person,
+#content #schedule_content > .panel-body .remove_person {
   cursor: pointer;
 }
-#schedule_content > .panel-body #apply_schedule_changes i,
-#schedule_content > .panel-body #schedule_add_person i,
-#schedule_content > .panel-body .remove_person i {
+#content #schedule_content > .panel-body #apply_schedule_changes i,
+#content #schedule_content > .panel-body #schedule_add_person i,
+#content #schedule_content > .panel-body .remove_person i {
   font-size: 16px;
 }
-#schedule_content > .panel-body li {
+#content #schedule_content > .panel-body li {
   list-style-type: none;
+}
+#content #menu_content .menu_img {
+  max-width: 100%;
+  height: auto;
 }

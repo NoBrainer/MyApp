@@ -66,32 +66,6 @@ a.footer_link {
 	}
 }
 
-#content {
-	background-color: transparent;
-	padding-top: @header_height;
-	
-	.jumbotron {
-		height: @jumbotron_height;
-		margin-bottom: 20px;
-		padding: 0;
-	}
-	.jumbotron_image {
-		background-position: center bottom;
-		background-size: cover;
-		display: inline-block;
-		height: @jumbotron_height;
-		width: 50%;
-	}
-	.jumbotron_left {
-		background-image: url(/resources/instagram1.jpg);
-		margin-right: -2px;
-	}
-	.jumbotron_right {
-		background-image: url(/resources/instagram2.jpg);
-		margin-left: -2px;
-	}
-}
-
 #header {
 	top: 0;
 	left: 0;
@@ -125,123 +99,102 @@ a.footer_link {
 	.modal {
 		color: @body_color;
 	}
-}
-
-#site_logo {
-	position: fixed;
-	top: 0;
-	z-index: 1031;
 	
-	> img {
-		height: 170px;
-		width: auto;
-		left: 50%;
-		margin-left: -59px; /*half of the width*/
+	#site_logo {
 		position: fixed;
-	}
-}
-
-.panel-heading,
-.panel-body {
-	.panel_right {
-		float: right;
-		font-size: 14px;
-	}
-}
-.panel,
-.panel_shadow {
-	box-shadow: 0 5px 15px 3px #000000;
-}
-.panel:empty {
-	border-width: 0;
-}
-
-#social_media_list {
-	margin: 0 auto;
-	width: 185px;
-	
-	li {
-		font-size: 25px;
-		display: inline;
-		height: 56px;
-		margin-right: 15px;
-		max-height: 56px;
-		max-width: 51px;
-		width: 51px;
+		top: 0;
+		z-index: 1031;
 		
-		i {
-			color: @header_color;
-		}
-	}
-	li:hover {
-		font-size: 35px;
-		
-		a {
-			padding: 3px 10px;
-		}
-	}
-	li:last-child {
-		margin: 0;
-	}
-}
-
-#news_content {
-	.news_toggle {
-		cursor: pointer;
-	}
-	
-	.news_posted {
-		color: lighten(@body_color, 10%);
-		font-size: 12px;
-	}
-	
-	#news_add_more {
-		cursor: pointer;
-		
-		i {
-			font-size: 16px;
-		}
-	}
-	
-	.news_edit_entry {
-		border-bottom: 1px solid black;
-		margin-bottom: 10px;
-		
-		.news_edit_title {
-			width: 100%;
-		}
-		
-		.news_edit_content {
-			width: 100%;
+		> img {
+			height: 170px;
+			width: auto;
+			left: 50%;
+			margin-left: -59px; /*half of the width*/
+			position: fixed;
 		}
 	}
 }
 
-#schedule_content {
-	width: 100%;
+#content {
+	background-color: transparent;
+	padding-top: @header_height;
 	
-	> .panel-body {
-		width: 100%;
+	.panel-heading,
+	.panel-body {
+		.panel_right {
+			float: right;
+			font-size: 14px;
+		}
+	}
+	.panel,
+	.panel_shadow {
+		box-shadow: 0 5px 15px 3px #000000;
+	}
+	.panel:empty {
+		border-width: 0;
+	}
+	
+	.jumbotron {
+		height: @jumbotron_height;
+		margin-bottom: 20px;
+		padding: 0;
+	}
+	.jumbotron_image {
+		background-position: center bottom;
+		background-size: cover;
+		display: inline-block;
+		height: @jumbotron_height;
+		width: 50%;
+	}
+	.jumbotron_left {
+		background-image: url(/resources/instagram1.jpg);
+		margin-right: -2px;
+	}
+	.jumbotron_right {
+		background-image: url(/resources/instagram2.jpg);
+		margin-left: -2px;
+	}
+	
+	#social_media_list {
+		margin: 0 auto;
+		width: 185px;
 		
-		#schedule_edit_form {
-			select {
-				margin-right: 10px;
-			}
+		li {
+			font-size: 25px;
+			display: inline;
+			height: 56px;
+			margin-right: 15px;
+			max-height: 56px;
+			max-width: 51px;
+			width: 51px;
 			
-			> div {
-				margin-bottom: 10px;
-			}
-			
-			.nav {
-				li {
-					width: auto;
-				}
+			i {
+				color: @header_color;
 			}
 		}
+		li:hover {
+			font-size: 35px;
+			
+			a {
+				padding: 3px 10px;
+			}
+		}
+		li:last-child {
+			margin: 0;
+		}
+	}
+	
+	#news_content {
+		.news_toggle {
+			cursor: pointer;
+		}
 		
-		#apply_schedule_changes,
-		#schedule_add_person,
-		.remove_person {
+		.news_posted {
+			color: lighten(@body_color, 10%);
+			font-size: 12px;
+		}
+		
+		#news_add_more {
 			cursor: pointer;
 			
 			i {
@@ -249,8 +202,62 @@ a.footer_link {
 			}
 		}
 		
-		li {
-			list-style-type: none;
+		.news_edit_entry {
+			border-bottom: 1px solid black;
+			margin-bottom: 10px;
+			
+			.news_edit_title {
+				width: 100%;
+			}
+			
+			.news_edit_content {
+				width: 100%;
+			}
+		}
+	}
+	
+	#schedule_content {
+		width: 100%;
+		
+		> .panel-body {
+			width: 100%;
+			
+			#schedule_edit_form {
+				select {
+					margin-right: 10px;
+				}
+				
+				> div {
+					margin-bottom: 10px;
+				}
+				
+				.nav {
+					li {
+						width: auto;
+					}
+				}
+			}
+			
+			#apply_schedule_changes,
+			#schedule_add_person,
+			.remove_person {
+				cursor: pointer;
+				
+				i {
+					font-size: 16px;
+				}
+			}
+			
+			li {
+				list-style-type: none;
+			}
+		}
+	}
+	
+	#menu_content {
+		.menu_img {
+			max-width: 100%;
+			height: auto;
 		}
 	}
 }
