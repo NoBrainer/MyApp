@@ -8,6 +8,7 @@ var roleUtil = require('../utils/role-util');
 // Primary db model
 var Schedule = require('../models/schedule-model');
 
+// Constants
 var ONE_DAY = 1000 * 60 * 60 * 24;
 
 /**
@@ -32,7 +33,7 @@ var generateDateString = function generateDateString(date){
  * GET - A list of every schedule entry
  * @memberOf Schedule
  */
-exports.getAll = function getAll(req, res){
+var getAll = function getAll(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -79,7 +80,7 @@ exports.getAll = function getAll(req, res){
  * GET - A list of the schedule between startDate and endDate
  * @memberOf Schedule
  */
-exports.getRange = function getRange(req, res){
+var getRange = function getRange(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -180,7 +181,7 @@ exports.getRange = function getRange(req, res){
  * GET - A list of the schedule during the specified month
  * @memberOf Schedule
  */
-exports.getMonth = function getMonth(req, res){
+var getMonth = function getMonth(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -225,7 +226,7 @@ exports.getMonth = function getMonth(req, res){
  * POST - update a schedule for the given date
  * @memberOf Schedule
  */
-exports.update = function update(req, res){
+var update = function update(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -313,3 +314,9 @@ exports.update = function update(req, res){
 		}
 	});
 };
+
+//Module exports
+exports.getAll = getAll;
+exports.getRange = getRange;
+exports.getMonth = getMonth;
+exports.update = update;

@@ -31,6 +31,7 @@ var isEmployee = function isEmployee(req){
 	return !(_.isNull(matches) || _.isUndefined(matches));
 };
 
+// Module exports
 exports.isDeveloper = isDeveloper;
 exports.isAdmin = isAdmin;
 exports.isEmployee = isEmployee;

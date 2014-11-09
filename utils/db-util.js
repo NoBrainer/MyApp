@@ -51,5 +51,6 @@ var close = function close(){
 	});
 };
 
+// Module exports
 exports.setup = setup;
 exports.close = close;

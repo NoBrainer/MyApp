@@ -198,7 +198,7 @@ var aggregateCss = function aggregateCss(targetFile, publicDir){
 ///**
 // * 
 // */
-//exports.copyDirectory = function copyResources(targetDir, destDir, preserveNesting){
+//var copyDirectory = function copyResources(targetDir, destDir, preserveNesting){
 //	// Determine what kind of files we care about
 //	var isImage = function(file){
 //		return file.match(/.+\.(jpg|png|ico)$/i);
@@ -216,6 +216,7 @@ var aggregateCss = function aggregateCss(targetFile, publicDir){
 //	walk(targetDir, isImage, done);
 //};
 
+// Module exports
 exports.aggregateTemplates = aggregateTemplates;
 exports.aggregateJavaScript = aggregateJavaScript;
 exports.aggregateCss = aggregateCss;

@@ -12,7 +12,7 @@ var News = require('../models/news-model');
  * GET - A list of all news
  * @memberOf News
  */
-exports.getAll = function getAll(req, res){
+var getAll = function getAll(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -51,7 +51,7 @@ exports.getAll = function getAll(req, res){
  * POST - create a news entry
  * @memberOf News
  */
-exports.create = function create(req, res){
+var create = function create(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -100,7 +100,7 @@ exports.create = function create(req, res){
  * POST - update a news entry
  * @memberOf News
  */
-exports.update = function update(req, res){
+var update = function update(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -179,7 +179,7 @@ exports.update = function update(req, res){
  * POST - delete news entries
  * @memberOf News
  */
-exports.remove = function remove(req, res){
+var remove = function remove(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -233,3 +233,9 @@ exports.remove = function remove(req, res){
 		res.send(responseObject);
 	});
 };
+
+// Module exports
+exports.getAll = getAll;
+exports.create = create;
+exports.update = update;
+exports.remove = remove;

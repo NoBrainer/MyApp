@@ -13,7 +13,7 @@ var User = require('../models/user-model');
  * GET - Check if a user exists
  * @memberOf User
  */
-exports.exists = function exists(req, res){
+var exists = function exists(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -55,7 +55,7 @@ exports.exists = function exists(req, res){
  * GET - A list of all users
  * @memberOf User
  */
-exports.getAll = function getAll(req, res){
+var getAll = function getAll(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -94,7 +94,7 @@ exports.getAll = function getAll(req, res){
  * GET - check login state
  * @memberOf User
  */
-exports.isLoggedIn = function isLoggedIn(req, res){
+var isLoggedIn = function isLoggedIn(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -125,7 +125,7 @@ exports.isLoggedIn = function isLoggedIn(req, res){
  * POST - attempt user login
  * @memberOf User
  */
-exports.login = function login(req, res){
+var login = function login(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -213,7 +213,7 @@ exports.login = function login(req, res){
  * POST - attempt user logout
  * @memberOf User
  */
-exports.logout = function logout(req, res){
+var logout = function logout(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -241,7 +241,7 @@ exports.logout = function logout(req, res){
  * POST - attempt user registration
  * @memberOf User
  */
-exports.register = function register(req, res){
+var register = function register(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -314,7 +314,7 @@ exports.register = function register(req, res){
  * POST - attempt user registration
  * @memberOf User
  */
-exports.confirmation = function confirmation(req, res){
+var confirmation = function confirmation(req, res){
 	// Default response template
 	var message = "Error during confirmation";
 	
@@ -365,7 +365,7 @@ exports.confirmation = function confirmation(req, res){
  * POST - approve a user (creates a new entry if one doesn't exist)
  * @memberOf User
  */
-exports.approveUser = function approveUser(req, res){
+var approveUser = function approveUser(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -478,7 +478,7 @@ exports.approveUser = function approveUser(req, res){
  * POST - update the user
  * @memberOf User
  */
-exports.updateUser = function updateUser(req, res){
+var updateUser = function updateUser(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -589,7 +589,7 @@ exports.updateUser = function updateUser(req, res){
  * POST - update the user type
  * @memberOf User
  */
-exports.updateUserType = function updateUserType(req, res){
+var updateUserType = function updateUserType(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -666,7 +666,7 @@ exports.updateUserType = function updateUserType(req, res){
  * POST - Start a password reset
  * @memberOf User
  */
-exports.startPasswordReset = function startPasswordReset(req, res){
+var startPasswordReset = function startPasswordReset(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -746,7 +746,7 @@ exports.startPasswordReset = function startPasswordReset(req, res){
  * GET - Checks if the user can reset the password
  * @memberOf User
  */
-exports.isAbleToResetPassword = function isAbleToResetPassword(req, res){
+var isAbleToResetPassword = function isAbleToResetPassword(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -771,7 +771,7 @@ exports.isAbleToResetPassword = function isAbleToResetPassword(req, res){
  * POST - Reset the password
  * @memberOf User
  */
-exports.resetPassword = function resetPassword(req, res){
+var resetPassword = function resetPassword(req, res){
 	// Default response template
 	var responseObject = {
 			error : null,
@@ -847,3 +847,18 @@ exports.resetPassword = function resetPassword(req, res){
 		}
 	});
 };
+
+// Module exports
+exports.exists = exists;
+exports.getAll = getAll;
+exports.isLoggedIn = isLoggedIn;
+exports.login = login;
+exports.logout = logout;
+exports.register = register;
+exports.confirmation = confirmation;
+exports.approveUser = approveUser;
+exports.updateUser = updateUser;
+exports.updateUserType = updateUserType;
+exports.startPasswordReset = startPasswordReset;
+exports.isAbleToResetPassword = isAbleToResetPassword;
+exports.resetPassword = resetPassword;

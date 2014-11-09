@@ -44,4 +44,5 @@ var sendEmail = function sendEmail(opts, callback){
 	transport.sendMail(opts, callback);
 };
 
+// Module exports
 exports.sendEmail = sendEmail;

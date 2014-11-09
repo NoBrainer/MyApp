@@ -53,5 +53,6 @@ var lastDayOfMonth = function(date){
 	return date;
 };
 
+// Module exports
 exports.getFirstDayOfMonth = getFirstDayOfMonth;
 exports.lastDayOfMonth = lastDayOfMonth;
