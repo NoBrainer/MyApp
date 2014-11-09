@@ -1,5 +1,9 @@
+// Library imports
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
+
+// Local imports
+// EMPTY
 
 var transport = nodemailer.createTransport(smtpTransport(config.props.EMAIL_OPTS));
 
@@ -17,7 +21,7 @@ var defaultOptions = {
  * @param opts.html - {String} the email content
  * @param callback - {function} called after sending the email
  */
-exports.sendEmail = function sendEmail(opts, callback){
+var sendEmail = function sendEmail(opts, callback){
 	var opts = opts || {};
 	
 	// Always send emails from the bot
@@ -39,3 +43,5 @@ exports.sendEmail = function sendEmail(opts, callback){
 	// Send the email
 	transport.sendMail(opts, callback);
 };
+
+exports.sendEmail = sendEmail;

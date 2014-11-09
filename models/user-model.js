@@ -1,11 +1,14 @@
+// Library imports
 var bcrypt = require('bcrypt');
 var mongoose = require('mongoose');
+
+// Local imports
 var mailUtil = require('../utils/mail-util');
 
+// Constants
 var SALT_WORK_FACTOR = 10;
 var MAX_LOGIN_ATTEMPTS = 5;
 var LOCK_TIME = 5 * 60 * 1000; //5min
-
 var DEFAULT_NAME = "Default Name";
 var DEFAULT_PASSWORD = "password";
 

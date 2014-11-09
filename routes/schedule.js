@@ -1,24 +1,14 @@
+// Library imports
 var mongoose = require('mongoose');
+
+// Local imports
+var dateUtil = require('../utils/date-util');
+var roleUtil = require('../utils/role-util');
+
+// Primary db model
 var Schedule = require('../models/schedule-model');
 
 var ONE_DAY = 1000 * 60 * 60 * 24;
-
-// Helper functions to check user privileges
-var isDeveloper = function isDeveloper(req){
-	var type = req.session.type || "";
-	var matches = type.match(/developer/);
-	return !(_.isNull(matches) || _.isUndefined(matches));
-};
-var isAdmin = function isAdmin(req){
-	var type = req.session.type || "";
-	var matches = type.match(/(admin|developer)/);
-	return !(_.isNull(matches) || _.isUndefined(matches));
-};
-var isEmployee = function isEmployee(req){
-	var type = req.session.type || "";
-	var matches = type.match(/(employee|admin|developer)/);
-	return !(_.isNull(matches) || _.isUndefined(matches));
-};
 
 /**
  * Generate the date string with format YYYY-MM-DD
@@ -45,8 +35,9 @@ var generateDateString = function generateDateString(date){
 exports.getAll = function getAll(req, res){
 	// Default response template
 	var responseObject = {
-		error : null,
-		schedule : null
+			error : null,
+			message : null,
+			schedule : null
 	};
 	
 	// Generate the query
@@ -55,7 +46,9 @@ exports.getAll = function getAll(req, res){
 	// Search for all schedule entries
 	Schedule.find(query, function(err, data){
 		if(err){
+			responseObject.message = "Error finding user";
 			responseObject.error = err;
+			console.error(responseObject.message);
 			console.error(err);
 		}else{
 			// Filter the attributes returned
@@ -70,7 +63,7 @@ exports.getAll = function getAll(req, res){
 									dateString : entry.dateString,
 									shift : ""
 							};
-							if(isAdmin(req)){
+							if(roleUtil.isAdmin(req)){
 								obj.shift = entry.shift;
 							}
 							return obj;
@@ -83,38 +76,41 @@ exports.getAll = function getAll(req, res){
 };
 
 /**
- * POST - A list of the schedule between startDate and endDate
+ * GET - A list of the schedule between startDate and endDate
  * @memberOf Schedule
  */
 exports.getRange = function getRange(req, res){
 	// Default response template
 	var responseObject = {
-		error : null,
-		schedule : null
+			error : null,
+			message : null,
+			schedule : null
 	};
 	
-	// Get variables from request body
-	var body = req.body || {};
-	body.startDate = body.startDate || null;
-	body.endDate = body.endDate || null;
+	// Get variables from request params
+	var params = req.params || {};
+	params.startDate = params.startDate || null;
+	params.endDate = params.endDate || null;
 	
-	// Validate the request body
-	if(_.isNull(body.startDate)){
-		responseObject.error = "body.startDate is required";
+	// Validate the request params
+	if(_.isNull(params.startDate)){
+		responseObject.message = "Cannot get date range without startDate";
+		responseObject.error = new Error(responseObject.message);
 		console.error(responseObject.message);
 		res.send(responseObject);
 		return;
 	}
-	if(_.isNull(body.endDate)){
-		responseObject.error = "body.endDate is required";
+	if(_.isNull(params.endDate)){
+		responseObject.message = "Cannot get date range without endDate";
+		responseObject.error = new Error(responseObject.message);
 		console.error(responseObject.message);
 		res.send(responseObject);
 		return;
 	}
 	
 	// Generate the date range array to help build the schedule array template
-	var start = (new Date(body.startDate)).getTime();
-	var end = (new Date(body.endDate)).getTime()+1;
+	var start = (new Date(params.startDate)).getTime();
+	var end = (new Date(params.endDate)).getTime()+1;
 	var step = ONE_DAY;
 	var dateRange = _.range(start, end, step);
 	dateRange = _.map(dateRange, function(millis){
@@ -125,24 +121,26 @@ exports.getRange = function getRange(req, res){
 	var scheduleTemplate = _.map(dateRange, function(date){
 		var dateString = generateDateString(date);
 		return {
-			dateString : dateString,
-			date : date,
-			entries : []
+				dateString : dateString,
+				date : date,
+				entries : []
 		};
 	});
 	
 	// Generate the query
 	var query = {
-		date : {
-			$gte : body.startDate,
-			$lte : body.endDate
-		}
+			date : {
+				$gte : params.startDate,
+				$lte : params.endDate
+			}
 	};
 	
 	// Search for all schedule entries
 	Schedule.find(query, function(err, data){
 		if(err){
+			responseObject.message = "Error finding schedule data";
 			responseObject.error = err;
+			console.error(responseObject.message);
 			console.error(err);
 		}else{
 			// Filter the attributes returned
@@ -157,7 +155,7 @@ exports.getRange = function getRange(req, res){
 									dateString : entry.dateString,
 									shift : ""
 							};
-							if(isAdmin(req)){
+							if(roleUtil.isAdmin(req)){
 								obj.shift = entry.shift;
 							}
 							return obj;
@@ -179,19 +177,67 @@ exports.getRange = function getRange(req, res){
 };
 
 /**
+ * GET - A list of the schedule during the specified month
+ * @memberOf Schedule
+ */
+exports.getMonth = function getMonth(req, res){
+	// Default response template
+	var responseObject = {
+			error : null,
+			message : null,
+			schedule : null,
+			month : null
+	};
+	
+	// Get variables from request params
+	var params = req.params || {};
+	params.date = params.date || null;
+	
+	// Try to build the query
+	var query = {};
+	if(!_.isNull(params.date)){
+		// Build the query based on the date
+		var startDate = dateUtil.getFirstDayOfMonth(params.date);
+		var endDate = dateUtil.getLastDayOfMonth(params.date);
+		query.date = {
+				$gte : startDate,
+				$lte : endDate
+		};
+		
+		// Keep track of which month we're looking at
+		responseObject.month = "MONTH-YEAR"
+				.replace("MONTH", startDate.getMonth()+1)
+				.replace("YEAR", startDate.getFullYear());
+	}else{
+		// Otherwise, we don't have enough data to proceed
+		responseObject.message = "Cannot get month of schedule without date";
+		responseObject.error = new Error(responseObject.message);
+		console.error(responseObject.message);
+		res.send(responseObject);
+		return;
+	}
+	
+	// Make the call
+	//TODO: finish implementation
+};
+
+/**
  * POST - update a schedule for the given date
  * @memberOf Schedule
  */
 exports.update = function update(req, res){
 	// Default response template
 	var responseObject = {
-		error : null,
-		successful : false
+			error : null,
+			message : null,
+			successful : false
 	};
 	
 	// Verify admin status
-	if(!isAdmin(req)){
-		responseObject.error = "Not authorized to update schedule";
+	if(!roleUtil.isAdmin(req)){
+		responseObject.message = "Not authorized to update schedule";
+		responseObject.error = new Error(responseObject.message);
+		console.error(responseObject.message);
 		res.send(responseObject);
 		return;
 	}
@@ -203,37 +249,41 @@ exports.update = function update(req, res){
 	
 	// The date is required
 	if(_.isNull(body.date)){
-		responseObject.error = "Cannot update schedule without date";
+		responseObject.message = "Cannot update schedule without date";
+		responseObject.error = new Error(responseObject.message);
+		console.error(responseObject.message);
 		res.send(responseObject);
 		return;
 	}
 	
 	// Build the update object
 	var updates = {
-		date : body.date,
-		entries : body.entries
+			date : body.date,
+			entries : body.entries
 	};
 	
 	// Build the query
 	var query = {
-		date : new Date(body.date)
+			date : new Date(body.date)
 	};
 	
 	// Find the schedule date to update
 	Schedule.findOne(query, function(err, item){
 		if(err){
+			responseObject.message = "Error finding schedule data";
 			responseObject.error = err;
-			responseObject.message = err.message;
 			console.error(responseObject.message);
+			console.error(err);
 			res.send(responseObject);
 		}else if(item){
 			//TODO: see if we can just save instead of update
 			// Update the schedule entry
 			Schedule.update(query, updates, function(err, numAffected){
 				if(err){
+					responseObject.message = "Error updating schedule";
 					responseObject.error = err;
-					responseObject.message = err.message;
 					console.error(responseObject.message);
+					console.error(err);
 				}else{
 					responseObject.successful = true;
 				}
@@ -245,13 +295,15 @@ exports.update = function update(req, res){
 			
 			// Create instance of a Schedule and save it
 			var newItem = new Schedule({
-				date : body.date,
-				entries : body.entries,
-				dateString : dateString
+					date : body.date,
+					entries : body.entries,
+					dateString : dateString
 			});
 			newItem.save(function(err, savedObj){
 				if(err){
+					responseObject.message = "Error saving schedule";
 					responseObject.error = err;
+					console.error(responseObject.message);
 					console.error(err);
 				}else{
 					responseObject.successful = true;

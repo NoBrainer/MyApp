@@ -1,5 +1,9 @@
+// Library imports
 var fs = require('fs');
 var path = require('path');
+
+// Local imports
+// EMPTY
 
 /**
  * Traverse the directory
@@ -124,7 +128,7 @@ var createAggregate = function createAggregate(fileArr, targetFile, strictOrder)
  * @param targetDir - directory to look in (full path)
  * @param targetFile - file to print to (full path)
  */
-exports.aggregateTemplates = function aggregateTemplates(targetDir, targetFile){
+var aggregateTemplates = function aggregateTemplates(targetDir, targetFile){
 	// Determine what kind of files we care about
 	var isTemplate = function(file){
 		return file.match(/.+\.template$/);
@@ -144,7 +148,7 @@ exports.aggregateTemplates = function aggregateTemplates(targetDir, targetFile){
  * @param targetFile - file to print to (full path)
  * @param libDir - directory with JavaScript libraries (full path)
  */
-exports.aggregateJavaScript = function aggregateJavaScript(targetDir, targetFile, libDir){
+var aggregateJavaScript = function aggregateJavaScript(targetDir, targetFile, libDir){
 	// Array of libraries to import (order matters)
 	var libArray = [ "jquery/js/jquery.js", "underscore/js/underscore.js", "backbone/js/backbone.js", "bootstrap/js/bootstrap.js" ];
 	libArray = _.map(libArray, function(item){
@@ -179,7 +183,7 @@ exports.aggregateJavaScript = function aggregateJavaScript(targetDir, targetFile
  * @param targetFile - file to print to (full path)
  * @param publicDir - public directory (full path)
  */
-exports.aggregateCss = function aggregateCss(targetFile, publicDir){
+var aggregateCss = function aggregateCss(targetFile, publicDir){
 	// Array of css files to import (order matters)
 	var fileArr = [ "lib/bootstrap/css/bootstrap.css", "lib/bootstrap/css/bootstrap-custom.css", "lib/font-awesome/css/font-awesome.css", "stylesheets/style.css", "stylesheets/style-responsive.css" ];
 	fileArr = _.map(fileArr, function(item){
@@ -211,3 +215,8 @@ exports.aggregateCss = function aggregateCss(targetFile, publicDir){
 //	// Traverse the target directory
 //	walk(targetDir, isImage, done);
 //};
+
+exports.aggregateTemplates = aggregateTemplates;
+exports.aggregateJavaScript = aggregateJavaScript;
+exports.aggregateCss = aggregateCss;
+//exports.copyDirectory = copyDirectory;

@@ -382,7 +382,7 @@ app.view.part.Schedule = Backbone.View.extend({
 		
 		// Build ajax options for getting the schedule list
 		var scheduleOpts = {
-			type : 'POST',
+			type : 'GET',
 			url : "/api/schedule",
 			cache : false,
 			contentType : 'application/json',

@@ -1,14 +1,18 @@
+// Library imports
 var bcrypt = require('bcrypt');
 var fs = require('fs');
 var mongoose = require('mongoose');
 
+// Local imports
 var User = require('../models/user-model');
+
+// Local variables
 var db = undefined;
 
 /**
  * Setup the mongo database
  */
-exports.setup = function setup(callback){
+var setup = function setup(callback){
 	// Setup the database
 	var mongoOptions = {
 //		user : config.props.MONGO_USERNAME,
@@ -41,8 +45,11 @@ exports.setup = function setup(callback){
 /**
  * Close the connection to mongo
  */
-exports.close = function close(){
+var close = function close(){
 	db.close(function(){
 		console.log('Mongoose disconnected');
 	});
 };
+
+exports.setup = setup;
+exports.close = close;

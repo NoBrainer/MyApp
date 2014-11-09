@@ -1,4 +1,8 @@
+// Library imports
 var mongoose = require('mongoose');
+
+// Local imports
+// EMPTY
 
 /**
  * Initialize schema
