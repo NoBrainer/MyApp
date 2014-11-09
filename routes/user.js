@@ -22,7 +22,7 @@ var exists = function exists(req, res){
 	};
 
 	// Get variables from request params
-	var params = req.params || {};
+	var params = req.query || {};
 	var username = params.username || "";
 	
 	// Input validation

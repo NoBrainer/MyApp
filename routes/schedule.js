@@ -89,7 +89,7 @@ var getRange = function getRange(req, res){
 	};
 	
 	// Get variables from request params
-	var params = req.params || {};
+	var params = req.query || {};
 	params.startDate = params.startDate || null;
 	params.endDate = params.endDate || null;
 	
@@ -191,7 +191,7 @@ var getMonth = function getMonth(req, res){
 	};
 	
 	// Get variables from request params
-	var params = req.params || {};
+	var params = req.query || {};
 	params.date = params.date || null;
 	
 	// Try to build the query

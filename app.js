@@ -166,8 +166,11 @@ router.route('/news/remove')
 	.post(news.remove);
 // Schedule
 router.route('/schedule')
-	.get(schedule.getAll)
-	.post(schedule.getRange);
+	.get(schedule.getAll);
+router.route('/schedule/range')
+	.get(schedule.getRange);
+router.route('/schedule/month')
+	.get(schedule.getMonth);
 router.route('/schedule/update')
 	.post(schedule.update);
 

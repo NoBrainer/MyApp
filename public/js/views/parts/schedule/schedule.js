@@ -383,13 +383,13 @@ app.view.part.Schedule = Backbone.View.extend({
 		// Build ajax options for getting the schedule list
 		var scheduleOpts = {
 			type : 'GET',
-			url : "/api/schedule",
+			url : "/api/schedule/range",
 			cache : false,
 			contentType : 'application/json',
-			data : JSON.stringify({
+			data : {
 					startDate : start,
 					endDate : end
-			})
+			}
 		};
 		scheduleOpts.success = function(resp){
 			if(_.isNull(resp.error)){
