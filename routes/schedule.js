@@ -95,14 +95,14 @@ var getRange = function getRange(req, res){
 	
 	// Validate the request params
 	if(_.isNull(params.startDate)){
-		responseObject.message = "Cannot get date range without startDate";
+		responseObject.message = "Cannot get schedule range without startDate";
 		responseObject.error = new Error(responseObject.message);
 		console.error(responseObject.message);
 		res.send(responseObject);
 		return;
 	}
 	if(_.isNull(params.endDate)){
-		responseObject.message = "Cannot get date range without endDate";
+		responseObject.message = "Cannot get schedule range without endDate";
 		responseObject.error = new Error(responseObject.message);
 		console.error(responseObject.message);
 		res.send(responseObject);
@@ -194,23 +194,8 @@ var getMonth = function getMonth(req, res){
 	var params = req.query || {};
 	params.date = params.date || null;
 	
-	// Try to build the query
-	var query = {};
-	if(!_.isNull(params.date)){
-		// Build the query based on the date
-		var startDate = dateUtil.getFirstDayOfMonth(params.date);
-		var endDate = dateUtil.getLastDayOfMonth(params.date);
-		query.date = {
-				$gte : startDate,
-				$lte : endDate
-		};
-		
-		// Keep track of which month we're looking at
-		responseObject.month = "MONTH-YEAR"
-				.replace("MONTH", startDate.getMonth()+1)
-				.replace("YEAR", startDate.getFullYear());
-	}else{
-		// Otherwise, we don't have enough data to proceed
+	// Validate the request params
+	if(_.isNull(params.date)){
 		responseObject.message = "Cannot get month of schedule without date";
 		responseObject.error = new Error(responseObject.message);
 		console.error(responseObject.message);
@@ -218,8 +203,48 @@ var getMonth = function getMonth(req, res){
 		return;
 	}
 	
-	// Make the call
-	//TODO: finish implementation
+	// Build the query based on the date
+	var query = {};
+	var startDate = dateUtil.firstDayOfMonth(params.date);
+	var endDate = dateUtil.lastDayOfMonth(params.date);
+	query.date = {
+			$gte : startDate,
+			$lte : endDate
+	};
+	
+	// Keep track of which month we're looking at
+	responseObject.month = startDate.toDateString();
+	
+	// Search for all schedule entries in this month
+	Schedule.find(query, function(err, data){
+		if(err){
+			responseObject.message = "Error finding schedule data";
+			responseObject.error = err;
+			console.error(responseObject.message);
+			console.error(err);
+		}else{
+			// Return a blank shift unless the user is an employee
+			responseObject.schedule = _.map(data, function(item){
+				return {
+						dateString : item.dateString,
+						date : item.date,
+						entries : _.map(item.entries, function(entry){
+							var obj = {
+									username : entry.username,
+									name : entry.name,
+									dateString : entry.dateString,
+									shift : ""
+							};
+							if(roleUtil.isEmployee(req)){
+								obj.shift = entry.shift;
+							}
+							return obj;
+						})
+				};
+			});
+		}
+		res.send(responseObject);
+	});
 };
 
 /**

@@ -10,6 +10,12 @@ app.view.part.Schedule = Backbone.View.extend({
 		// Array of schedule entries
 		this.schedule = [];
 		
+		// Array of months we've loaded
+		this.months = [];
+		
+		// Keep track of when we get the data
+		this.dataAge = null;
+		
 		// Stub data used if no users are returned
 		this.stubUser = {
 				username : "",
@@ -24,8 +30,13 @@ app.view.part.Schedule = Backbone.View.extend({
 	,syncAndRender : function syncAndRender(){
 		var self = this;
 		
+		// Create a date for each month of schedule data
+		var thisMonth = new Date();
+		var nextMonth = new Date();
+		nextMonth.setMonth(nextMonth.getMonth()+1);
+		
 		// Callback to render once ready
-		var numCalls = 2;
+		var numCalls = 2;//TODO: change this to 3 when ready
 		var renderIfReady = function renderIfReady(){
 			numCalls--;
 			if(numCalls === 0){
@@ -36,6 +47,11 @@ app.view.part.Schedule = Backbone.View.extend({
 		// Make the ajax calls
 		self.getUserList()
 			.done(renderIfReady);
+		//TODO: uncomment this and remove self.getScheduleEntries() when ready
+//		self.checkSchedule(thisMonth)
+//			.done(renderIfReady);
+//		self.checkSchedule(nextMonth)
+//			.done(renderIfReady);
 		self.getScheduleEntries()
 			.done(renderIfReady);
 		
@@ -47,6 +63,9 @@ app.view.part.Schedule = Backbone.View.extend({
 	 */
 	,render : function render(){
 		var self = this;
+		
+		//TODO: Pull data out of self.schedule to show
+		//TODO: Make it so we can scroll through self.schedule's data
 		
 		// Massage the data
 		var scheduleList = _.map(self.schedule, function(item){
@@ -355,57 +374,137 @@ app.view.part.Schedule = Backbone.View.extend({
 	/**
 	 * Get schedule entries and merge them with self.schedule
 	 */
-	,getScheduleEntries : function getScheduleEntries(opts){
+	,getScheduleEntries : function getScheduleEntries(date){
 		var self = this;
 		
-		opts = opts || {};
-		var start = opts.start || null;
-		var end = opts.end || null;
-		
-		if(_.isDate(start) && _.isDate(end)){
-			// Set hours/mins/seconds to zero
-			start = app.util.Date.startOfDay(start);
-			end = app.util.Date.startOfDay(end);
-		}else if(_.isEmpty(start) && _.isDate(end)){
-			// Calculate one week ending at the beginning of day 'end'
-			end = app.util.Date.startOfDay(end);
-			start = app.util.Date.prevDay(end, 6);
-		}else if(_.isDate(start) && _.isEmpty(end)){
-			// Calculate one week starting at the beginning of day 'start'
-			start = app.util.Date.startOfDay(start);
-			end = app.util.Date.nextDay(end, 6);
-		}else{
-			// Default to one week starting today
-			start = app.util.Date.startOfDay();
-			end = app.util.Date.nextDay(start, 6);
-		}
+		date = date || new Date();
+		date = app.util.Date.firstDayOfMonth(date);
 		
 		// Build ajax options for getting the schedule list
 		var scheduleOpts = {
 			type : 'GET',
-			url : "/api/schedule/range",
+			url : "/api/schedule/month",
 			cache : false,
 			contentType : 'application/json',
 			data : {
-					startDate : start,
-					endDate : end
+					date : date
 			}
 		};
 		scheduleOpts.success = function(resp){
 			if(_.isNull(resp.error)){
-				// Update the schedule
-				resp.schedule = resp.schedule || [];
-				self.schedule = _.union(self.schedule, resp.schedule);
-				//TODO: prevent duplicates
+				self.updateLocalScheduleData(resp.schedule, resp.month);
 			}else{
+				console.log(resp.message);
 				self.renderError(resp.error);
 			}
 		};
 		scheduleOpts.error = function(resp){
+			console.log(resp.message);
 			self.renderError("Failure to communicate with site. Try again later. [app.view.part.Schedule.getScheduleEntries]");
 		};
 		
-		// Make the ajax calls
+		// Make the ajax call
 		return $.ajax(scheduleOpts);
+	}
+	
+	/**
+	 * Update the local schedule data.
+	 * @param newData - {Array} response from the server
+	 * @param month - {String} returned from {Date.toDateString()}
+	 */
+	,updateLocalScheduleData : function updateLocalScheduleData(newData, month){
+		var self = this;
+		
+		newData = newData || [];
+		month = month || "";
+		
+		if(_.isEmpty(self.dataAge)){
+			// Keep track of the first time we retrieve data
+			self.dataAge = Date.now();
+		}
+		
+		if(!_.isEmpty(month) && !_.isEmpty(newData) && !self.alreadyLoadedMonth(month)){
+			// Keep track of what months we've loaded
+			self.months.push(resp.month);
+			
+			// Update the schedule
+			self.schedule = _.union(self.schedule, newData);
+		}
+		
+		return self;
+	}
+	
+	/**
+	 * Check if we've already loaded this month.
+	 * @param month - {String} returned from {Date.toDateString()}
+	 */
+	,alreadyLoadedMonth : function alreadyLoadedMonth(month){
+		var self = this;
+		
+//		//TODO: uncomment when we get things working
+//		// Check if the local schedule data is stale
+//		var tenMinAgo = Date.now() - (1000 * 60 * 10);
+//		if(self.dataAge < tenMinAgo){
+//			// Reset the local schedule data
+//			self.schedule = [];
+//			self.months = [];
+//			self.dataAge = null;
+//			return false;
+//		}
+		
+		// Say we've already loaded it if the month is invalid
+		if(_.isEmpty(month) || !_.isString(month)){
+			return true;
+		}
+		
+		return _.contains(self.months, month);
+	}
+	
+	/**
+	 * Check the schedule for a given date's month. Get more schedule data from the server if necessary.
+	 * @param date - {Date}
+	 */
+	,checkSchedule : function checkSchedule(date){
+		var self = this;
+		var dfd = $.Deferred();
+		
+		// Build the month string
+		date = app.util.Date.firstDayOfMonth(date);
+		var month = date.toDateString();
+		
+		// Check if we've already loaded this month
+		if(!self.alreadyLoadedMonth(month)){
+			// Make a server call
+			var ajaxOpts = {
+					type : 'GET',
+					url : '/api/schedule/month',
+					cache : false,
+					contentType : 'application/json',
+					data : {
+						date : date
+					},
+					success : function(resp){
+						if(_.isNull(resp.error)){
+							self.updateLocalScheduleData(resp.schedule, resp.month);
+						}else{
+							console.log(resp.message);
+							console.log(resp);
+						}
+					},
+					error : function(resp){
+						console.log("Failed to get schedule data");
+						console.log(resp);
+					},
+					always : function(){
+						dfd.resolve();
+					}
+			};
+			$.ajax(ajaxOpts);
+		}else{
+			// Resolve without a server call
+			dfd.resolve();
+		}
+		
+		return dfd.promise();
 	}
 });

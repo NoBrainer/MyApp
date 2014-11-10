@@ -7,7 +7,7 @@
 /**
  * Get the first day of the month with the time cleared.
  */
-var getFirstDayOfMonth = function(date){
+var firstDayOfMonth = function(date){
 	if(!_.isDate(date)){
 		// Default to now
 		date = new Date();
@@ -54,5 +54,5 @@ var lastDayOfMonth = function(date){
 };
 
 // Module exports
-exports.getFirstDayOfMonth = getFirstDayOfMonth;
+exports.firstDayOfMonth = firstDayOfMonth;
 exports.lastDayOfMonth = lastDayOfMonth;
