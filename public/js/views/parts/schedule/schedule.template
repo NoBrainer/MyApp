@@ -18,33 +18,80 @@
 	<div class="panel-body">
 		<table class="table admin_edit_toggle">
 			<tr>
+				<td class="arrow_cell arrow_cell_left">
+					<a class="schedule_scroll_left">
+						<i class="fa fa-arrow-circle-left"></i>
+					</a>
+				</td>
 				<% _.each(scheduleList, function(item){ %>
 					<td>
 						<%= item.label %>
 					</td>
 				<% }); %>
+				<td class="arrow_cell arrow_cell_right">
+					<a class="schedule_scroll_right">
+						<i class="fa fa-arrow-circle-right"></i>
+					</a>
+				</td>
 			</tr>
 			<tr>
+				<td class="arrow_cell blank_cell_left"></td>
 				<% _.each(scheduleList, function(item){ %>
 					<td>
 						<ul>
-							<% _.each(item.entries, function(entry){ %>
+							<% if(_.isEmpty(item.entries)){ %>
 								<li>
-									<span>
-										<%= entry.name %>
-									</span>
-									<span>
-										<%= entry.shift %>
-									</span>
+									TBD
 								</li>
-							<% }); %>
+							<% }else{ %>
+								<% _.each(item.entries, function(entry){ %>
+									<li>
+										<span>
+											<%= entry.name %>
+										</span>
+										<span>
+											<%= entry.shift %>
+										</span>
+									</li>
+								<% }); %>
+							<% } %>
 						</ul>
 					</td>
 				<% }); %>
+				<td class="arrow_cell blank_cell_right"></td>
 			</tr>
 		</table>
 		<div id="schedule_edit_form" class="admin_edit_toggle" style="display:none;"></div>
 	</div>
+</script>
+
+<script type="text/template" id="schedule-label-template">
+	<td>
+		<%= item.label %>
+	</td>
+</script>
+
+<script type="text/template" id="schedule-item-template">
+	<td>
+		<ul>
+			<% if(_.isEmpty(item.entries)){ %>
+				<li>
+					TBD
+				</li>
+			<% }else{ %>
+				<% _.each(item.entries, function(entry){ %>
+					<li>
+						<span>
+							<%= entry.name %>
+						</span>
+						<span>
+							<%= entry.shift %>
+						</span>
+					</li>
+				<% }); %>
+			<% } %>
+		</ul>
+	</td>
 </script>
 
 <script type="text/template" id="schedule-edit-form-template">

@@ -181,6 +181,11 @@ a.footer_link {
 #content #schedule_content > .panel-body {
   width: 100%;
 }
+#content #schedule_content > .panel-body .arrow_cell {
+  padding-left: 0;
+  padding-right: 0;
+  width: 12px;
+}
 #content #schedule_content > .panel-body #schedule_edit_form select {
   margin-right: 10px;
 }

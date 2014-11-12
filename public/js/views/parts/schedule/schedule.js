@@ -36,7 +36,7 @@ app.view.part.Schedule = Backbone.View.extend({
 		nextMonth.setMonth(nextMonth.getMonth()+1);
 		
 		// Callback to render once ready
-		var numCalls = 2;//TODO: change this to 3 when ready
+		var numCalls = 3;
 		var renderIfReady = function renderIfReady(){
 			numCalls--;
 			if(numCalls === 0){
@@ -47,12 +47,9 @@ app.view.part.Schedule = Backbone.View.extend({
 		// Make the ajax calls
 		self.getUserList()
 			.done(renderIfReady);
-		//TODO: uncomment this and remove self.getScheduleEntries() when ready
-//		self.checkSchedule(thisMonth)
-//			.done(renderIfReady);
-//		self.checkSchedule(nextMonth)
-//			.done(renderIfReady);
-		self.getScheduleEntries()
+		self.checkSchedule(thisMonth)
+			.done(renderIfReady);
+		self.checkSchedule(nextMonth)
 			.done(renderIfReady);
 		
 		return self;
@@ -64,19 +61,34 @@ app.view.part.Schedule = Backbone.View.extend({
 	,render : function render(){
 		var self = this;
 		
-		//TODO: Pull data out of self.schedule to show
 		//TODO: Make it so we can scroll through self.schedule's data
 		
-		// Massage the data
-		var scheduleList = _.map(self.schedule, function(item){
-			var date = new Date(item.date);
-			item.label = app.util.Date.toStringShort(date);
+		// Build the template of days
+		var ONE_DAY = 1000 * 60 * 60 * 24;
+		var SEVEN_DAYS = ONE_DAY * 7;
+		var earliest = app.util.Date.startOfDay().getTime();
+		var latest = earliest + SEVEN_DAYS;
+		var weekList = _.range(earliest, latest, ONE_DAY);
+		weekList = _.map(weekList, function(item){
+			var date = new Date(item);
+			return {
+					date : date,
+					dateString : date.toDateString(),
+					entries : [],
+					label : app.util.Date.toStringShort(date)
+			};
+		});
+		
+		// Add the schedule data to the template of days
+		weekList = _.map(weekList, function(item){
+			var data = _.findWhere(self.schedule, { dateString : item.dateString });
+			item.entries = (_.isEmpty(data) ? [] : data.entries);
 			return item;
 		});
 		
 		// Add the html to the page
 		var params = {
-				scheduleList : scheduleList
+				scheduleList : weekList
 		};
 		var template = app.util.TemplateCache.get("#schedule-template");
 		var html = template(params);
@@ -425,7 +437,7 @@ app.view.part.Schedule = Backbone.View.extend({
 		
 		if(!_.isEmpty(month) && !_.isEmpty(newData) && !self.alreadyLoadedMonth(month)){
 			// Keep track of what months we've loaded
-			self.months.push(resp.month);
+			self.months.push(month);
 			
 			// Update the schedule
 			self.schedule = _.union(self.schedule, newData);
@@ -495,7 +507,7 @@ app.view.part.Schedule = Backbone.View.extend({
 						console.log("Failed to get schedule data");
 						console.log(resp);
 					},
-					always : function(){
+					complete : function(){
 						dfd.resolve();
 					}
 			};

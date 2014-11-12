@@ -205,6 +205,7 @@ app.util.Date = {
 	
 	/**
 	 * Get the first day of the month with the time cleared.
+	 * @memberOf app.util.Date
 	 */
 	,firstDayOfMonth : function(date){
 		if(!_.isDate(date)){
@@ -229,6 +230,7 @@ app.util.Date = {
 	
 	/**
 	 * Get the last day of the month with the time maxed out (23:59:59:999).
+	 * @memberOf app.util.Date
 	 */
 	,lastDayOfMonth : function(date){
 		if(!_.isDate(date)){

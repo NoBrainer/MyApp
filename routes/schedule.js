@@ -12,21 +12,12 @@ var Schedule = require('../models/schedule-model');
 var ONE_DAY = 1000 * 60 * 60 * 24;
 
 /**
- * Generate the date string with format YYYY-MM-DD
+ * Generate the date string with format 'day Mon dd YYYY'
+ * Ex: Thu Nov 13 2014
  */
 var generateDateString = function generateDateString(date){
 	date = (_.isDate(date) ? date : new Date(date));
-	
-	var year = date.getFullYear();
-	var month = date.getMonth()+1;
-	var day = date.getDate();
-	day = (day<10 ? "0"+day : day);
-	var id = "YYYY-MM-DD"
-			.replace(/YYYY/, year)
-			.replace(/MM/, month)
-			.replace(/DD/, day);
-	
-	return id;
+	return date.toDateString();
 };
 
 /**
