@@ -6,12 +6,7 @@ app.util.Date = {
 	 * @memberOf app.util.Date
 	 */
 	toString : function toString(date){
-		if(!_.isDate(date)){
-			return "UNDEFINED";
-		}
-		
-		// Prevent pass by reference
-		date = new Date(date.getTime());
+		date = preventPassByReference(date);
 		
 		// Pull data out of date object
 		var dayOfWeek = dayOfWeekShort[date.getDay()];
@@ -52,12 +47,7 @@ app.util.Date = {
 	 * @memberOf app.util.Date
 	 */
 	,toStringVerbose : function toStringVerbose(date){
-		if(!_.isDate(date)){
-			return "UNDEFINED";
-		}
-		
-		// Prevent pass by reference
-		date = new Date(date.getTime());
+		date = preventPassByReference(date);
 		
 		// Pull data out of date object
 		var dayOfWeek = dayOfWeek[date.getDay()];
@@ -98,12 +88,7 @@ app.util.Date = {
 	 * @memberOf app.util.Date
 	 */
 	,toStringShort : function toStringShort(date){
-		if(!_.isDate(date)){
-			return "UNDEFINED";
-		}
-		
-		// Prevent pass by reference
-		date = new Date(date.getTime());
+		date = preventPassByReference(date);
 		
 		// Pull data out of date object
 		var dayOfWeek = dayOfWeekShort[date.getDay()];
@@ -122,12 +107,7 @@ app.util.Date = {
 	 * @memberOf app.util.Date
 	 */
 	,startOfDay : function startOfDay(date){
-		if(!_.isDate(date)){
-			date = new Date(); //default to now
-		}
-		
-		// Prevent pass by reference
-		date = new Date(date.getTime());
+		date = preventPassByReference(date);
 		
 		date.setHours(0);
 		date.setMinutes(0);
@@ -142,15 +122,7 @@ app.util.Date = {
 	 * @memberOf app.util.Date
 	 */
 	,nextDay : function nextDay(date, num){
-		if(!_.isDate(date)){
-			date = new Date(); //default to now
-		}
-		if(!_.isNumber(num)){
-			num = 1;
-		}
-		
-		// Prevent pass by reference
-		date = new Date(date.getTime());
+		date = preventPassByReference(date);
 		
 		// Increment the date
 		date.setDate(date.getDate() + num);
@@ -162,15 +134,7 @@ app.util.Date = {
 	 * @memberOf app.util.Date
 	 */
 	,prevDay : function prevDay(date, num){
-		if(!_.isDate(date)){
-			date = new Date();//default to now
-		}
-		if(!_.isNumber(num)){
-			num = 1;
-		}
-		
-		// Prevent pass by reference
-		date = new Date(date.getTime());
+		date = preventPassByReference(date);
 		
 		// Decrement the date
 		date.setDate(date.getDate() - num);
@@ -182,13 +146,7 @@ app.util.Date = {
 	 * @memberOf app.util.Date
 	 */
 	,generateDatesForAWeek : function generateDatesForAWeek(start){
-		if(!_.isDate(date)){
-			// Default to now
-			date = new Date();
-		}
-		
-		// Prevent pass by reference
-		start = new Date(start.getTime());
+		date = preventPassByReference(date);
 		
 		// Get the start time
 		var currentDay = app.util.Date.startOfDay(start);
@@ -208,13 +166,7 @@ app.util.Date = {
 	 * @memberOf app.util.Date
 	 */
 	,firstDayOfMonth : function(date){
-		if(!_.isDate(date)){
-			// Default to now
-			date = new Date();
-		}
-		
-		// Prevent pass by reference
-		date = new Date(date.getTime());
+		date = preventPassByReference(date);
 		
 		// Zero-out the time
 		date.setMilliseconds(0);
@@ -233,13 +185,7 @@ app.util.Date = {
 	 * @memberOf app.util.Date
 	 */
 	,lastDayOfMonth : function(date){
-		if(!_.isDate(date)){
-			// Default to now
-			date = new Date();
-		}
-		
-		// Prevent pass by reference
-		date = new Date(date.getTime());
+		date = preventPassByReference(date);
 		
 		// Max-out the time
 		date.setMilliseconds(999);
@@ -253,6 +199,19 @@ app.util.Date = {
 		
 		return date;
 	}
+};
+
+// Prevent pass by-reference and convert {Number|String} dates into {Date}
+var preventPassByReference = function(date){
+	if(_.isDate(date)){
+		date = new Date(date.getTime());
+	}else{
+		date = new Date(date);
+		if(date.toString() === "Invalid Date"){
+			date = new Date(); //default to now
+		}
+	}
+	return date;
 };
 
 var dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];

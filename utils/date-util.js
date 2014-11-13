@@ -5,16 +5,25 @@
 // EMPTY
 
 /**
+ * Prevent pass by-reference and convert {Number|String} dates into {Date}
+ */
+var preventPassByReference = function(date){
+	if(_.isDate(date)){
+		date = new Date(date.getTime());
+	}else{
+		date = new Date(date);
+		if(date.toString() === "Invalid Date"){
+			date = new Date(); //default to now
+		}
+	}
+	return date;
+};
+
+/**
  * Get the first day of the month with the time cleared.
  */
 var firstDayOfMonth = function(date){
-	if(!_.isDate(date)){
-		// Default to now
-		date = new Date();
-	}
-	
-	// Prevent pass by reference
-	date = new Date(date.getTime());
+	date = preventPassByReference(date);
 	
 	// Zero-out the time
 	date.setMilliseconds(0);
@@ -32,13 +41,7 @@ var firstDayOfMonth = function(date){
  * Get the last day of the month with the time maxed out (23:59:59:999).
  */
 var lastDayOfMonth = function(date){
-	if(!_.isDate(date)){
-		// Default to now
-		date = new Date();
-	}
-	
-	// Prevent pass by reference
-	date = new Date(date.getTime());
+	date = preventPassByReference(date);
 	
 	// Max-out the time
 	date.setMilliseconds(999);
