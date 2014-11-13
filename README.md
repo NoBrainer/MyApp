@@ -75,7 +75,11 @@
 
 ### PRIORITY 1
 Schedule
-- Improve UX
+- Load data when editing
+- Edit multiple dates at once
+
+Admin Panel
+- Set name during pre-approval
 
 General
 - Optimize for mobile
