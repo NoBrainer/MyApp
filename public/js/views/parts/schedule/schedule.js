@@ -61,11 +61,7 @@ app.view.part.Schedule = Backbone.View.extend({
 	,render : function render(){
 		var self = this;
 		
-		//TODO: Make it so we can scroll through self.schedule's data
-		
 		// Build the template of days
-		var ONE_DAY = 1000 * 60 * 60 * 24;
-		var SEVEN_DAYS = ONE_DAY * 7;
 		var earliest = app.util.Date.startOfDay().getTime();
 		var latest = earliest + SEVEN_DAYS;
 		var weekList = _.range(earliest, latest, ONE_DAY);
@@ -80,15 +76,37 @@ app.view.part.Schedule = Backbone.View.extend({
 		});
 		
 		// Add the schedule data to the template of days
-		weekList = _.map(weekList, function(item){
+		self.shownDays = _.map(weekList, function(item){
 			var data = _.findWhere(self.schedule, { dateString : item.dateString });
 			item.entries = (_.isEmpty(data) ? [] : data.entries);
 			return item;
 		});
 		
+		// Build the template for the prev and next day
+		var prevDay = new Date(earliest - ONE_DAY);
+		var nextDay = new Date(latest);
+		self.prevDay = {
+				date : prevDay,
+				dateString : prevDay.toDateString(),
+				entries : [],
+				label : app.util.Date.toStringShort(prevDay)
+		};
+		self.nextDay = {
+				date : nextDay,
+				dateString : nextDay.toDateString(),
+				entries : [],
+				label : app.util.Date.toStringShort(nextDay)
+		};
+		
+		// Add the schedule data to the template for the prev/next days
+		var prevData = _.findWhere(self.schedule, { dateString : prevDay.dateString });
+		var nextData = _.findWhere(self.schedule, { dateString : nextDay.dateString });
+		self.prevDay.entries = (_.isEmpty(prevData) ? [] : prevData.entries);
+		self.nextDay.entries = (_.isEmpty(nextData) ? [] : nextData.entries);
+		
 		// Add the html to the page
 		var params = {
-				scheduleList : weekList
+				scheduleList : self.shownDays
 		};
 		var template = app.util.TemplateCache.get("#schedule-template");
 		var html = template(params);
@@ -122,28 +140,109 @@ app.view.part.Schedule = Backbone.View.extend({
 		// Setup the admin mode if the user is an admin
 		self.setupAdminMode();
 		
-//		//TODO: remove this if we settle on the table version
-//		// Click handler to show the expanded version
-//		self.$el.find('.expanding_btn').on('click', function(){
-//			var $this = $(this);
-//			var target = $this.attr('target');
-//			var $placeholder = $(target);
-//			
-//			if(!$this.hasClass('expanded')){
-//				$placeholder.width($this.width());
-//				$placeholder.height($this.height());
-//			}
-//			
-//			$this.toggleClass('expanded');
-//			$placeholder.toggle();
-//		});
-//		
-//		// Click handler to close the expanded version
-//		self.$el.find('.expanded_btn').on('click', function(){
-//			$(this).hide();
-//		});
+		// Click handlers for the prev/next buttons
+		$('#schedule_content .schedule_scroll_left').on('click', _.bind(self.scrollLeft, self));
+		$('#schedule_content .schedule_scroll_right').on('click', _.bind(self.scrollRight, self));
 		
 		return self;
+	}
+	
+	/**
+	 * Scroll the schedule left
+	 */
+	,scrollLeft : function scrollLeft(){
+		var self = this;
+		
+		var indexToRemove = 6;
+		var $labelCells = $('#schedule_content .schedule_label_cell');
+		var $contentCells = $('#schedule_content .schedule_content_cell');
+		var $leftArrowLabel = $('#schedule_content .arrow_cell_left');
+		var $leftArrowContent = $('#schedule_content .blank_cell_left');
+		var labelTemplate = app.util.TemplateCache.get("#schedule-label-template");
+		var contentTemplate = app.util.TemplateCache.get("#schedule-item-template");
+		
+		// Build the new html
+		var templateParams = {
+				item : self.prevDay
+		};
+		var newLabelHtml = labelTemplate(templateParams);
+		var newContentHtml = contentTemplate(templateParams);
+		
+		// Scroll self.shownDays and self.nextDay
+		self.nextDay = _.last(self.shownDays);
+		self.shownDays = _.union(self.prevDay, _.initial(self.shownDays));
+		
+		// Update the UI
+		$labelCells.get(indexToRemove).remove();
+		$contentCells.get(indexToRemove).remove();
+		$leftArrowLabel.after(newLabelHtml);
+		$leftArrowContent.after(newContentHtml);
+		
+		// Calculate a new prevDay
+		var newPrevDay = new Date(self.prevDay.date.getTime() - ONE_DAY);
+		self.prevDay = {
+				date : newPrevDay,
+				dateString : newPrevDay.toDateString(),
+				entries : [],
+				label : app.util.Date.toStringShort(newPrevDay)
+		};
+		var prevData = _.findWhere(self.schedule, { dateString : self.prevDay.dateString });
+		self.prevDay.entries = (_.isEmpty(prevData) ? [] : prevData.entries);
+		
+		// Check 7 days back to pre-load more schedule data
+		var sevenDaysPrior = new Date(newPrevDay.getTime() - (ONE_DAY*7));
+		self.checkSchedule(sevenDaysPrior);
+		
+		return false;
+	}
+	
+	/**
+	 * Scroll the schedule right
+	 */
+	,scrollRight : function scrollRight(){
+		var self = this;
+		
+		var indexToRemove = 0;
+		var $labelCells = $('#schedule_content .schedule_label_cell');
+		var $contentCells = $('#schedule_content .schedule_content_cell');
+		var $rightArrowLabel = $('#schedule_content .arrow_cell_right');
+		var $rightArrowContent = $('#schedule_content .blank_cell_right');
+		var labelTemplate = app.util.TemplateCache.get("#schedule-label-template");
+		var contentTemplate = app.util.TemplateCache.get("#schedule-item-template");
+		
+		// Build the new html
+		var templateParams = {
+				item : self.nextDay
+		};
+		var newLabelHtml = labelTemplate(templateParams);
+		var newContentHtml = contentTemplate(templateParams);
+		
+		// Scroll self.shownDays and self.prevDay
+		self.prevDay = _.first(self.shownDays);
+		self.shownDays = _.union(_.tail(self.shownDays), self.nextDay);
+		
+		// Update the UI
+		$labelCells.get(indexToRemove).remove();
+		$contentCells.get(indexToRemove).remove();
+		$rightArrowLabel.before(newLabelHtml);
+		$rightArrowContent.before(newContentHtml);
+		
+		// Calculate a new nextDay
+		var newNextDay = new Date(self.nextDay.date.getTime() + ONE_DAY);
+		self.nextDay = {
+				date : newNextDay,
+				dateString : newNextDay.toDateString(),
+				entries : [],
+				label : app.util.Date.toStringShort(newNextDay)
+		};
+		var nextData = _.findWhere(self.schedule, { dateString : self.nextDay.dateString });
+		self.nextDay.entries = (_.isEmpty(nextData) ? [] : nextData.entries);
+		
+		// Check 7 days forward to pre-load more schedule data
+		var sevenDaysForward = new Date(newNextDay.getTime() + (ONE_DAY*7));
+		self.checkSchedule(sevenDaysForward);
+		
+		return false;
 	}
 	
 	/**
@@ -435,10 +534,12 @@ app.view.part.Schedule = Backbone.View.extend({
 			self.dataAge = Date.now();
 		}
 		
-		if(!_.isEmpty(month) && !_.isEmpty(newData) && !self.alreadyLoadedMonth(month)){
+		if(!_.isEmpty(month) && !self.alreadyLoadedMonth(month)){
 			// Keep track of what months we've loaded
 			self.months.push(month);
-			
+		}
+		
+		if(!_.isEmpty(newData)){
 			// Update the schedule
 			self.schedule = _.union(self.schedule, newData);
 		}
@@ -520,3 +621,6 @@ app.view.part.Schedule = Backbone.View.extend({
 		return dfd.promise();
 	}
 });
+
+var ONE_DAY = 1000 * 60 * 60 * 24;
+var SEVEN_DAYS = ONE_DAY * 7;

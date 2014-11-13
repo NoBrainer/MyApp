@@ -24,7 +24,7 @@
 					</a>
 				</td>
 				<% _.each(scheduleList, function(item){ %>
-					<td>
+					<td class="schedule_label_cell">
 						<%= item.label %>
 					</td>
 				<% }); %>
@@ -37,7 +37,7 @@
 			<tr>
 				<td class="arrow_cell blank_cell_left"></td>
 				<% _.each(scheduleList, function(item){ %>
-					<td>
+					<td class="schedule_content_cell">
 						<ul>
 							<% if(_.isEmpty(item.entries)){ %>
 								<li>
@@ -66,13 +66,13 @@
 </script>
 
 <script type="text/template" id="schedule-label-template">
-	<td>
+	<td class="schedule_label_cell">
 		<%= item.label %>
 	</td>
 </script>
 
 <script type="text/template" id="schedule-item-template">
-	<td>
+	<td class="schedule_content_cell">
 		<ul>
 			<% if(_.isEmpty(item.entries)){ %>
 				<li>
