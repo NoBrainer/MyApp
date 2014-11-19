@@ -135,14 +135,14 @@
 		<select class="user_selection">
 			<option value="">-- Select a Person --</option>
 			<% _.each(users, function(user){ %>
-				<option value="<%= user.username %>"><%= user.name %></option>
+				<option value="<%= user.username %>" <%= (entry.username===user.username ? "selected" : "") %>><%= user.name %></option>
 			<% }); %>
 		</select>
 		<select class="shift_selection">
 			<option value="">-- Select the Shift --</option>
-			<option value="barback">Barback</option>
-			<option value="open">Open</option>
-			<option value="close">Close</option>
+			<option value="barback" <%= (entry.shift==="barback" ? "selected" : "") %>>Barback</option>
+			<option value="open" <%= (entry.shift==="open" ? "selected" : "") %>>Open</option>
+			<option value="close" <%= (entry.shift==="close" ? "selected" : "") %>>Close</option>
 		</select>
 		<span class="remove_person">
 			<i class="fa fa-minus-circle"></i>

@@ -246,6 +246,42 @@ app.view.part.Schedule = Backbone.View.extend({
 	}
 	
 	/**
+	 * Load an entry for editing
+	 */
+	,loadEntryToEdit : function loadEntryToEdit(date){
+		var self = this;
+		
+		// Clear the previous entries
+		$('.remove_person').click();
+		
+		// Load the new entries
+		$.when(self.checkSchedule(date))
+			.done(function(resp){
+				var entries = [];
+				if(_.isEmpty(resp) || _.isEmpty(resp.entries)){
+					// The default entry is a single blank one
+					entries.push({
+						name : "",
+						shift : "",
+						username : ""
+					});
+				}else{
+					// Get the entries from the response
+					entries = resp.entries;
+				}
+				_.each(entries, function(entry){
+					// Trigger a click event to add a new entry, and pass the entry data
+					$('#schedule_add_person').trigger('click', [entry]);
+				});
+			})
+			.fail(function(resp){
+				console.log(resp);
+			});
+		
+		return self;
+	}
+	
+	/**
 	 * Setup the admin mode if the user is an admin
 	 */
 	,setupAdminMode : function setupAdminMode(){
@@ -296,19 +332,21 @@ app.view.part.Schedule = Backbone.View.extend({
 		});
 		
 		// Handler for adding people to the schedule
-		$('#schedule_add_person').on('click', function(e){
+		$('#schedule_add_person').on('click', function(e, entry){
 			var $this = $(this);
+			
+			// Get the entry from the parameter, default to an empty entry
+			entry = entry || {
+					username : "",
+					name : "",
+					shift : ""
+			};
 			
 			self.$el.queue(function(){
 				// Build the html
 				var entryTemplate = app.util.TemplateCache.get("#schedule-edit-entry-template");
-				var person = {
-						username : "",
-						name : "",
-						shift : ""
-				};
 				var params = {
-						entry : person,
+						entry : entry,
 						users : self.users
 				};
 				var entryHtml = entryTemplate(params);
@@ -320,7 +358,7 @@ app.view.part.Schedule = Backbone.View.extend({
 			});
 			
 			self.$el.queue(function(){
-				var $removePeople = $this.parent().find('.remove_person');
+				var $removePeople = $('#schedule_edit_form .remove_person');
 				$removePeople.off().on('click', function(e){
 					var $target = $(this);
 					var $entry = $target.parents('.schedule_edit_entry');
@@ -347,11 +385,49 @@ app.view.part.Schedule = Backbone.View.extend({
 			var today = new Date(Date.now());
 			picker.setDate(today);
 			$datePicker.on('changeDate', function(e){
-				console.log(e.date.toString());
+				var date = app.util.Date.startOfDay(e.localDate);
+				self.loadEntryToEdit(date);
 			});
-			$datePicker.find('input').on('click', function(e){
-				$datePicker.find('.add-on').click();
-			});
+			var lastKeyUp = null;
+			$datePicker.find('input')
+				.on('click', function(e){
+					$datePicker.find('.add-on').click();
+				})
+				.on('keyup', function(e){
+					var $this = $(this);
+					
+					// Callback to try and update 1000ms after the last keyup
+					var updateAfterSomeTime = function updateAfterSomeTime(){
+						setTimeout(function(){
+							if(Date.now() - lastKeyUp < 1000){
+								// The last keyup was too recent, so check again later
+								updateAfterSomeTime();
+								return false;
+							}
+							// Enough time has passed since the last keyup, so check if we can update the date
+							lastKeyUp = null;
+							var text = $this.val();
+							var match = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+							if(match && match.length === 4){
+								// The text is the correct date format, so trigger a date change
+								var date = app.util.Date.startOfDay();
+								var month = parseInt(match[1]);
+								var day = parseInt(match[2]) + 1;
+								var year = parseInt(match[3]);
+								date.setMonth(month);
+								date.setDate(day);
+								date.setFullYear(year);
+								$this.trigger('change', [text]);
+								return false;
+							}
+						}, 1000);
+					};
+					if(_.isNull(lastKeyUp)){
+						updateAfterSomeTime();
+					}
+					lastKeyUp = Date.now();
+					return false;
+				});
 			
 			self.$el.dequeue();
 		});
@@ -367,7 +443,7 @@ app.view.part.Schedule = Backbone.View.extend({
 		
 		// Get the date
 		var picker = $('#schedule_date_picker').data('datetimepicker');
-		var date = app.util.Date.startOfDay(picker.getDate());
+		var date = app.util.Date.startOfDay(picker.getLocalDate());
 		
 		// Get the complete entries
 		var $entries = $('#schedule_edit_form .schedule_edit_entry');
@@ -581,6 +657,9 @@ app.view.part.Schedule = Backbone.View.extend({
 		var self = this;
 		var dfd = $.Deferred();
 		
+		// Build the current date's string
+		var currentDate = app.util.Date.startOfDay(date).toDateString();
+		
 		// Build the month string
 		date = app.util.Date.firstDayOfMonth(date);
 		var month = date.toDateString();
@@ -609,13 +688,16 @@ app.view.part.Schedule = Backbone.View.extend({
 						console.log(resp);
 					},
 					complete : function(){
-						dfd.resolve();
+						// Resolve with the schedule data for the given date
+						var scheduleForDate = _.findWhere(self.schedule, { dateString : currentDate });
+						dfd.resolve(scheduleForDate);
 					}
 			};
 			$.ajax(ajaxOpts);
 		}else{
 			// Resolve without a server call
-			dfd.resolve();
+			var scheduleForDate = _.findWhere(self.schedule, { dateString : currentDate });
+			dfd.resolve(scheduleForDate);
 		}
 		
 		return dfd.promise();

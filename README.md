@@ -75,11 +75,11 @@
 
 ### PRIORITY 1
 Schedule
-- Load data when editing
 - Edit multiple dates at once
 
 Admin Panel
 - Set name during pre-approval
+- Changing user names
 
 General
 - Optimize for mobile
@@ -94,7 +94,6 @@ News
 
 Admin Panel
 - Deleting users
-- Changing user names
 - Unlocking user accounts
 - Improve UX
 
