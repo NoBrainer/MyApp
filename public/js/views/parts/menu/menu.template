@@ -10,6 +10,8 @@
 		</h3>
 	</div>
 	<div class="panel-body">
-		<img class="menu_img" src="/resources/drink_menu.jpg">
+		<img class="menu_img" src="/resources/food-menu.jpg">
+		<img class="menu_img" src="/resources/drink-menu.jpg">
+		<img class="menu_img" src="/resources/drink-specials.jpg">
 	</div>
 </script>
