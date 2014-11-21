@@ -52,7 +52,7 @@ var favicon = require('serve-favicon');
 _ = require('./public/lib/underscore/js/underscore');
 try{
 	// First try to use the config file in the properties directory
-	config = require('../../properties/config');
+	config = require('../properties/config');
 }catch(e){
 	// Fallback to the config file with the app
 	config =  require('./config')
