@@ -67,9 +67,10 @@ a.footer_link {
   font-size: 20px;
 }
 #header .navbar #navbar-collapse .address {
+  cursor: default;
   font-size: 12px;
   margin-bottom: -25px;
-  margin-top: -8px;
+  margin-top: -18px;
   text-decoration: none;
 }
 #header .navbar-header {
