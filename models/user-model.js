@@ -199,13 +199,13 @@ var sendConfirmationEmail = function sendConfirmationEmail(){
 	var emailContent;
 	if(self.type === 'pending-approval'){
 		// If the user has not been approved yet, send the regular confirmation email
-		emailContent = "Click this link to confirm your registration: " +
+		emailContent = "Click this link to confirm your registration with Copycat Co: " +
 				"<a target='_blank' href='_URL_ROOT_/api/users/confirmation/_ID_'>_ID_</a>" +
 				"<br/><br/>" +
 				"You have not yet been approved. Please contact an admin to have them approve you.";
 	}else{
 		// If the user has been pre-approved, send a modified confirmation email
-		emailContent = "You have been approved for an account. Click this link to confirm your registration: " +
+		emailContent = "You have been approved for an account on Copycat Co. Click this link to confirm your registration: " +
 				"<a target='_blank' href='_URL_ROOT_/api/users/confirmation/_ID_'>_ID_</a>" +
 				"<br/><br/>" +
 				"Then login with these credentials and reset your password:" +
@@ -224,7 +224,7 @@ var sendConfirmationEmail = function sendConfirmationEmail(){
 	
 	var params = {
 		to : emailAddress,
-		subject : "Confirm your registration",
+		subject : "Welcome to Copycat Co.",
 		html : emailContent
 	};
 	mailUtil.sendEmail(params);
@@ -345,7 +345,7 @@ UserSchema.methods.sendPasswordResetEmail = function sendPasswordResetEmail(id, 
 		var emailContent = 
 			"Click this " +
 			"<a target='_blank' href='_URL_ROOT_/#resetPassword/_ID_'>link</a> " +
-			"to reset your password." +
+			"to reset your password with Copycat Co." +
 			"<br/><br/>" +
 			"If you did not try to reset your password, then please delete this email.";
 		
@@ -357,7 +357,7 @@ UserSchema.methods.sendPasswordResetEmail = function sendPasswordResetEmail(id, 
 		// Build the params and send the email
 		var params = {
 			to : this.username,
-			subject : "Password Reset",
+			subject : "Copycat Co. - Password Reset",
 			html : emailContent
 		};
 		console.log("Sending password reset email to "+this.username);
