@@ -150,7 +150,7 @@ var aggregateTemplates = function aggregateTemplates(targetDir, targetFile){
  */
 var aggregateJavaScript = function aggregateJavaScript(targetDir, targetFile, libDir){
 	// Array of libraries to import (order matters)
-	var libArray = [ "jquery/js/jquery.js", "underscore/js/underscore.js", "backbone/js/backbone.js", "bootstrap/js/bootstrap.js" ];
+	var libArray = [ "jquery/js/jquery.js", "underscore/js/underscore.js", "backbone/js/backbone.js", "bootstrap/js/bootstrap.js", "bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" ];
 	libArray = _.map(libArray, function(item){
 		return path.join(libDir, item);
 	});
