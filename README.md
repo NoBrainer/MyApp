@@ -68,6 +68,9 @@
  # NOTE: Requires you to move stop.sh to ~/bin and do 'chmod +x stop.sh' on it
  alias stopServer='~/bin/stop.sh'
  alias startServer='sudo service copycatco start'
+
+# Edit the properties
+alias editProps='sudo vi ~/bin/properties/config.js'
  
  # Tail the logs
  alias tailLog='tail -f /path/to/logfile.log'

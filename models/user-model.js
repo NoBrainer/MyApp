@@ -13,7 +13,7 @@ var DEFAULT_NAME = "Default Name";
 var DEFAULT_PASSWORD = "password";
 
 // Get the url root from the config
-var URL_ROOT = "http://copycatcompany.com";//TODO: get to work for: //config.props.URL_ROOT;
+var URL_ROOT = config.props.URL_ROOT;
 
 /**
  * Initialize schema
