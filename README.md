@@ -64,6 +64,11 @@
 - Add this:
  # CUSTOM ALIASES
  
+ # Stop/start the server
+ # NOTE: Requires you to move stop.sh to ~/bin and do 'chmod +x stop.sh' on it
+ alias stopServer='~/bin/stop.sh'
+ alias startServer='sudo service copycatco start'
+ 
  # Tail the logs
  alias tailLog='tail -f /path/to/logfile.log'
 - Apply changes
@@ -105,9 +110,11 @@
 From server:
 - Stop the service
 	- sudo service copycatco stop
-- Stop the forever process (get forever_pid from the column named 'forever')
-	- forever list
-	- sudo kill -9 {forever_pid}
+- Stop all forever processes
+	- forever stopall
+	- OR stop individual forever process (get forever_pid from the column named 'forever')
+		- forever list
+		- sudo kill -9 {forever_pid}
 - Check the process on port 8080
 	- fuser 8080/tcp
 - Kill the process on port 8080
