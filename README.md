@@ -3,7 +3,7 @@
 # MyApp
 
 
-## Setup
+## Dev Environment Setup
 - Install Eclipse
 - Install Node & Nodeclipse
 - Download this repository
@@ -26,6 +26,19 @@
 	- Apply, Ok
 - Add 'aggregate.js' to nodemon's ignore list (/node_modules/nodemon/lib/config/defaults.js)
 
+### Setup .bashrc aliases
+- Open .bashrc
+	- sudo vi ~/.bashrc
+- Add this:
+ # CUSTOM ALIASES
+ 
+ # ssh into server
+ alias sshserver='ssh {user}@{server_ip}'
+ 
+ # update server code
+ alias updateserver='rsync -ru --delete /path/to/deployment/directory {user}@{server_ip}:bin'
+- Apply changes
+	- source ~/.bashrc
 
 ## Linux Server Setup
 - Install node:
@@ -44,7 +57,20 @@
 	- iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port ${HTTP_PORT}
 	- iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port ${HTTPS_PORT}
 	- service iptables save
-### Making a mongo service
+
+### Setup .bashrc aliases
+- Open .bashrc
+	- sudo vi ~/.bashrc
+- Add this:
+ # CUSTOM ALIASES
+ 
+ # Tail the logs
+ alias tailLog='tail -f /path/to/logfile.log'
+- Apply changes
+	- source ~/.bashrc
+
+
+### Make mongo service run at server start-up
 - Add mongod to chkconfig
 	- Make sure the mongo database is owned by mongod
 		- sudo chown -R mongod /var/lib/mongo
@@ -53,7 +79,9 @@
 		- sudo /sbin/chkconfig --level 345 mongod on
 	- Run the service
 		- sudo service mongod start
-### Making a service for the webapp
+
+
+### Make webapp service run at start-up
 - Setup init.d script for this webapp
 	- Setup the copycatco service
 		- sudo cp copycatco /etc/rc.d/init.d/
@@ -62,15 +90,48 @@
 		- sudo /sbin/chkconfig --level 345 copycatco on
 	- Run the service
 		- sudo service copycatco start
-### Rolling log files
+
+
+### Setup rolling log files
 - Add an entry in /etc/logrotate.conf
 	- sudo vi /etc/logrotate.conf
 	- Use the contents in logrotate.conf in this project
 - The logrotate should happen from the cronjob at /etc/cron.daily/logrotate
 
+
+## Deployment Process
+
+### Stop copycatco service
+From server:
+- Stop the service
+	- sudo service copycatco stop
+- Stop the forever process (get forever_pid from the column named 'forever')
+	- forever list
+	- sudo kill -9 {forever_pid}
+- Check the process on port 8080
+	- fuser 8080/tcp
+- Kill the process on port 8080
+	- fuser -k 8080/tcp
+- Delete the pid file
+	- sudo rm /var/run/CopyCatCo.pid
+- Verify that it's stopped
+	- sudo service copycatco status
+	- fuser 8080/tcp
+
+#### Deploy new code
+From dev environment:
+- updatecopycat
+	
+#### Restart copycatco service
+From server:
+- Start the service
+	- sudo service copycatco start
+- Tail the logs
+	- tailCopycat
+
 ### Process Clean-up
 
-#### Clean-up Mongod
+#### Stop mongod service
 - Stop the service
 	- sudo service mongod stop
 - Remove mongod.lock files
@@ -78,24 +139,16 @@
 	- sudo rm /var/lib/mongo/mongod.lock
 - Delete the pid file
 	- sudo rm /var/run/mongodb/mongod.pid
-
-#### Clean-up copycatco
-- Stop the service
-	- sudo service copycatco stop
-- Check the process on port 8080
-	- fuser 8080/tcp
-- Kill the process on port 8080 (this may have to be done serveral times in a row quickly)
-	- fuser -k 8080/tcp
-- Delete the pid file
-	- sudo rm /var/run/CopyCatCo.pid
-
-#### Restart services
-- Verify that each service is stopped
+- Verify that the service is stopped
 	- sudo service mongod status
-	- sudo service copycatco status
-- Start each service
+
+
+#### Start mongod service
+From server:
+- Start the service
 	- sudo service mongod start
-	- sudo service copycatco start
+- Tail the logs
+	- tailMongo
 
 
 ### Miscellaneous Linux Commands
@@ -110,7 +163,6 @@
 
 
 ## Usage
-
 
 
 ## Developing
@@ -146,7 +198,6 @@ Menu
 - Setup admin uploading
 
 ### Tools
-
 Created with [Nodeclipse](https://github.com/Nodeclipse/nodeclipse-1)
  ([Eclipse Marketplace](http://marketplace.eclipse.org/content/nodeclipse), [site](http://www.nodeclipse.org))   
 
