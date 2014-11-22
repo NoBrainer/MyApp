@@ -38,7 +38,7 @@
 - Install forever:
 	- npm install forever -g
 - Add symlinks for forever:
-	- sudo ln -s /usr/local/bin/forever ../lib/node_modules/forever/bin/forever
+	- sudo ln -s /usr/local/bin/forever /usr/local/lib/node_modules/forever/bin/forever
 	- sudo ln -s /usr/bin/forever /usr/local/bin/forever
 - Modify /etc/rc.local to reroute to ports 80 and 443 (replace ${HTTP_PORT} and ${HTTPS_PORT})
 	- iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port ${HTTP_PORT}
@@ -48,6 +48,7 @@
 - Add mongod to chkconfig
 	- Make sure the mongo database is owned by mongod
 		- sudo chown -R mongod /var/lib/mongo
+		- sudo chown -R mongod /data/db
 	- Set it too run at startup
 		- sudo /sbin/chkconfig --level 345 mongod on
 	- Run the service
@@ -66,6 +67,47 @@
 	- sudo vi /etc/logrotate.conf
 	- Use the contents in logrotate.conf in this project
 - The logrotate should happen from the cronjob at /etc/cron.daily/logrotate
+
+### Process Clean-up
+
+#### Clean-up Mongod
+- Stop the service
+	- sudo service mongod stop
+- Remove mongod.lock files
+	- sudo rm /data/db/mongod.lock
+	- sudo rm /var/lib/mongo/mongod.lock
+- Delete the pid file
+	- sudo rm /var/run/mongodb/mongod.pid
+
+#### Clean-up copycatco
+- Stop the service
+	- sudo service copycatco stop
+- Check the process on port 8080
+	- fuser 8080/tcp
+- Kill the process on port 8080 (this may have to be done serveral times in a row quickly)
+	- fuser -k 8080/tcp
+- Delete the pid file
+	- sudo rm /var/run/CopyCatCo.pid
+
+#### Restart services
+- Verify that each service is stopped
+	- sudo service mongod status
+	- sudo service copycatco status
+- Start each service
+	- sudo service mongod start
+	- sudo service copycatco start
+
+
+### Miscellaneous Linux Commands
+- Check what processes are running at start-up
+	- /sbin/chkconfig --list
+	- /sbin/chkconfig --list | grep copycatco
+	- /sbin/chkconfig --list | grep mongod
+- Check all processes running on ports
+	- netstat -plten
+- Kill a process with a given pid
+	- sudo kill -9 {pid}
+
 
 ## Usage
 
