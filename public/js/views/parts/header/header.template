@@ -20,17 +20,24 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="navbar-collapse">
 				<ul class="nav navbar-nav">
+					<!-- TODO: figure out if we want this
 					<li>
 						<a href="#link-to-menu.pdf" title="Menu">
 							<i class="fa fa-book"></i>
 						</a>
 					</li>
+					-->
 					<li>
-						<a class="address">
-							1110 H St. NE<br/>
-							Washington, DC 20002<br/>
+						<div class="address">
+							<a href="https://www.google.com/maps/place/1110+H+St+NE,+Washington,+DC+20002/@38.900454,-76.991027,17z" target="_blank">
+								1110 H St. NE | Washington, DC 20002
+								<i class="fa fa-map-marker"></i>
+							</a>
+							<br/>
+							Hours: Sun-Thu 5pm-2am, Fri-Sat 5pm-3am
+							<br/>
 							202-241-1952
-						</a>
+						</div>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">

@@ -67,11 +67,23 @@ a.footer_link {
   font-size: 20px;
 }
 #header .navbar #navbar-collapse .address {
+  color: #FFFFFF;
   cursor: default;
+  display: block;
   font-size: 12px;
+  line-height: 20px;
   margin-bottom: -25px;
+  margin-left: 15px;
   margin-top: -18px;
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+#header .navbar #navbar-collapse .address a {
+  color: #FFFFFF;
   text-decoration: none;
+}
+#header .navbar #navbar-collapse .address a:hover {
+  text-decoration: underline;
 }
 #header .navbar-header {
   min-height: 83px;
