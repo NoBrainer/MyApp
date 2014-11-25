@@ -105,7 +105,7 @@ app.view.part.AdminPanel = Backbone.View.extend({
 	/**
 	 * Attempt to pre-approve a user
 	 */
-	,preApproveUser : function preApproveUser(username, type){
+	,preApproveUser : function preApproveUser(name, username, type){
 		var self = this;
 		
 		// Build ajax options
@@ -115,6 +115,7 @@ app.view.part.AdminPanel = Backbone.View.extend({
 			cache : false,
 			contentType : 'application/json',
 			data : JSON.stringify({
+				name : name,
 				username : username,
 				type : type
 			})
@@ -122,7 +123,8 @@ app.view.part.AdminPanel = Backbone.View.extend({
 		options.success = function(resp){
 			if(_.isNull(resp.error)){
 				if(resp.approved){
-					// Do nothing if the approval succeeded
+					// Re-render the admin panel
+					self.syncAndRender();
 				}else{
 					// Alert the user if there's an error
 					var message = resp.message || "No users updated";
@@ -191,11 +193,21 @@ app.view.part.AdminPanel = Backbone.View.extend({
 		// Pre-approve the user
 		$('#pre_approve_user').on('click', function(e){
 			// Get the username and type from the form
+			var name = $('#pre_approve_user_name').val().trim();
 			var username = $('#pre_approve_user_email').val().trim();
 			var type = $('#pre_approve_user_type').val().trim();
-
+			
+			if(_.isEmpty(name)){
+				alert("Please enter the user's name before pre-approving");
+				return false;
+			}
+			if(_.isEmpty(username)){
+				alert("Please enter the user's email address before pre-approving");
+				return false;
+			}
+			
 			// Make the call
-			self.preApproveUser(username, type);
+			self.preApproveUser(name, username, type);
 		});
 		
 		// Update the user type
@@ -207,6 +219,11 @@ app.view.part.AdminPanel = Backbone.View.extend({
 			
 			// Make the call
 			self.updateUserType(username, type);
+		});
+		
+		// Refresh the admin controls
+		$('#admin_controls_refresh').on('click', function(e){
+			self.syncAndRender();
 		});
 		
 		return self;

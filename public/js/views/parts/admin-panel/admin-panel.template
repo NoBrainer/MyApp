@@ -2,6 +2,11 @@
 	<div class="panel-heading">
 		<h3>
 			Admin Controls
+			<ul class="nav nav-pills panel_right admin_controls">
+				<li>
+					<a id="admin_controls_refresh">Refresh</a>
+				</li>
+			</ul>
 		</h3>
 	</div>
 	<div class="panel-body">
@@ -47,7 +52,8 @@
 		<h4>
 			Pre-approve Users
 		</h4>
-		<input id="pre_approve_user_email" type="text" placeholder="Enter an email address">
+		<input id="pre_approve_user_name" type="text" placeholder="Enter the name">
+		<input id="pre_approve_user_email" type="text" placeholder="Enter the email address">
 		<select id="pre_approve_user_type">
 			<option value="employee">employee</option>
 			<option value="admin">admin</option>

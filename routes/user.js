@@ -384,12 +384,20 @@ var approveUser = function approveUser(req, res){
 	
 	// Get variables from request body
 	var body = req.body || {};
+	var name = body.name || "";
 	var username = body.username || "";
 	var type = body.type || 'employee';
 	
 	// Input validation
+	if(_.isEmpty(name)){
+		responseObject.message = "Name is required to approve users";
+		responseObject.error = new Error(responseObject.message);
+		console.error(responseObject.message);
+		res.send(responseObject);
+		return;
+	}
 	if(_.isEmpty(username)){
-		responseObject.message = "Username is required to approve users";
+		responseObject.message = "Email address is required to approve users";
 		responseObject.error = new Error(responseObject.message);
 		console.error(responseObject.message);
 		res.send(responseObject);
@@ -403,6 +411,7 @@ var approveUser = function approveUser(req, res){
 	
 	// Generate update
 	var update = {
+			name : name,
 			type : type
 	};
 	
@@ -416,7 +425,7 @@ var approveUser = function approveUser(req, res){
 			res.send(responseObject);
 		}else if(user){
 			if(user.type === 'pending-approval'){
-				// If user already exists & isn't approved, update its type
+				// If user already exists & isn't approved, update its type & name
 				User.update(query, update, function(err, numAffected){
 					if(err){
 						responseObject.message = "Error updating user";
@@ -452,6 +461,7 @@ var approveUser = function approveUser(req, res){
 				
 				// Create a new user
 				var newUser = new User({
+						name : name,
 						username : username,
 						type : type,
 						confirmation : hash

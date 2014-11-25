@@ -37,6 +37,11 @@ app.view.part.Menu = Backbone.View.extend({
 		// Setup the admin mode if the user is an admin
 		self.setupAdminMode();
 		
+		// Click handler for edit button
+		$('#edit_menu').on('click', function(e){
+			alert("This function has not yet been implemented. Contact Vincent to update the menu: vincent.incarvite@gmail.com");
+		});
+		
 		return self;
 	}
 	

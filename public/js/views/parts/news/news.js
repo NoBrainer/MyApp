@@ -151,7 +151,8 @@ app.view.part.News = Backbone.View.extend({
 		
 		// Handler for refreshing the page
 		$('#refresh_news').on('click', function(e){
-			app.router.reloadPage();
+			self.syncAndRender();
+			return false;
 		});
 		
 		// Handler for applying changes

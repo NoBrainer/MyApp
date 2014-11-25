@@ -308,7 +308,8 @@ app.view.part.Schedule = Backbone.View.extend({
 		
 		// Handler for refreshing the page
 		$('#refresh_schedule').on('click', function(e){
-			app.router.reloadPage();
+			self.syncAndRender();
+			return false;
 		});
 		
 		// Handler for applying changes
