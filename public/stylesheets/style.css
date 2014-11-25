@@ -199,6 +199,19 @@ a.footer_link {
   padding-right: 0;
   width: 12px;
 }
+#content #schedule_content > .panel-body .today {
+  background-color: #EAEAEA;
+}
+#content #schedule_content > .panel-body .today.schedule_label_cell {
+  border-left: 1px solid #6C6C6C;
+  border-right: 1px solid #6C6C6C;
+  border-top: 1px solid #6C6C6C;
+}
+#content #schedule_content > .panel-body .today.schedule_content_cell {
+  border-bottom: 1px solid #6C6C6C;
+  border-left: 1px solid #6C6C6C;
+  border-right: 1px solid #6C6C6C;
+}
 #content #schedule_content > .panel-body #schedule_edit_form select {
   margin-right: 10px;
 }

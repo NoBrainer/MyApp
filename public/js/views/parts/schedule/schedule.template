@@ -24,7 +24,10 @@
 					</a>
 				</td>
 				<% _.each(scheduleList, function(item){ %>
-					<td class="schedule_label_cell">
+					<%
+						var isToday = (item.dateString == today.toDateString());
+					%>
+					<td class="schedule_label_cell<%= (isToday ? " today" : "") %>">
 						<%= item.label %>
 					</td>
 				<% }); %>
@@ -37,7 +40,10 @@
 			<tr>
 				<td class="arrow_cell blank_cell_left"></td>
 				<% _.each(scheduleList, function(item){ %>
-					<td class="schedule_content_cell">
+					<%
+						var isToday = (item.dateString == today.toDateString());
+					%>
+					<td class="schedule_content_cell<%= (isToday ? " today" : "") %>">
 						<ul>
 							<% if(_.isEmpty(item.entries)){ %>
 								<li>
@@ -66,13 +72,13 @@
 </script>
 
 <script type="text/template" id="schedule-label-template">
-	<td class="schedule_label_cell">
+	<td class="schedule_label_cell<%= (isToday ? " today" : "") %>">
 		<%= item.label %>
 	</td>
 </script>
 
 <script type="text/template" id="schedule-item-template">
-	<td class="schedule_content_cell">
+	<td class="schedule_content_cell<%= (isToday ? " today" : "") %>">
 		<ul>
 			<% if(_.isEmpty(item.entries)){ %>
 				<li>

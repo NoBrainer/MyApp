@@ -106,7 +106,8 @@ app.view.part.Schedule = Backbone.View.extend({
 		
 		// Add the html to the page
 		var params = {
-				scheduleList : self.shownDays
+				scheduleList : self.shownDays,
+				today : app.util.Date.startOfDay()
 		};
 		var template = app.util.TemplateCache.get("#schedule-template");
 		var html = template(params);
@@ -161,9 +162,14 @@ app.view.part.Schedule = Backbone.View.extend({
 		var labelTemplate = app.util.TemplateCache.get("#schedule-label-template");
 		var contentTemplate = app.util.TemplateCache.get("#schedule-item-template");
 		
+		// Determine if the next day is today
+		var today = app.util.Date.startOfDay();
+		var isToday = (self.prevDay.dateString == today.toDateString());
+		
 		// Build the new html
 		var templateParams = {
-				item : self.prevDay
+				item : self.prevDay,
+				isToday : isToday
 		};
 		var newLabelHtml = labelTemplate(templateParams);
 		var newContentHtml = contentTemplate(templateParams);
@@ -210,9 +216,14 @@ app.view.part.Schedule = Backbone.View.extend({
 		var labelTemplate = app.util.TemplateCache.get("#schedule-label-template");
 		var contentTemplate = app.util.TemplateCache.get("#schedule-item-template");
 		
+		// Determine if the next day is today
+		var today = app.util.Date.startOfDay();
+		var isToday = (self.nextDay.dateString == today.toDateString());
+		
 		// Build the new html
 		var templateParams = {
-				item : self.nextDay
+				item : self.nextDay,
+				isToday : isToday
 		};
 		var newLabelHtml = labelTemplate(templateParams);
 		var newContentHtml = contentTemplate(templateParams);
