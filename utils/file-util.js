@@ -150,7 +150,11 @@ var aggregateTemplates = function aggregateTemplates(targetDir, targetFile){
  */
 var aggregateJavaScript = function aggregateJavaScript(targetDir, targetFile, libDir){
 	// Array of libraries to import (order matters)
-	var libArray = [ "jquery/js/jquery.js", "underscore/js/underscore.js", "backbone/js/backbone.js", "bootstrap/js/bootstrap.js", "bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" ];
+	var libArray = [ "jquery/js/jquery.js",
+	                 "underscore/js/underscore.js",
+	                 "backbone/js/backbone.js",
+	                 "bootstrap/js/bootstrap.js",
+	                 "bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" ];
 	libArray = _.map(libArray, function(item){
 		return path.join(libDir, item);
 	});
@@ -185,7 +189,12 @@ var aggregateJavaScript = function aggregateJavaScript(targetDir, targetFile, li
  */
 var aggregateCss = function aggregateCss(targetFile, publicDir){
 	// Array of css files to import (order matters)
-	var fileArr = [ "lib/bootstrap/css/bootstrap.css", "lib/bootstrap/css/bootstrap-custom.css", "lib/font-awesome/css/font-awesome.css", "stylesheets/style.css", "stylesheets/style-responsive.css" ];
+	var fileArr = [ "lib/bootstrap/css/bootstrap.css",
+	                "lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css",
+	                "lib/bootstrap/css/bootstrap-custom.css",
+	                "lib/font-awesome/css/font-awesome.css",
+	                "stylesheets/style.css",
+	                "stylesheets/style-responsive.css" ];
 	fileArr = _.map(fileArr, function(item){
 		return path.join(publicDir, item);
 	});

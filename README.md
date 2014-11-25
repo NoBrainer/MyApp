@@ -182,7 +182,6 @@ Schedule
 - Edit multiple dates at once
 
 Admin Panel
-- Set name during pre-approval
 - Changing user names
 
 General
@@ -199,7 +198,6 @@ News
 Admin Panel
 - Deleting users
 - Unlocking user accounts
-- Improve UX
 
 Jumbotron Images
 - Automatically pull latest from instagram
