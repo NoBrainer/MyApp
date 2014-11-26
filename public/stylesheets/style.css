@@ -121,15 +121,15 @@ a.footer_link {
   border-width: 0;
 }
 #content .jumbotron {
-  height: 300px;
+  height: 350px;
   margin-bottom: 20px;
   padding: 0;
 }
 #content .jumbotron_image {
-  background-position: center bottom;
+  background-position: center center;
   background-size: cover;
   display: inline-block;
-  height: 300px;
+  height: 350px;
   width: 50%;
 }
 #content .jumbotron_left {
