@@ -178,16 +178,16 @@ From server:
 ## Developing
 
 ### PRIORITY 1
+Bugs
+- Starting state of schedule always shows TBD when scrolling left
+
 Browser Support
 - Safari
 - Chrome
 
-Logging
-- Add a timestamp/username prefix to all server logging
-
 Schedule
 - Edit multiple dates at once
-- Fix bug with starting state
+- Restrict min date to the grand opening date
 
 Admin Panel
 - Changing user names
@@ -202,6 +202,7 @@ Schedule
 
 News
 - RSS feed
+- Make archived entries hidden (then show-able)
 
 Admin Panel
 - Deleting users
