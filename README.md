@@ -178,8 +178,16 @@ From server:
 ## Developing
 
 ### PRIORITY 1
+Browser Support
+- Safari
+- Chrome
+
+Logging
+- Add a timestamp/username prefix to all server logging
+
 Schedule
 - Edit multiple dates at once
+- Fix bug with starting state
 
 Admin Panel
 - Changing user names

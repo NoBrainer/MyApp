@@ -83,7 +83,9 @@ var MongoStore = require('connect-mongo')(session);
 app.use(cookieParser());
 app.use(session({
 	secret : config.props.SECRET,
-	maxAge : new Date(Date.now() + 3600000),
+	cookie : {
+		maxAge : 86400000
+	},
 	store : new MongoStore(config.props.DATABASE)
 }));
 
