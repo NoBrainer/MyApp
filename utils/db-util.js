@@ -30,9 +30,8 @@ var setup = function setup(callback){
 	};
 	mongoose.connect(config.props.MONGO_LOCATION, mongoOptions);
 	db = mongoose.connection;
-	db.on('error', console.error.bind(console, 'connection error:'));
 	db.once('open', function(){
-		console.log('successfully opened database!');
+		logger.log('successfully opened database!');
 		
 		if(_.isFunction(callback)){
 			// Call this function if it's provided
@@ -47,7 +46,7 @@ var setup = function setup(callback){
  */
 var close = function close(){
 	db.close(function(){
-		console.log('Mongoose disconnected');
+		logger.log('Mongoose disconnected');
 	});
 };
 

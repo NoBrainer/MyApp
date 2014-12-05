@@ -107,10 +107,10 @@ var createAggregate = function createAggregate(fileArr, targetFile, strictOrder)
 //			newFile = destDir + fileName;
 //		}
 //		
-//		console.log("~~~~~");
-//		console.log("before: [__]".replace("__", file));
-//		console.log("after : [__]".replace("__", newFile));
-//		console.log("nest  : [__]".replace("__", nesting));
+//		logger.log("~~~~~");
+//		logger.log("before: [__]".replace("__", file));
+//		logger.log("after : [__]".replace("__", newFile));
+//		logger.log("nest  : [__]".replace("__", nesting));
 //		
 //		//TODO: fs.mkdir for parent dirs
 //		// http://stackoverflow.com/questions/16316330/how-to-write-file-if-parent-folder-dosent-exists

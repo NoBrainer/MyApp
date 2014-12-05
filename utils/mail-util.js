@@ -33,11 +33,10 @@ var sendEmail = function sendEmail(opts, callback){
 	opts.html = opts.html || defaultOptions.html;
 	callback = callback || function(err, resp){
 		if(err){
-			console.log(err);
+			logger.log(err);
 			return;
 		}
-		console.log("Email sent:");
-		console.log(resp.message);
+		logger.log("Email sent");
 	};
 	
 	// Send the email

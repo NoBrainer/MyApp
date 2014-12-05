@@ -38,10 +38,10 @@ var getAll = function getAll(req, res){
 	// Search for all schedule entries
 	Schedule.find(query, function(err, data){
 		if(err){
-			responseObject.message = "Error finding user";
+			responseObject.message = "Error finding schedule entries";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 		}else{
 			// Filter the attributes returned
 			responseObject.schedule = _.map(data, function(item){
@@ -88,14 +88,14 @@ var getRange = function getRange(req, res){
 	if(_.isNull(params.startDate)){
 		responseObject.message = "Cannot get schedule range without startDate";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
 	if(_.isNull(params.endDate)){
 		responseObject.message = "Cannot get schedule range without endDate";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -132,8 +132,8 @@ var getRange = function getRange(req, res){
 		if(err){
 			responseObject.message = "Error finding schedule data";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 		}else{
 			// Filter the attributes returned
 			var mappedData = _.map(data, function(item){
@@ -189,7 +189,7 @@ var getMonth = function getMonth(req, res){
 	if(_.isNull(params.date)){
 		responseObject.message = "Cannot get month of schedule without date";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -211,8 +211,8 @@ var getMonth = function getMonth(req, res){
 		if(err){
 			responseObject.message = "Error finding schedule data";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 		}else{
 			// Return a blank shift unless the user is an employee
 			responseObject.schedule = _.map(data, function(item){
@@ -254,7 +254,7 @@ var update = function update(req, res){
 	if(!roleUtil.isAdmin(req)){
 		responseObject.message = "Not authorized to update schedule";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -268,7 +268,7 @@ var update = function update(req, res){
 	if(_.isNull(body.date)){
 		responseObject.message = "Cannot update schedule without date";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -289,8 +289,8 @@ var update = function update(req, res){
 		if(err){
 			responseObject.message = "Error finding schedule data";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 			res.send(responseObject);
 		}else if(item){
 			//TODO: see if we can just save instead of update
@@ -299,10 +299,14 @@ var update = function update(req, res){
 				if(err){
 					responseObject.message = "Error updating schedule";
 					responseObject.error = err;
-					console.error(responseObject.message);
-					console.error(err);
+					logger.error(responseObject.message, req.session);
+					logger.error(err, req.session);
 				}else{
 					responseObject.successful = true;
+					
+					// Log the success
+					var message = "Successfully updated schedule for _DATE_".replace("_DATE_", body.date);
+					logger.log(message, req.session);
 				}
 				res.send(responseObject);
 			});
@@ -320,10 +324,14 @@ var update = function update(req, res){
 				if(err){
 					responseObject.message = "Error saving schedule";
 					responseObject.error = err;
-					console.error(responseObject.message);
-					console.error(err);
+					logger.error(responseObject.message, req.session);
+					logger.error(err, req.session);
 				}else{
 					responseObject.successful = true;
+					
+					// Log the success
+					var message = "Successfully added schedule for _DATE_".replace("_DATE_", body.date);
+					logger.log(message, req.session);
 				}
 				res.send(responseObject);
 			});

@@ -29,7 +29,7 @@ var exists = function exists(req, res){
 	if(_.isEmpty(username)){
 		responseObject.message = "Username is required";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -42,10 +42,15 @@ var exists = function exists(req, res){
 		if(err){
 			responseObject.message = "Error searching for user";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 		}else{
 			responseObject.found = true;
+			
+			// Log the success
+			var message = "Successfully checked existence of _USER_"
+					.replace("_USER_", user.username);
+			logger.log(message, req.session);
 		}
 		res.send(responseObject);
 	});
@@ -69,8 +74,8 @@ var getAll = function getAll(req, res){
 		if(err){
 			responseObject.message = "Error getting all users";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 		}else{
 			responseObject.users = _.map(data, function(user){
 				// Filter the attributes returned
@@ -114,8 +119,8 @@ var isLoggedIn = function isLoggedIn(req, res){
 	}catch(err){
 		responseObject.message = "Error checking login status";
 		responseObject.error = err;
-		console.error(responseObject.message);
-		console.error(err);
+		logger.error(responseObject.message, req.session);
+		logger.error(err, req.session);
 	}finally{
 		res.send(responseObject);
 	}
@@ -145,13 +150,13 @@ var login = function login(req, res){
 	if(_.isEmpty(username)){
 		responseObject.message = "Username is required to login";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message);
 		res.send(responseObject);
 		return;
 	}else if(_.isEmpty(password)){
 		responseObject.message = "Password is required to login";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message);
 		res.send(responseObject);
 		return;
 	}
@@ -159,10 +164,10 @@ var login = function login(req, res){
 	// Attempt to authenticate user
 	User.getAuthenticated(username, password, function(err, user, reason){
 		if(err){
-			responseObject.message = "Error authenticating user";
+			responseObject.message = "Error authenticating _USER_".replace("_USER_", username);
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message);
+			logger.error(err);
 			res.send(responseObject);
 			return;
 		}
@@ -180,6 +185,9 @@ var login = function login(req, res){
 			req.session.type = user.type;
 			req.session.passwordResetId = undefined;
 			req.session.passwordResetUsername = undefined;
+			
+			// Log the success
+			logger.log("User logged in", req.session);
 			
 			res.send(responseObject);
 			return;
@@ -203,8 +211,13 @@ var login = function login(req, res){
 			default:
 				responseObject.message = "Unexpected error occurred";
 		}
+		var mockSession = {
+				username : user.username || null,
+				name : user.name || null,
+				type : user.type || null
+		};
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, mockSession);
 		res.send(responseObject);
 	});
 };
@@ -221,6 +234,19 @@ var logout = function logout(req, res){
 			successful : false
 	};
 	
+	// Generate temporary session object for logging
+	var tempSession = {
+			username : req.session.username,
+			name : req.session.name,
+			type : req.session.type
+	};
+	
+	// Keep track of whether or not the user started logged in
+	var startedLoggedIn = true;
+	if(!req.session.username || !req.session.name || !req.session.type){
+		startedLoggedIn = false;
+	}
+	
 	try{
 		// Logout the session
 		req.session.username = undefined;
@@ -230,9 +256,13 @@ var logout = function logout(req, res){
 	}catch(err){
 		responseObject.message = "Failed to logout";
 		responseObject.error = err;
-		console.error(responseObject.message);
-		console.error(err);
+		logger.error(responseObject.message, req.session);
+		logger.error(err, req.session);
 	}finally{
+		if(responseObject.successful && startedLoggedIn){
+			// Log the success
+			logger.log("User logged out", tempSession);
+		}
 		res.send(responseObject);
 	}
 };
@@ -278,8 +308,8 @@ var register = function register(req, res){
 		if(err){
 			responseObject.message = "Error generating confirmation id";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message);
+			logger.error(err);
 			res.send(responseObject);
 			return;
 		}
@@ -300,10 +330,14 @@ var register = function register(req, res){
 			if(err){
 				responseObject.message = "Error saving user";
 				responseObject.error = err;
-				console.error(responseObject.message);
-				console.error(err);
+				logger.error(responseObject.message);
+				logger.error(err);
 			}else{
 				responseObject.successful = true;
+				
+				// Log the success
+				var message = "Successfully registered _USER_".replace("_USER_", savedObj.username);
+				logger.log(message);
 			}
 			res.send(responseObject);
 		});
@@ -330,12 +364,14 @@ var confirmation = function confirmation(req, res){
 	// Search for a single user based on confirmation id
 	User.findOne(query, function(err, user){
 		if(err){
-			console.error(err);
+			message = "Error confirming _USER_".replace("_USER_", user.username);
+			logger.error(message);
+			logger.error(err);
 			res.send(err);
 		}else if(user && user.isConfirmed===true){
 			// Users can only be confirmed if they haven't yet been confirmed
-			message = "User already confirmed";
-			console.error(message);
+			message = "_USER_ already confirmed".replace("_USER_", user.username);
+			logger.error(message);
 			res.send(message);
 		}else if(user && user.isConfirmed===false){
 			// Mark user as confirmed
@@ -345,17 +381,20 @@ var confirmation = function confirmation(req, res){
 			};
 			User.findOneAndUpdate(query, update, function(err, user){
 				if(err){
-					console.error(err);
+					message = "Error confirming _USER_".replace("_USER_", user.username);
+					logger.error(message);
+					logger.error(err);
 					res.send(err);
 				}else{
-					message = "Successfully confirmed email address: "+user.username;
-					console.log(message);
+					// Log the success
+					message = "Successfully confirmed email address: _USER_".replace("_USER_", user.username);
+					logger.log(message);
 					res.send(message);
 				}
 			});
 		}else{
 			message = "Invalid confirmation id [_ID]".replace("_ID", id);
-			console.error(message);
+			logger.error(message);
 			res.send(message);
 		}
 	});
@@ -377,7 +416,7 @@ var approveUser = function approveUser(req, res){
 	if(!roleUtil.isAdmin(req)){
 		responseObject.message = "Not authorized to approve users";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -392,14 +431,14 @@ var approveUser = function approveUser(req, res){
 	if(_.isEmpty(name)){
 		responseObject.message = "Name is required to approve users";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
 	if(_.isEmpty(username)){
 		responseObject.message = "Email address is required to approve users";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -420,8 +459,8 @@ var approveUser = function approveUser(req, res){
 		if(err){
 			responseObject.message = "Error checking if user exists";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 			res.send(responseObject);
 		}else if(user){
 			if(user.type === 'pending-approval'){
@@ -430,10 +469,14 @@ var approveUser = function approveUser(req, res){
 					if(err){
 						responseObject.message = "Error updating user";
 						responseObject.error = err;
-						console.error(responseObject.message);
-						console.error(err);
+						logger.error(responseObject.message, req.session);
+						logger.error(err, req.session);
 					}else if(numAffected > 0){
 						responseObject.approved = true;
+						
+						// Log the success
+						var message = "Successfully approved _USER_".replace("_USER_", user.username);
+						logger.log(message, req.session);
 					}
 					res.send(responseObject);
 				});
@@ -441,7 +484,7 @@ var approveUser = function approveUser(req, res){
 				// If user already exists & is already approved, throw an error
 				responseObject.message = "Cannot approve a user more than once";
 				responseObject.error = new Error(responseObject.message);
-				console.error(responseObject.message);
+				logger.error(responseObject.message, req.session);
 				res.send(responseObject);
 			}
 		}else{
@@ -450,8 +493,8 @@ var approveUser = function approveUser(req, res){
 				if(err){
 					responseObject.message = "Error generating confirmation id";
 					responseObject.error = err;
-					console.error(responseObject.message);
-					console.error(err);
+					logger.error(responseObject.message, req.session);
+					logger.error(err, req.session);
 					res.send(responseObject);
 					return;
 				}
@@ -472,10 +515,16 @@ var approveUser = function approveUser(req, res){
 					if(err){
 						responseObject.message = "Error saving user";
 						responseObject.error = err;
-						console.error(responseObject.message);
-						console.error(err);
+						logger.error(responseObject.message, req.session);
+						logger.error(err, req.session);
 					}else{
 						responseObject.approved = true;
+						
+						// Log the success
+						var message = "Successfully pre-approved _USER_ as _TYPE_"
+								.replace("_USER_", savedObj.username)
+								.replace("_TYPE_", savedObj.type);
+						logger.log(message, req.session);
 					}
 					res.send(responseObject);
 				});
@@ -537,8 +586,8 @@ var updateUser = function updateUser(req, res){
 		if(err){
 			responseObject.message = "Error finding user";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 			res.send(responseObject);
 			return;
 		}else if(user){
@@ -549,8 +598,8 @@ var updateUser = function updateUser(req, res){
 					if(err){
 						responseObject.message = "Error updating user with encryption";
 						responseObject.error = err;
-						console.error(responseObject.message);
-						console.error(err);
+						logger.error(responseObject.message, req.session);
+						logger.error(err, req.session);
 					}else{
 						responseObject.successful = true;
 						_.each(updates, function(value, key){
@@ -559,6 +608,10 @@ var updateUser = function updateUser(req, res){
 								req.session[key] = value;
 							}
 						});
+						
+						// Log the success
+						var message = "Successfully updated _USER_".replace("_USER_", savedObj.username);
+						logger.log(message, req.session);
 					}
 					res.send(responseObject);
 				});
@@ -574,8 +627,8 @@ var updateUser = function updateUser(req, res){
 					if(err){
 						responseObject.message = "Error comparing passwords";
 						responseObject.error = err;
-						console.error(responseObject.message);
-						console.error(err);
+						logger.error(responseObject.message, req.session);
+						logger.error(err, req.session);
 						res.send(responseObject);
 						return;
 					}
@@ -586,7 +639,7 @@ var updateUser = function updateUser(req, res){
 						// Old password doesn't match
 						responseObject.message = "Old password is incorrect";
 						responseObject.error = new Error(responseObject.message);;
-						console.error(responseObject.message);
+						logger.error(responseObject.message, req.session);
 						res.send(responseObject);
 					}
 				});
@@ -611,7 +664,7 @@ var updateUserType = function updateUserType(req, res){
 	if(!roleUtil.isAdmin(req)){
 		responseObject.message = "Not authorized to update users";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -625,13 +678,13 @@ var updateUserType = function updateUserType(req, res){
 	if(_.isEmpty(username)){
 		responseObject.message = "Username is required the update a user's type";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}else if(_.isEmpty(type)){
 		responseObject.message = "Type is required to update a users's type";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -651,8 +704,8 @@ var updateUserType = function updateUserType(req, res){
 		if(err){
 			responseObject.message = "Error finding user";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 			res.send(responseObject);
 			return;
 		}else if(user){
@@ -661,10 +714,16 @@ var updateUserType = function updateUserType(req, res){
 				if(err){
 					responseObject.message = "Error updating user";
 					responseObject.error = err;
-					console.error(responseObject.message);
-					console.error(err);
+					logger.error(responseObject.message, req.session);
+					logger.error(err, req.session);
 				}else{
 					responseObject.successful = true;
+					
+					// Log the success
+					var message = "Successfully updated _USER_ to _TYPE_"
+							.replace("_USER_", savedObj.username)
+							.replace("_TYPE_", savedObj.type);
+					logger.log(message, req.session);
 				}
 				res.send(responseObject);
 			});
@@ -692,7 +751,7 @@ var startPasswordReset = function startPasswordReset(req, res){
 	if(_.isEmpty(username)){
 		responseObject.message = "Username is required to start a password reset";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -707,8 +766,8 @@ var startPasswordReset = function startPasswordReset(req, res){
 		if(err){
 			responseObject.message = "Error finding user";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 			res.send(responseObject);
 		}else if(user){
 			// User is found, so generate a password reset id
@@ -716,8 +775,8 @@ var startPasswordReset = function startPasswordReset(req, res){
 				if(err){
 					responseObject.message = "Error generating password reset id";
 					responseObject.error = err;
-					console.error(responseObject.message);
-					console.error(err);
+					logger.error(responseObject.message, req.session);
+					logger.error(err, req.session);
 					res.send(responseObject);
 					return;
 				}
@@ -734,10 +793,15 @@ var startPasswordReset = function startPasswordReset(req, res){
 					if(err){
 						responseObject.message = "Error sending password reset email";
 						responseObject.error = err;
-						console.error(responseObject.message);
-						console.error(err);
+						logger.error(responseObject.message, req.session);
+						logger.error(err, req.session);
 					}else{
 						responseObject.sentToUser = true;
+						
+						// Log the success
+						var message = "Successfully sent password reset email for _USER_"
+								.replace("_USER_", req.session.passwordResetUsername);
+						logger.log(message, req.session);
 					}
 					res.send(responseObject);
 				});
@@ -746,7 +810,7 @@ var startPasswordReset = function startPasswordReset(req, res){
 			// User is not found
 			responseObject.message = "ERROR: _username_ not found".replace("_username_", username);
 			responseObject.error = new Error(responseObject.message);
-			console.error(responseObject.message);
+			logger.error(responseObject.message, req.session);
 			res.send(responseObject);
 		}
 	});
@@ -771,8 +835,8 @@ var isAbleToResetPassword = function isAbleToResetPassword(req, res){
 	}catch(err){
 		responseObject.message = "Error checking if able to reset password";
 		responseObject.error = err;
-		console.error(responseObject.message);
-		console.error(err);
+		logger.error(responseObject.message, req.session);
+		logger.error(err, req.session);
 	}
 	res.send(responseObject);
 };
@@ -799,19 +863,19 @@ var resetPassword = function resetPassword(req, res){
 	if(_.isEmpty(username)){
 		responseObject.message = "Invalid username while confirming password reset";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}else if(_.isEmpty(newPassword)){
 		responseObject.message = "Invalid password provided while confirming password reset";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}else if(_.isEmpty(id) || id !== req.session.passwordResetId){
 		responseObject.message = "Invalid id provided while confirming password reset";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -829,8 +893,8 @@ var resetPassword = function resetPassword(req, res){
 		if(err){
 			responseObject.message = "Error finding user";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 			res.send(responseObject);
 		}else if(user){
 			// User is found, so try to update the password
@@ -838,11 +902,15 @@ var resetPassword = function resetPassword(req, res){
 				if(err){
 					responseObject.message = "Error updating user with encryption";
 					responseObject.error = err;
-					console.error(responseObject.message);
-					console.error(err);
+					logger.error(responseObject.message, req.session);
+					logger.error(err, req.session);
 				}else{
 					// Succeeded
 					responseObject.successful = true;
+					
+					// Log the success
+					var message = "Successfully reset password for _USER_".replace("_USER_", user.username);
+					logger.log(message, req.session);
 				}
 				// Update the session variables and send the response
 				req.session.passwordResetId = undefined;
@@ -852,7 +920,7 @@ var resetPassword = function resetPassword(req, res){
 		}else{
 			responseObject.message = "Cannot reset password for user: [_USER_]".replace("_USER_", username);
 			responseObject.error = new Error(responseObject.message);
-			console.error(responseObject.message);
+			logger.error(responseObject.message, req.session);
 			res.send(responseObject);
 		}
 	});

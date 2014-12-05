@@ -192,7 +192,7 @@ var sendConfirmationEmail = function sendConfirmationEmail(){
 	
 	var emailAddress = self.username || "";
 	
-	console.log("Sending confirmation email to "+emailAddress);
+	logger.log("Sending confirmation email to "+emailAddress);
 	
 	// Create the email content with the confirmation link
 	var id = self.confirmation;
@@ -360,7 +360,7 @@ UserSchema.methods.sendPasswordResetEmail = function sendPasswordResetEmail(id, 
 			subject : "Copycat Co. - Password Reset",
 			html : emailContent
 		};
-		console.log("Sending password reset email to "+this.username);
+		logger.log("Sending password reset email to "+this.username);
 		mailUtil.sendEmail(params);
 		return done();
 	}catch(e){

@@ -26,8 +26,8 @@ var getAll = function getAll(req, res){
 		if(err){
 			responseObject.message = "Error finding news";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 		}else{
 			responseObject.news = _.map(data, function(entry){
 				// Filter the attributes returned
@@ -63,7 +63,7 @@ var create = function create(req, res){
 	if(!roleUtil.isAdmin(req)){
 		responseObject.message = "Not authorized to create news";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -87,10 +87,14 @@ var create = function create(req, res){
 		if(err){
 			responseObject.message = "Error saving news";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 		}else{
 			responseObject.successful = true;
+			
+			// Log the success TODO: uncomment this when issues are resolved (deleting session on logout may help)
+//			var message = "Successfully created news (_TITLE_)".replace("_TITLE_", body.title);
+//			logger.log(message, req.session);
 		}
 		res.send(responseObject);
 	});
@@ -112,7 +116,7 @@ var update = function update(req, res){
 	if(!roleUtil.isAdmin(req)){
 		responseObject.message = "Not authorized to update news";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -128,7 +132,7 @@ var update = function update(req, res){
 	if(_.isEmpty(body.id)){
 		responseObject.message = "Cannot update news without id";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -150,8 +154,8 @@ var update = function update(req, res){
 		if(err){
 			responseObject.message = "Error finding news data";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 			res.send(responseObject);
 		}else if(entry){
 			// Update the news entry
@@ -159,17 +163,21 @@ var update = function update(req, res){
 				if(err){
 					responseObject.message = "Error updating news";
 					responseObject.error = err;
-					console.error(responseObject.message);
-					console.error(err);
+					logger.error(responseObject.message, req.session);
+					logger.error(err, req.session);
 				}else{
 					responseObject.successful = true;
+					
+					// Log the success
+					var message = "Successfully updated news item (_TITLE_)".replace("_TITLE_", body.title);
+					logger.log(message, req.session);
 				}
 				res.send(responseObject);
 			});
 		}else{
 			responseObject.message = "No news entry with id = "+id;
 			responseObject.error = new Error(responseObject.message);
-			console.error(responseObject.message);
+			logger.error(responseObject.message, req.session);
 			res.send(responseObject);
 		}
 	});
@@ -191,7 +199,7 @@ var remove = function remove(req, res){
 	if(!roleUtil.isAdmin(req)){
 		responseObject.message = "Not authorized to delete news entries";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -208,7 +216,7 @@ var remove = function remove(req, res){
 	if(_.isEmpty(body.ids)){
 		responseObject.message = "Cannot archive news without an list of ids";
 		responseObject.error = new Error(responseObject.message);
-		console.error(responseObject.message);
+		logger.error(responseObject.message, req.session);
 		res.send(responseObject);
 		return;
 	}
@@ -220,15 +228,21 @@ var remove = function remove(req, res){
 			}
 	};
 	
+	//TODO: get the news items title/body/timestamp and log them with the success message
+	
 	// Remove the news entries
 	News.remove(query, function(err){
 		if(err){
 			responseObject.message = "Error removing news entries";
 			responseObject.error = err;
-			console.error(responseObject.message);
-			console.error(err);
+			logger.error(responseObject.message, req.session);
+			logger.error(err, req.session);
 		}else{
 			responseObject.successful = true;
+			
+			// Log the success
+			var message = "Successfully deleted news item";
+			logger.log(message, req.session);
 		}
 		res.send(responseObject);
 	});

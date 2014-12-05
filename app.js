@@ -41,7 +41,7 @@ var express = require('express');
 var fs = require('fs');
 var http = require('http');
 var https = require ('https');
-var logger = require('morgan');
+var morganLogger = require('morgan');
 var methodOverride = require('method-override');
 var path = require('path');
 var serveStatic = require('serve-static');
@@ -50,6 +50,7 @@ var favicon = require('serve-favicon');
 
 // Global variables
 _ = require('./public/lib/underscore/js/underscore');
+logger = require('./utils/logger-util');
 try{
 	// First try to use the config file in the properties directory
 	config = require('../properties/config');
@@ -92,7 +93,7 @@ app.use(session({
 // Do things when in development mode
 var isDevelopment = ('dev' === app.get('env'));
 if(isDevelopment){
-//	app.use(logger('dev'));
+//	app.use(morganLogger('dev'));
 	app.use(favicon(path.join(publicDir, 'logo.ico')));
 	app.use(errorHandler());
 	app.use(serveStatic(publicDir));
@@ -178,12 +179,12 @@ router.route('/schedule/update')
 
 var startListening = function startListening(){
 	// Start the server
-	console.log("Creating server...");
+	logger.log("Creating server...");
 	var server = http.createServer(app);
 	
-	console.log("Listening to port "+app.get('port'));
+	logger.log("Listening to port "+app.get('port'));
 	server.listen(app.get('port'), function(){
-		console.log('Express server listening on port ' + app.get('port'));
+		logger.log('Express server listening on port ' + app.get('port'));
 	});
 	
 	// If the node process ends, close the mongo connection
@@ -205,7 +206,7 @@ dbUtil.setup(function(){
 //};
 //var server = https.createServer(certOpts, app);
 //server.listen(app.get('port'), function(){
-//	console.log('Express server listening on port ' + app.get('port'));
+//	logger.log('Express server listening on port ' + app.get('port'));
 //});
 //
 //// Make separate server to reroute http to https
