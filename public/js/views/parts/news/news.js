@@ -183,7 +183,7 @@ app.view.part.News = Backbone.View.extend({
 			var entryHtml = entryTemplate(item);
 			
 			// Add it to the page before the add button
-			$this.before(entryHtml);
+			$this.parents('.news_edit_button_list').before(entryHtml);
 		});
 		
 		return self;

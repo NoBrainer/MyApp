@@ -92,7 +92,7 @@
 	<% _.each(entries, function(entry, i){ %>
 		<%= entry %>
 	<% }); %>
-	<ul class="nav nav-pills">
+	<ul class="nav nav-pills news_edit_button_list">
 		<li>
 			<a id="news_add_more">
 				<i class="fa fa-plus-circle"></i>
