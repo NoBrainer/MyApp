@@ -178,8 +178,11 @@ From server:
 ## Developing
 
 ### PRIORITY 1
+Google
+- Add metadata to the header
+
 Bugs
-- Starting state of schedule always shows TBD when scrolling left
+- [unreported]
 
 Browser Support
 - Safari

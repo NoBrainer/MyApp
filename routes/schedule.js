@@ -215,24 +215,29 @@ var getMonth = function getMonth(req, res){
 			logger.error(err, req.session);
 		}else{
 			// Return a blank shift unless the user is an employee
-			responseObject.schedule = _.map(data, function(item){
-				return {
-						dateString : item.dateString,
-						date : item.date,
-						entries : _.map(item.entries, function(entry){
-							var obj = {
-									username : entry.username,
-									name : entry.name,
-									dateString : entry.dateString,
-									shift : ""
-							};
-							if(roleUtil.isEmployee(req)){
-								obj.shift = entry.shift;
-							}
-							return obj;
-						})
-				};
-			});
+			responseObject.schedule = _.chain(data)
+				.map(function(item){
+					return {
+							dateString : item.dateString,
+							date : item.date,
+							entries : _.map(item.entries, function(entry){
+								var obj = {
+										username : entry.username,
+										name : entry.name,
+										dateString : entry.dateString,
+										shift : ""
+								};
+								if(roleUtil.isEmployee(req)){
+									obj.shift = entry.shift;
+								}
+								return obj;
+							})
+					};
+				})
+				.sortBy(function(item){
+					return item.date;
+				})
+				.value();
 		}
 		res.send(responseObject);
 	});

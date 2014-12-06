@@ -34,9 +34,11 @@ app.view.part.Schedule = Backbone.View.extend({
 		var thisMonth = new Date();
 		var nextMonth = new Date();
 		nextMonth.setMonth(nextMonth.getMonth()+1);
+		var prevMonth = new Date();
+		prevMonth.setMonth(prevMonth.getMonth()-1);
 		
 		// Callback to render once ready
-		var numCalls = 3;
+		var numCalls = 4;
 		var renderIfReady = function renderIfReady(){
 			numCalls--;
 			if(numCalls === 0){
@@ -45,11 +47,13 @@ app.view.part.Schedule = Backbone.View.extend({
 		};
 		
 		// Make the ajax calls
-		self.getUserList()
+		self.checkSchedule(prevMonth)
 			.done(renderIfReady);
 		self.checkSchedule(thisMonth)
 			.done(renderIfReady);
 		self.checkSchedule(nextMonth)
+			.done(renderIfReady);
+		self.getUserList()
 			.done(renderIfReady);
 		
 		return self;
@@ -99,8 +103,9 @@ app.view.part.Schedule = Backbone.View.extend({
 		};
 		
 		// Add the schedule data to the template for the prev/next days
-		var prevData = _.findWhere(self.schedule, { dateString : prevDay.dateString });
-		var nextData = _.findWhere(self.schedule, { dateString : nextDay.dateString });
+		var prevData = _.findWhere(self.schedule, { dateString : self.prevDay.dateString });
+		var nextData = _.findWhere(self.schedule, { dateString : self.nextDay.dateString });
+		
 		self.prevDay.entries = (_.isEmpty(prevData) ? [] : prevData.entries);
 		self.nextDay.entries = (_.isEmpty(nextData) ? [] : nextData.entries);
 		
@@ -144,6 +149,9 @@ app.view.part.Schedule = Backbone.View.extend({
 		// Click handlers for the prev/next buttons
 		$('#schedule_content .schedule_scroll_left').on('click', _.bind(self.scrollLeft, self));
 		$('#schedule_content .schedule_scroll_right').on('click', _.bind(self.scrollRight, self));
+		
+		// Load the starting entry
+		self.loadEntryToEdit();
 		
 		return self;
 	}
