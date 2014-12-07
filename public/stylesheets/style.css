@@ -71,7 +71,7 @@ a.footer_link {
 #header .navbar #navbar-collapse i {
   font-size: 20px;
 }
-#header .navbar #navbar-collapse .address {
+#header .navbar #navbar-collapse .metadata {
   color: #FFFFFF;
   cursor: default;
   display: block;
@@ -83,11 +83,11 @@ a.footer_link {
   padding-bottom: 15px;
   padding-top: 15px;
 }
-#header .navbar #navbar-collapse .address a {
+#header .navbar #navbar-collapse .metadata a {
   color: #FFFFFF;
   text-decoration: none;
 }
-#header .navbar #navbar-collapse .address a:hover {
+#header .navbar #navbar-collapse .metadata a:hover {
   text-decoration: underline;
 }
 #header .navbar-header {

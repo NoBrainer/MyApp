@@ -20,23 +20,22 @@
 			<!-- Collect the nav links, forms, and other content for toggling -->
 			<div class="collapse navbar-collapse" id="navbar-collapse">
 				<ul class="nav navbar-nav">
-					<!-- TODO: figure out if we want this
 					<li>
-						<a href="#link-to-menu.pdf" title="Menu">
-							<i class="fa fa-book"></i>
-						</a>
-					</li>
-					-->
-					<li>
-						<div class="address">
-							<a href="https://www.google.com/maps/place/1110+H+St+NE,+Washington,+DC+20002/@38.900454,-76.991027,17z" target="_blank">
-								1110 H St. NE | Washington, DC 20002
-								<i class="fa fa-map-marker"></i>
-							</a>
+						<div class="metadata">
+							<span class="address">
+								<a href="https://www.google.com/maps/place/1110+H+St+NE,+Washington,+DC+20002/@38.900454,-76.991027,17z" target="_blank">
+									1110 H St. NE | Washington, DC 20002
+									<i class="fa fa-map-marker"></i>
+								</a>
+							</span>
 							<br/>
-							Hours: Sun-Thu 5pm-2am, Fri-Sat 5pm-3am
+							<span class="hours">
+								Hours: Sun-Thu 5pm-2am, Fri-Sat 5pm-3am
+							</span>
 							<br/>
-							202-241-1952
+							<span class="phone">
+								202-241-1952
+							</span>
 						</div>
 					</li>
 				</ul>
