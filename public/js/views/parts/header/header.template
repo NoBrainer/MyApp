@@ -1,6 +1,4 @@
 <script type="text/template" id="header-template">
-	<div id="modal_storage"></div>
-	
 	<div id="site_logo">
 		<img src="/resources/logo.png">
 	</div>
