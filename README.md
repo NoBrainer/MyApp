@@ -178,11 +178,8 @@ From server:
 ## Developing
 
 ### PRIORITY 1
-Google
-- Add metadata to the header
-
 Bugs
-- [unreported]
+- news coming back in wrong order
 
 Browser Support
 - Safari
@@ -198,6 +195,7 @@ Admin Panel
 General
 - Optimize for mobile
 - Setup SSL (one-way)
+- Get a smaller image for the background image
 
 ### PRIORITY 2
 Schedule
