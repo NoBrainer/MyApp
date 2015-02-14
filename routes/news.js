@@ -29,19 +29,25 @@ var getAll = function getAll(req, res){
 			logger.error(responseObject.message, req.session);
 			logger.error(err, req.session);
 		}else{
-			responseObject.news = _.map(data, function(entry){
-				// Filter the attributes returned
-				var obj = {
-						postedDate : entry.postedDate,
-						title : entry.title,
-						content : entry.content,
-						isArchived : entry.isArchived
-				};
-				if(roleUtil.isAdmin(req)){
-					obj.id = entry._id
-				}
-				return obj;
-			});
+			responseObject.news = _.chain(data)
+				.map(function(entry){
+					// Filter the attributes returned
+					var obj = {
+							postedDate : entry.postedDate,
+							title : entry.title,
+							content : entry.content,
+							isArchived : entry.isArchived
+					};
+					if(roleUtil.isAdmin(req)){
+						obj.id = entry._id
+					}
+					return obj;
+				})
+				.sortBy(function(entry){
+					// Sort by posted date descending (most recent first)
+					return entry.postedDate * -1;
+				})
+				.value();
 		}
 		res.send(responseObject);
 	});

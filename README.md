@@ -179,11 +179,7 @@ From server:
 
 ### PRIORITY 1
 Bugs
-- news coming back in wrong order
-
-Browser Support
-- Safari
-- Chrome
+- [none reported]
 
 Schedule
 - Edit multiple dates at once
