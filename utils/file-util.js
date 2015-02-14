@@ -167,14 +167,14 @@ var aggregateJavaScript = function aggregateJavaScript(targetDir, targetFile, li
 			return false;
 		}else if(file.match(/setup\.js$/)){
 			setupFile = file;
-			return false
+			return false;
 		}
 		return file.match(/.+\.js$/);
 	};
 	// Determine what we do with the results
 	var done = function(err, result){
 		if(err) throw err;
-		var fileArr = _.union(libArray, setupFile, result, mainFile);
+		var fileArr = _.union(libArray, [setupFile], result, [mainFile]);
 		var strictOrder = true;
 		createAggregate(fileArr, targetFile, strictOrder);
 	};
@@ -191,7 +191,7 @@ var aggregateCss = function aggregateCss(targetFile, publicDir){
 	// Array of css files to import (order matters)
 	var fileArr = [ "lib/bootstrap/css/bootstrap.css",
 	                "lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css",
-	                "lib/bootstrap/css/bootstrap-custom.css",
+	                "stylesheets/custom-lib/bootstrap-custom.css",
 	                "lib/font-awesome/css/font-awesome.css",
 	                "stylesheets/style.css",
 	                "stylesheets/style-responsive.css" ];
