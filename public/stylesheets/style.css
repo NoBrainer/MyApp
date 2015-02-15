@@ -199,6 +199,12 @@ a.footer_link {
   padding-right: 0;
   width: 12px;
 }
+#content #schedule_content > .panel-body .arrow_cell .schedule_scroll_left {
+  margin-right: 1px;
+}
+#content #schedule_content > .panel-body .arrow_cell .schedule_scroll_right {
+  margin-left: 1px;
+}
 #content #schedule_content > .panel-body .today {
   background-color: #EAEAEA;
 }
