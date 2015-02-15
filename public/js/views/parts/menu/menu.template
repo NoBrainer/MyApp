@@ -10,8 +10,14 @@
 		</h3>
 	</div>
 	<div class="panel-body">
-		<img class="menu_img" src="/resources/food-menu.jpg">
-		<img class="menu_img" src="/resources/drink-menu.jpg">
-		<img class="menu_img" src="/resources/drink-specials.jpg">
+		<img class="menu_img" src="/resources/menus/food-menu.png">
+		<img class="menu_img" src="/resources/menus/drink-menu-01-guide.jpg">
+		<img class="menu_img" src="/resources/menus/drink-menu-02-smash.jpg">
+		<img class="menu_img" src="/resources/menus/drink-menu-03-daiquiri.png">
+		<img class="menu_img" src="/resources/menus/drink-menu-04-horse.png">
+		<img class="menu_img" src="/resources/menus/drink-menu-05-ny.png">
+		<img class="menu_img" src="/resources/menus/drink-menu-06-champagne.png">
+		<img class="menu_img" src="/resources/menus/drink-menu-07-old-fashioned.png">
+		<img class="menu_img" src="/resources/menus/drink-menu-08-south-of-the-border.png">
 	</div>
 </script>
