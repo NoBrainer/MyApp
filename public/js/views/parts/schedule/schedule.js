@@ -184,7 +184,7 @@ app.view.part.Schedule = Backbone.View.extend({
 		
 		// Scroll self.shownDays and self.nextDay
 		self.nextDay = _.last(self.shownDays);
-		self.shownDays = _.union(self.prevDay, _.initial(self.shownDays));
+		self.shownDays = _.union([self.prevDay], _.initial(self.shownDays));
 		
 		// Update the UI
 		$labelCells.get(indexToRemove).remove();
@@ -238,7 +238,7 @@ app.view.part.Schedule = Backbone.View.extend({
 		
 		// Scroll self.shownDays and self.prevDay
 		self.prevDay = _.first(self.shownDays);
-		self.shownDays = _.union(_.tail(self.shownDays), self.nextDay);
+		self.shownDays = _.union(_.tail(self.shownDays), [self.nextDay]);
 		
 		// Update the UI
 		$labelCells.get(indexToRemove).remove();
