@@ -31,10 +31,10 @@ app.view.part.Schedule = Backbone.View.extend({
 		var self = this;
 		
 		// Create a date for each month of schedule data
-		var thisMonth = new Date();
-		var nextMonth = new Date();
+		var thisMonth = app.util.Date.firstDayOfMonth(new Date());
+		var nextMonth = app.util.Date.firstDayOfMonth(new Date());
 		nextMonth.setMonth(nextMonth.getMonth()+1);
-		var prevMonth = new Date();
+		var prevMonth = app.util.Date.firstDayOfMonth(new Date());
 		prevMonth.setMonth(prevMonth.getMonth()-1);
 		
 		// Callback to render once ready
