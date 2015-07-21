@@ -180,7 +180,6 @@ From server:
 ### PRIORITY 1
 Bugs
 - [none reported]
-- Switch from px to em
 
 Schedule
 - Edit multiple dates at once
