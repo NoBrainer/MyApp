@@ -154,7 +154,9 @@ var aggregateJavaScript = function aggregateJavaScript(targetDir, targetFile, li
 	                 "underscore/js/underscore.js",
 	                 "backbone/js/backbone.js",
 	                 "bootstrap/js/bootstrap.js",
-	                 "bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" ];
+	                 "bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js",
+	                 "moment/moment.min.js",
+	                 "fullcalendar/fullcalendar.min.js"];
 	libArray = _.map(libArray, function(item){
 		return path.join(libDir, item);
 	});
@@ -192,6 +194,7 @@ var aggregateCss = function aggregateCss(targetFile, publicDir){
 	var fileArr = [ "lib/bootstrap/css/bootstrap.css",
 	                "lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css",
 	                "stylesheets/custom-lib/bootstrap-custom.css",
+	                "lib/fullcalendar/fullcalendar.min.css",
 	                "lib/font-awesome/css/font-awesome.css",
 	                "stylesheets/style.css",
 	                "stylesheets/style-responsive.css" ];

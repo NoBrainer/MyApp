@@ -240,6 +240,12 @@ a.footer_link {
 #content #schedule_content > .panel-body li {
   list-style-type: none;
 }
+#content #schedule_content > .panel-body .user_selection_list {
+  margin-left: 15px;
+}
+#content #schedule_content > .panel-body .user_selection_list li {
+  list-style-type: disc;
+}
 #content #menu_content .menu_img {
   max-width: 100%;
   height: auto;

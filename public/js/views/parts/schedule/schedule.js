@@ -12,6 +12,7 @@ app.view.part.Schedule = Backbone.View.extend({
 		
 		// Array of months we've loaded
 		this.months = [];
+		this.calendarEvents = [];
 		
 		// Keep track of when we get the data
 		this.dataAge = null;
@@ -109,17 +110,25 @@ app.view.part.Schedule = Backbone.View.extend({
 		self.prevDay.entries = (_.isEmpty(prevData) ? [] : prevData.entries);
 		self.nextDay.entries = (_.isEmpty(nextData) ? [] : nextData.entries);
 		
-		// Add the html to the page
-		var params = {
-				scheduleList : self.shownDays,
-				today : app.util.Date.startOfDay()
-		};
-		var template = app.util.TemplateCache.get("#schedule-template");
-		var html = template(params);
-		self.$el.html(html);
+		self.$el.queue(function(){
+			// Add the html to the page
+			var params = {
+					scheduleList : self.shownDays,
+					today : app.util.Date.startOfDay()
+			};
+			var template = app.util.TemplateCache.get("#schedule-template");
+			var html = template(params);
+			self.$el.html(html);
+			
+			self.$el.dequeue();
+		});
 		
-		// Initialize handlers
-		self.initHandlers();
+		self.$el.queue(function(){
+			// Initialize handlers
+			self.initHandlers();
+
+			self.$el.dequeue();
+		});
 		
 		return self;
 	}
@@ -271,27 +280,26 @@ app.view.part.Schedule = Backbone.View.extend({
 		var self = this;
 		
 		// Clear the previous entries
-		$('.remove_person').click();
+		var $userSelectionList = $('.user_selection_list');
+		$userSelectionList.empty();
 		
 		// Load the new entries
 		$.when(self.checkSchedule(date))
 			.done(function(resp){
 				var entries = [];
 				if(_.isEmpty(resp) || _.isEmpty(resp.entries)){
-					// The default entry is a single blank one
-					entries.push({
-						name : "",
-						shift : "",
-						username : ""
-					});
+					// Show placeholder text for no entries
+					$userSelectionList.text("TBD");
 				}else{
 					// Get the entries from the response
 					entries = resp.entries;
+					_.each(entries, function(entry){
+						// Show the entries
+						var userListTemplate = app.util.TemplateCache.get('#schedule-user-selection-list-template');
+						var userListHtml = userListTemplate({ entries : entries });
+						$userSelectionList.html(userListHtml);
+					});
 				}
-				_.each(entries, function(entry){
-					// Trigger a click event to add a new entry, and pass the entry data
-					$('#schedule_add_person').trigger('click', [entry]);
-				});
 			})
 			.fail(function(resp){
 				console.log(resp);
@@ -304,10 +312,10 @@ app.view.part.Schedule = Backbone.View.extend({
 	 * Setup the admin mode if the user is an admin
 	 */
 	,setupAdminMode : function setupAdminMode(){
+		var self = this;
 		if(!app.util.Login.isAdmin()){
 			return self;
 		}
-		var self = this;
 		
 		// Show admin controls
 		self.$el.find('.admin_controls').show();
@@ -318,6 +326,12 @@ app.view.part.Schedule = Backbone.View.extend({
 		// Handler for toggling edit-mode
 		$('#edit_schedule').on('click', function(e){
 			self.$el.find('.admin_edit_toggle').toggle();
+
+			var $editCalendar = $('#edit-calendar');
+			if($editCalendar.html().trim() === ""){
+				// Render the edit calendar if it hasn't been rendered
+				self.renderEventsOnEditCalendar(self.schedule);
+			}
 		});
 		
 		// Handler for canceling edits
@@ -473,7 +487,7 @@ app.view.part.Schedule = Backbone.View.extend({
 				var obj = {};
 				obj.username = ($this.find('.user_selection').val() || "").trim();
 				obj.name = ($this.find('.user_selection > :selected').text() || "").trim();
-				obj.shift = ($this.find('.shift_selection').val() || "").trim();
+				obj.shift = ($this.find('.shift_selection').val() || "open").trim();
 				return obj;
 			})
 			.filter(function(entry){
@@ -504,7 +518,7 @@ app.view.part.Schedule = Backbone.View.extend({
 			var people = [{
 				username : "",
 				name : "",
-				shift : ""
+				shift : "open"
 			}];
 			
 			// Build the html for each entry
@@ -638,6 +652,9 @@ app.view.part.Schedule = Backbone.View.extend({
 		if(!_.isEmpty(newData)){
 			// Update the schedule
 			self.schedule = _.union(self.schedule, newData);
+			
+			// Render the updates on the edit calendar
+			self.renderEventsOnEditCalendar(newData);
 		}
 		
 		return self;
@@ -684,6 +701,13 @@ app.view.part.Schedule = Backbone.View.extend({
 		date = app.util.Date.firstDayOfMonth(date);
 		var month = date.toDateString();
 		
+		// This is the empty schedule to be returned if there is no data for this date
+		var emptySchedule = {
+				date : moment(date).format('YYYY-MM-DD[T04:00:00.000Z]'),
+				dateString : currentDate,
+				entries : []
+		};
+		
 		// Check if we've already loaded this month
 		if(!self.alreadyLoadedMonth(month)){
 			// Make a server call
@@ -709,18 +733,309 @@ app.view.part.Schedule = Backbone.View.extend({
 					},
 					complete : function(){
 						// Resolve with the schedule data for the given date
-						var scheduleForDate = _.findWhere(self.schedule, { dateString : currentDate });
+						var scheduleForDate = _.findWhere(self.schedule, { dateString : currentDate }) || emptySchedule;
 						dfd.resolve(scheduleForDate);
 					}
 			};
 			$.ajax(ajaxOpts);
 		}else{
 			// Resolve without a server call
-			var scheduleForDate = _.findWhere(self.schedule, { dateString : currentDate });
+			var scheduleForDate = _.findWhere(self.schedule, { dateString : currentDate }) || emptySchedule;
 			dfd.resolve(scheduleForDate);
 		}
 		
 		return dfd.promise();
+	}
+	
+	/**
+	 * 
+	 */
+	,initializeEditCalendar : function initializeEditCalendar(){
+		var self = this;
+		var $editCalendar = $('#edit-calendar');
+		
+		// Keeps track of the current schedule object that may be submitted to the server (when 'Apply Changes' is clicked)
+		var updateObj = {
+				date : null,
+				dateString : null,
+				entries : []
+		};
+		
+		// Initialize the calendar
+		var calendarOpts = {
+				dayClick : function(date, jsEvent, view){
+					
+					// Update the date displayed in the modal
+					var dateString = date.format('MMMM DD, YYYY')
+					$dayModal.find('.schedule-edit-day-date').text(dateString)
+					
+					// Keep track of the data to post if we apply the changes
+					updateObj.date = date.format('YYYY-MM-DD[T04:00:00.000Z]');
+					updateObj.dateString = app.util.Date.startOfDay(updateObj.date).toDateString();
+					updateObj.entries = [];
+					
+					// Check the schedule
+					self.checkSchedule(updateObj.date)
+						.done(function(schedule){
+							console.log("finished checking schedule...");
+							console.log(schedule);
+							console.log(self.schedule);
+							
+							// Keep track of the entries from checking the schedule
+							updateObj.entries = schedule.entries || [];
+							
+							// Populate the entries on the form
+							updateEntryListUI(updateObj.entries);
+							
+							// Open the modal
+							$dayModal.modal('show');
+						});
+				},
+				eventClick : function(calEvent, jsEvent, view){
+					// Clicking an event triggers clicking the day (they do the same thing)
+					var date = calEvent.start;
+					calendarOpts.dayClick(date, jsEvent, view);
+					return false;
+				},
+				allDayDefault : true
+		};
+		$editCalendar.fullCalendar(calendarOpts);
+		$editCalendar.fullCalendar('today');
+		
+		// Add the modal to the page
+		var modalTemplate = app.util.TemplateCache.get("#schedule-edit-day-modal-template");
+		var params = {
+				users : self.users
+		};
+		var modalHtml = modalTemplate(params);
+		$editCalendar.after(modalHtml);
+		
+		// Each time the month changes, render the events
+		var $monthBtns = $editCalendar.find('.fc-prev-button,.fc-next-button,.fc-today-button');
+		$monthBtns.on('click', function(){
+			self.renderEventsOnEditCalendar(self.schedule);
+		});
+		
+		// Schedule edit UI components
+		var $dayModal = $('#schedule-edit-day-modal');
+		var $scheduleList = $dayModal.find('.user_selection_list');
+		var $userSelect = $dayModal.find('.user_selection');
+		var $writeInBtn = $dayModal.find('.add_write_in_btn');
+		var $writeInInput = $dayModal.find('.add_write_in_input');
+		var $applyChangesBtn = $dayModal.find('.apply_schedule_edits');
+		
+		// Helper function to update the entries on the UI
+		var updateEntryListUI = function(entries){
+			// Update the html
+			var template = app.util.TemplateCache.get('#schedule-user-selection-list-template');
+			var html = template({ entries : entries });
+			$scheduleList.html(html);
+			
+			// Add click handlers for the X buttons
+			$scheduleList.find('.remove_user').off().on('click', function removeUser(e){
+				// Remove the user from the updateObj entries
+				var username = $(e.target).attr('data-username') || "";
+				updateObj.entries = _.reject(updateObj.entries, function(entry){
+					return entry.username === username;
+				});
+				
+				updateEntryListUI(updateObj.entries);
+			});
+			
+			// Hide the options that are selected
+			var $options = $userSelect.find('option');
+			$options.removeClass('hidden');
+			_.each($options, function(option){
+				var username = $(option).val() || "";
+				var found = _.find(updateObj.entries, function(entry){
+					return entry.username === username;
+				});
+				if(found){
+					$(option).addClass('hidden');
+				}
+			});
+			$userSelect.val("");
+		};
+		
+		// Helper function to generate a temporary username that is unique to the schedule date
+		var generateTempUsername = function(indexStr){
+			var indexStr = indexStr || "";
+			var base = "temp";
+			var end = "@email.junk";
+			var tempUsername = base+indexStr+end;
+			var found = _.find(updateObj.entries, function(entry){
+				return entry.username === tempUsername;
+			});
+			if(found){
+				return generateTempUsername(_.uniqueId());
+			}
+			return tempUsername;
+		};
+		
+		// Handler to add people via the dropdown
+		$userSelect.on('change', function(e){
+			// Get the selected username from the dropdown
+			var selectedUsername = $userSelect.val() || "";
+			if(selectedUsername === ""){
+				return false;
+			}
+			
+			// If it's not already in the list, then build the entry from self.users
+			var foundUser = _.find(self.users, function(user){
+				return user.username === selectedUsername;
+			});
+			if(!foundUser){
+				console.log("Unexpected error! Username not found in self.users: "+selectedUsername);
+				return false;
+			}
+			
+			// Then update the entries
+			var entryToAdd = {
+					username : foundUser.username,
+					name : foundUser.name,
+					shift : "open" //TODO: remove this field
+			};
+			updateObj.entries.push(entryToAdd);
+			
+			// Then update the UI
+			updateEntryListUI(updateObj.entries);
+		});
+		
+		// Handler to add people via the write-in
+		$writeInBtn.on('click', function(e){
+			var writeInName = $writeInInput.val() || "";
+			if(!_.isString(writeInName) || writeInName.trim() === ""){
+				return false; //do nothing for a blank write-in
+			}
+			
+			// Then update the entries
+			var entryToAdd = {
+					username : generateTempUsername(),
+					name : writeInName,
+					shift : "open"
+			};
+			updateObj.entries.push(entryToAdd);
+			
+			// Then update the UI
+			updateEntryListUI(updateObj.entries);
+			
+			// Then clear the input
+			$writeInInput.val("");
+		});
+		
+		// Click the 'Add Write-in' button on ENTER keypress
+		$writeInInput.on('keypress', function(e){
+			if(e.keyCode === 13){
+				$writeInBtn.click();
+				return false;
+			}
+		});
+		
+		// Handler to apply the changes
+		$applyChangesBtn.on('click', function(e){
+			// Build ajax options
+			var options = {
+				type : 'POST',
+				url : "/api/schedule/update",
+				cache : false,
+				contentType : 'application/json',
+				data : JSON.stringify(updateObj)
+			};
+			
+			// Update the local schedule
+			self.updateLocalScheduleSingleDate(updateObj);
+			
+			// Make the ajax call to update the schedule server-side
+			$.ajax(options)
+				.done(function(resp){
+					// Hide the modal on success
+					$dayModal.modal('hide');
+				})
+				.fail(function(resp){
+					console.log("fail");
+					console.log(resp);
+					alert("Unexpected error. Please try again");
+				})
+				.always(function(){
+					//TODO: figure out a non-hacky way to refresh the calendar
+					$('.fc-next-button').click();
+					$('.fc-prev-button').click();
+				});
+		});
+	}
+	
+	/**
+	 * Update a single date on the local schedule then refresh the calendar
+	 */
+	,updateLocalScheduleSingleDate : function updateLocalScheduleSingleDate(updatedDateObj){
+		var self = this;
+		
+		// Validate input
+		//TODO
+		
+		// Update local schedule
+		self.schedule = _.reject(self.schedule, function(item){
+			return item.date === updatedDateObj.date;
+		});
+		self.schedule.push(updatedDateObj);
+		self.schedule = _.sortBy(self.schedule, function(item){
+			return new Date(item.date).getTime();
+		});
+		
+		// Refresh the calendar
+		//TODO: see if we need this
+		self.forceRefreshEditCalendar(updatedDateObj.date);
+		
+		return self;
+	}
+	
+	/**
+	 * TODO: remove if this alternative try doesn't work... it seems too hacky
+	 */
+	,forceRefreshEditCalendar : function forceRefreshEditCalendar(atDate){
+		var self = this;
+//		var $editCalendar = $('#edit-calendar');
+		
+		$('#edit-calendar').parent().html("<div id='edit-calendar'></div>");
+		self.initializeEditCalendar();
+		
+		if(!_.isString(atDate) || _.isEmpty(atDate)){
+			$('#edit-calendar').fullCalendar('today');
+		}else{
+			$('#edit-calendar').fullCalendar('gotoDate', moment(atDate));
+		}
+		
+		return self;
+	}
+	
+	/**
+	 * 
+	 */
+	,renderEventsOnEditCalendar : function renderEventsOnEditCalendar(eventList){
+		var self = this;
+		var $editCalendar = $('#edit-calendar');
+		
+		// Initialize the calendar if necessary
+		if(_.isEmpty($editCalendar) || _.isEmpty($editCalendar.html()) || _.isEmpty($editCalendar.html().trim())){
+			self.initializeEditCalendar();
+		}
+		
+		// Map each item in the event list to a fullcalendar event object
+		var newCalendarEvents = _.reduce(eventList, function(memo, item){
+			var start = item.date.substring(0, item.date.indexOf('T'));
+			_.each(item.entries, function(entry){
+				memo.push({
+					title : entry.name
+					,start : start
+				});
+			});
+			return memo;
+		}, []);
+		
+		// Update the edit calendar
+		_.each(newCalendarEvents, function(newEvent){
+			$editCalendar.fullCalendar('renderEvent', newEvent);
+		});
 	}
 });
 
