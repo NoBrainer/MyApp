@@ -182,7 +182,7 @@ Bugs
 - [none reported]
 
 Schedule
-- Edit multiple dates at once
+- Make fullcalendar more efficient
 - Restrict min date to the grand opening date
 
 Admin Panel
@@ -209,6 +209,7 @@ Jumbotron Images
 - Automatically pull latest from instagram
 
 Menu
+- Lazy-load the menus
 - Setup admin uploading
 
 ### Tools
