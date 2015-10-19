@@ -48,6 +48,44 @@ var serveStatic = require('serve-static');
 var session = require('express-session');
 var favicon = require('serve-favicon');
 
+
+//Compress png/jpg files TODO: hook this into a runtime arg
+var Imagemin = require('imagemin');
+var compressResources = false,
+	compressMenus = false;
+if(compressResources){
+	new Imagemin()
+		.src('public/resources/*.png')
+		.dest('public-production/resources')
+		.use(Imagemin.optipng({optimizationLevel: 3}))
+		.run(function(err, files){
+			console.log(err);
+		});
+	new Imagemin()
+		.src('public/resources/*.jpg')
+		.dest('public-production/resources')
+		.use(Imagemin.jpegtran({progressive: true}))
+		.run(function(err, files){
+			console.log(err);
+		});
+}
+if(compressMenus){
+	new Imagemin()
+		.src('public/resources/menus/*.png')
+		.dest('public-production/resources/menus')
+		.use(Imagemin.optipng({optimizationLevel: 3}))
+		.run(function(err, files){
+			console.log(err);
+		});
+	new Imagemin()
+		.src('public/resources/menus/*.jpg')
+		.dest('public-production/resources/menus')
+		.use(Imagemin.jpegtran({progressive: true}))
+		.run(function(err, files){
+			console.log(err);
+		});
+}
+
 // Global variables
 _ = require('./public/lib/underscore/js/underscore');
 logger = require('./utils/logger-util');
