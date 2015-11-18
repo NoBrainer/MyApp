@@ -36,7 +36,7 @@
 					var postedDateStr = app.util.Date.toString(dateObj);
 					
 					// Truncate the content if necessary
-					var maxLength = 200;
+					var maxLength = 250;
 					var hasTruncatedForm = (content.length > maxLength);
 					if(hasTruncatedForm){
 						var truncatedContent = "CONTENT... [MORE]".replace("CONTENT", content.substring(0, maxLength));

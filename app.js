@@ -75,6 +75,7 @@ if(compressMenus){
 		.dest('public-production/resources/menus')
 		.use(Imagemin.optipng({optimizationLevel: 3}))
 		.run(function(err, files){
+			console.log("png...");
 			console.log(err);
 		});
 	new Imagemin()
@@ -82,6 +83,7 @@ if(compressMenus){
 		.dest('public-production/resources/menus')
 		.use(Imagemin.jpegtran({progressive: true}))
 		.run(function(err, files){
+			console.log("jpg...");
 			console.log(err);
 		});
 }
