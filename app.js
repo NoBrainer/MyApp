@@ -96,7 +96,7 @@ try{
 	config = require('../properties/config');
 }catch(e){
 	// Fallback to the config file with the app
-	config =  require('./config')
+	config =  require('./config');
 }
 
 // Local imports
