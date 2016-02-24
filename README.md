@@ -188,6 +188,9 @@ Schedule
 Admin Panel
 - Changing user names
 
+Menu
+- Lazy load the menus
+
 General
 - Optimize for mobile
 - Setup SSL (one-way)
@@ -209,7 +212,6 @@ Jumbotron Images
 - Automatically pull latest from instagram
 
 Menu
-- Lazy-load the menus
 - Setup admin uploading
 
 ### Tools
