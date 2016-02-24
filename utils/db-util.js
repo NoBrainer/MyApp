@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var User = require('../models/user-model');
 
 // Local variables
-var db = undefined;
+//EMPTY
 
 /**
  * Setup the mongo database
@@ -29,13 +29,12 @@ var setup = function setup(callback){
 		}
 	};
 	mongoose.connect(config.props.MONGO_LOCATION, mongoOptions);
-	db = mongoose.connection;
 	db.once('open', function(){
 		logger.log('successfully opened database!');
 		
 		if(_.isFunction(callback)){
 			// Call this function if it's provided
-			// Thi prevents a race condition where the server is listening before it's connected to mongo
+			// This prevents a race condition where the server is listening before it's connected to mongo
 			callback();
 		}
 	});

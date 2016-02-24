@@ -369,4 +369,4 @@ UserSchema.methods.sendPasswordResetEmail = function sendPasswordResetEmail(id, 
 };
 
 // Compile and export the model
-module.exports = mongoose.model('User', UserSchema);
+module.exports = db.model('User', UserSchema);

@@ -41,6 +41,7 @@ var express = require('express');
 var fs = require('fs');
 var http = require('http');
 var https = require ('https');
+var mongoose = require('mongoose');
 var morganLogger = require('morgan');
 var methodOverride = require('method-override');
 var path = require('path');
@@ -91,6 +92,7 @@ if(compressMenus){
 // Global variables
 _ = require('./public/lib/underscore/js/underscore');
 logger = require('./utils/logger-util');
+db = mongoose.connection;
 try{
 	// First try to use the config file in the properties directory
 	config = require('../properties/config');

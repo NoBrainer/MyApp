@@ -41,4 +41,4 @@ var ScheduleSchema = mongoose.Schema({
 });
 
 // Compile and export the model
-module.exports = mongoose.model('Schedule', ScheduleSchema);
+module.exports = db.model('Schedule', ScheduleSchema);

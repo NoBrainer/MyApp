@@ -29,4 +29,4 @@ var NewsSchema = mongoose.Schema({
 });
 
 // Compile and export the model
-module.exports = mongoose.model('News', NewsSchema);
+module.exports = db.model('News', NewsSchema);
