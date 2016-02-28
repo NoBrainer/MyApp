@@ -11,7 +11,7 @@
 	</div>
 	<div class="panel-body">
 		<img class="menu_img" src="/resources/menus/food-menu.png" alt="[Food Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-01-guide.jpg" alt="[Drink Guide]">
+		<img class="menu_img" src="/resources/menus/drink-menu-01-guide.png" alt="[Drink Guide]">
 		<img class="menu_img" src="/resources/menus/drink-menu-02-smash.jpg" alt="[Smash Menu]">
 		<img class="menu_img" src="/resources/menus/drink-menu-03-daiquiri.png" alt="[Daiquiri Menu]">
 		<img class="menu_img" src="/resources/menus/drink-menu-04-horse.png" alt="[Horse Menu]">
