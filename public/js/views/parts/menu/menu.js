@@ -84,6 +84,7 @@ app.view.part.Menu = Backbone.View.extend({
 		
 		// On scroll, update which menus are loaded
 		$(window).on('scroll.menus', _.throttle(_.bind(this.loadMenus, this), 500));
+		this.loadMenus();
 		
 		return self;
 	}
@@ -117,7 +118,7 @@ app.view.part.Menu = Backbone.View.extend({
 		var $nextDiv = $($menuDivs.get(this.nextMenuIndex)),
 			nextTop = $nextDiv.offset().top,
 			scrollBottom = $window.scrollTop() + $window.height(),
-			threshold = 700;
+			threshold = 2000;
 		if(scrollBottom + threshold > nextTop){
 			// Generate the URL from the div id and menu mapping
 			var id = $nextDiv.attr('id'),
