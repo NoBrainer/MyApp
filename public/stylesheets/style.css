@@ -247,6 +247,15 @@ a.footer_link {
   list-style-type: disc;
 }
 #content #menu_content .menu_img {
-  max-width: 100%;
-  height: auto;
+  background-size: contain;
+  width: 868px;
+}
+#content #menu_content .menu_img.portrait {
+  height: 1430px;
+}
+#content #menu_content .menu_img.landscape {
+  height: 527px;
+}
+#content #menu_content .menu_img.landscape_2 {
+  height: 671px;
 }

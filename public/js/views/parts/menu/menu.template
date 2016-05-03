@@ -10,43 +10,43 @@
 		</h3>
 	</div>
 	<div class="panel-body">
-		<img class="menu_img" src="/resources/menus/food-menu.png" alt="[Food Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-01-guide.png" alt="[Drink Guide]">
-		<img class="menu_img" src="/resources/menus/drink-menu-02-smash.jpg" alt="[Smash Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-03-daiquiri.png" alt="[Daiquiri Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-04-horse.png" alt="[Horse Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-05-ny.png" alt="[NY Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-06-champagne.png" alt="[Champagne Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-07-old-fashioned.png" alt="[Old-Fashioned Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-08-south-of-the-border.png" alt="[South of the Border Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-09-bitters.png" alt="[Bitters Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-10-tiki.png" alt="[Tiki Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-11-gin-martini.png" alt="[Gin Martini Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-12-equal-parts.png" alt="[Equal Parts Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-13-ginger.png" alt="[Ginger Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-14-mirror.png" alt="[Mirror Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-15-savory.png" alt="[Savory Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-16-greatest-hits.png" alt="[Greatest Hits Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-17-tall-potations.png" alt="[Tall Potations Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-18-negroni.png" alt="[Negroni Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-19-founding-farmers.png" alt="[Founding Farmers Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-20-list.png" alt="[List Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-21-dude.png" alt="[Dude Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-22-double-feature.png" alt="[Double Feature Menu]">
-		<img class="menu_img" src="/resources/menus/drink-menu-23-daiquiri-part-2.png" alt="[Daiquiri Part 2]">
-		<img class="menu_img" src="/resources/menus/drink-menu-24-sasha.png" alt="[Sasha]">
-		<img class="menu_img" src="/resources/menus/drink-menu-25-hemingway.png" alt="[Hemingway]">
-		<img class="menu_img" src="/resources/menus/drink-menu-26-q&a.png" alt="[Q & A]">
-		<img class="menu_img" src="/resources/menus/drink-menu-27-something-different.png" alt="[Something Different]">
-		<img class="menu_img" src="/resources/menus/drink-menu-28-movies.png" alt="[Movies]">
-		<img class="menu_img" src="/resources/menus/drink-menu-29-grapefruit.png" alt="[Grapefruit]">
-		<img class="menu_img" src="/resources/menus/drink-menu-30-5050.png" alt="[50/50]">
-		<img class="menu_img" src="/resources/menus/drink-menu-31-price.png" alt="[Price]">
-		<img class="menu_img" src="/resources/menus/drink-menu-32-manhattan-2.png" alt="[Manhattan Variations]">
-		<img class="menu_img" src="/resources/menus/drink-menu-33-new-year.png" alt="[New Year]">
-		<img class="menu_img" src="/resources/menus/drink-menu-34-tiki-a.png" alt="[Tiki A]">
-		<img class="menu_img" src="/resources/menus/drink-menu-35-tiki-b.png" alt="[Tiki B]">
-		<img class="menu_img" src="/resources/menus/drink-menu-36-like-it-a.png" alt="[Like It A]">
-		<img class="menu_img" src="/resources/menus/drink-menu-37-like-it-b.png" alt="[Like It B]">
+		<div class="menu_img portrait" style="background-image:url(/resources/menus/food-menu.png)"></div>
+		<div class="menu_img portrait" style="background-image:url(/resources/menus/drink-menu-01-guide.png)"></div>
+		<div class="menu_img portrait" style="background-image:url(/resources/menus/drink-menu-02-smash.jpg)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-03-daiquiri.png)"></div>
+		<div class="menu_img portrait" style="background-image:url(/resources/menus/drink-menu-04-horse.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-05-ny.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-06-champagne.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-07-old-fashioned.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-08-south-of-the-border.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-09-bitters.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-10-tiki.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-11-gin-martini.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-12-equal-parts.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-13-ginger.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-14-mirror.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-15-savory.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-16-greatest-hits.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-17-tall-potations.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-18-negroni.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-19-founding-farmers.png)"></div>
+		<div class="menu_img landscape_2" style="background-image:url(/resources/menus/drink-menu-20-list.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-21-dude.png)"></div>
+		<div class="menu_img landscape_2" style="background-image:url(/resources/menus/drink-menu-22-double-feature.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-23-daiquiri-part-2.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-24-sasha.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-25-hemingway.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-26-q&a.png)"></div>
+		<div class="menu_img landscape_2" style="background-image:url(/resources/menus/drink-menu-27-something-different.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-28-movies.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-29-grapefruit.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-30-5050.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-31-price.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-32-manhattan-2.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-33-new-year.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-34-tiki-a.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-35-tiki-b.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-36-like-it-a.png)"></div>
+		<div class="menu_img landscape" style="background-image:url(/resources/menus/drink-menu-37-like-it-b.png)"></div>
 	</div>
 </script>

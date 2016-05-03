@@ -307,8 +307,24 @@ a.footer_link {
 	
 	#menu_content {
 		.menu_img {
-			max-width: 100%;
-			height: auto;
+			background-size: contain;
+			width: 868px;
+			
+			&.portrait {
+				//food,1,2,4
+				height: 1430px;
+			}
+			
+			&.landscape {
+				//3,5-19,21,23-26,28-37
+				height: 527px;
+			}
+			
+			&.landscape_2 {
+				//20,22,27
+				height: 671px;
+			}
 		}
+		
 	}
 }
