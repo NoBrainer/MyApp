@@ -212,9 +212,9 @@ var login = function login(req, res){
 				responseObject.message = "Unexpected error occurred";
 		}
 		var mockSession = {
-				username : user.username || null,
-				name : user.name || null,
-				type : user.type || null
+				username : user && user.username ? user.username : null,
+				name : user && user.name ? user.name : null,
+				type : user && user.type ? user.type : null
 		};
 		responseObject.error = new Error(responseObject.message);
 		logger.error(responseObject.message, mockSession);
