@@ -14,6 +14,11 @@ body {
 	color: @body_color;
 	background-color: @body_background;
 	background-image: url(/resources/background-grey.png);
+	
+	&.modal-open { //prevent weird visual jumping
+		overflow-y: scroll !important;
+		padding-right: 0 !important;
+	}
 }
 
 a {

@@ -5,6 +5,10 @@ body {
   background-color: #d0d0d0;
   background-image: url(/resources/background-grey.png);
 }
+body.modal-open {
+  overflow-y: scroll !important;
+  padding-right: 0 !important;
+}
 a {
   color: #333333;
   display: inline-block;
