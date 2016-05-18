@@ -417,7 +417,9 @@ app.view.part.Schedule = Backbone.View.extend({
 			});
 			var picker = $datePicker.data('datetimepicker');
 			var today = new Date(Date.now());
-			picker.setDate(today);
+			if(picker){
+				picker.setDate(today);
+			}
 			$datePicker.on('changeDate', function(e){
 				var date = app.util.Date.startOfDay(e.localDate);
 				self.loadEntryToEdit(date);
