@@ -32,7 +32,12 @@
 							</span>
 							<br/>
 							<span class="phone">
+								<i class="fa fa-phone"></i>
 								202-241-1952
+							</span>
+							<span class="email">
+								<a href="mailto:info@copycatcompany.com"><i class="fa fa-envelope"></i></a>
+								<a href="mailto:info@copycatcompany.com">info@copycatcompany.com</a>
 							</span>
 						</div>
 					</li>

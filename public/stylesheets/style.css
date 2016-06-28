@@ -89,6 +89,12 @@ a.footer_link {
 #header .navbar #navbar-collapse .metadata a:hover {
   text-decoration: underline;
 }
+#header .navbar #navbar-collapse .metadata i {
+  font-size: 16px;
+}
+#header .navbar #navbar-collapse .metadata .email {
+  margin-left: 5px;
+}
 #header .navbar-header {
   min-height: 83px;
 }
