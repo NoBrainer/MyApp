@@ -10,8 +10,7 @@
 		</h3>
 	</div>
 	<div class="panel-body">
-		<div class="menu_img portrait" id="food"></div>
-		<div class="menu_img portrait" id="01"></div>
+		<div class="menu_img landscape" id="overall"></div>
 		<div class="menu_img portrait" id="02"></div>
 		<div class="menu_img landscape" id="03"></div>
 		<div class="menu_img portrait" id="04"></div>

@@ -8,8 +8,7 @@ app.view.part.Menu = Backbone.View.extend({
 	 */
 	,initialize : function initialize(){
 		this.menuMapping = {
-				"food": "/resources/menus/food-menu.png",
-				"01": "/resources/menus/drink-menu-01-guide.png",
+				"overall": "/resources/menus/overall-menu.png",
 				"02": "/resources/menus/drink-menu-02-smash.jpg",
 				"03": "/resources/menus/drink-menu-03-daiquiri.png",
 				"04": "/resources/menus/drink-menu-04-horse.png",
