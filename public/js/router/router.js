@@ -68,7 +68,7 @@ app.Router = Backbone.Router.extend({
 		var ajaxOpts = {
 			type : 'GET',
 			url : "/api/users/resetPassword/",
-			complete : function(resp){
+			success : function(resp){
 				resp = resp || {};
 				if(resp.isAble === true){
 					// Render the password reset page
