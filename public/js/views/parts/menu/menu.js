@@ -44,7 +44,11 @@ app.view.part.Menu = Backbone.View.extend({
 				"34": "/resources/menus/drink-menu-34-tiki-a.png",
 				"35": "/resources/menus/drink-menu-35-tiki-b.png",
 				"36": "/resources/menus/drink-menu-36-like-it-a.png",
-				"37": "/resources/menus/drink-menu-37-like-it-b.png"
+				"37": "/resources/menus/drink-menu-37-like-it-b.png",
+				"38": "/resources/menus/drink-menu-38-berto.png",
+				"39": "/resources/menus/drink-menu-39-brugal.png",
+				"40": "/resources/menus/drink-menu-40-cecilia.png",
+				"41": "/resources/menus/drink-menu-41-royal-hawaiian.png"
 		};
 		this.nextMenuIndex = 0;
 	}

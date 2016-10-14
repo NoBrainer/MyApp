@@ -198,6 +198,9 @@ a.footer_link {
 #content #news_content .news_edit_entry .news_edit_content {
   width: 100%;
 }
+#content #news_content .news_page_nav > li > a {
+  display: inline-block;
+}
 #content #schedule_content {
   width: 100%;
 }
@@ -268,4 +271,7 @@ a.footer_link {
 }
 #content #menu_content .menu_img.landscape_2 {
   height: 671px;
+}
+#content #menu_content .menu_img.landscape_3 {
+  height: 582px;
 }
