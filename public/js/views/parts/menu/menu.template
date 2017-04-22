@@ -10,7 +10,8 @@
 		</h3>
 	</div>
 	<div class="panel-body">
-		<div class="menu_img landscape" id="overall"></div>
+		<div class="menu_img landscape" id="food"></div>
+		<div class="menu_img portrait_2" id="overall"></div>
 		<div class="menu_img portrait" id="02"></div>
 		<div class="menu_img landscape" id="03"></div>
 		<div class="menu_img portrait" id="04"></div>
@@ -51,5 +52,10 @@
 		<div class="menu_img landscape" id="39"></div>
 		<div class="menu_img landscape" id="40"></div>
 		<div class="menu_img landscape_3" id="41"></div>
+		<div class="menu_img landscape" id="42"></div>
+		<div class="menu_img landscape" id="43"></div>
+		<div class="menu_img landscape" id="44"></div>
+		<div class="menu_img landscape" id="45"></div>
+		<div class="menu_img landscape" id="46"></div>
 	</div>
 </script>

@@ -266,6 +266,9 @@ a.footer_link {
 #content #menu_content .menu_img.portrait {
   height: 1430px;
 }
+#content #menu_content .menu_img.portrait_2 {
+  height: 1414px;
+}
 #content #menu_content .menu_img.landscape {
   height: 527px;
 }

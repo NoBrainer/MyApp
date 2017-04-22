@@ -8,6 +8,7 @@ app.view.part.Menu = Backbone.View.extend({
 	 */
 	,initialize : function initialize(){
 		this.menuMapping = {
+				"food": "/resources/menus/food-menu.png",
 				"overall": "/resources/menus/overall-menu.png",
 				"02": "/resources/menus/drink-menu-02-smash.jpg",
 				"03": "/resources/menus/drink-menu-03-daiquiri.png",
@@ -48,7 +49,12 @@ app.view.part.Menu = Backbone.View.extend({
 				"38": "/resources/menus/drink-menu-38-berto.png",
 				"39": "/resources/menus/drink-menu-39-brugal.png",
 				"40": "/resources/menus/drink-menu-40-cecilia.png",
-				"41": "/resources/menus/drink-menu-41-royal-hawaiian.png"
+				"41": "/resources/menus/drink-menu-41-royal-hawaiian.png",
+				"42": "/resources/menus/drink-menu-42-apple-number-2.png",
+				"43": "/resources/menus/drink-menu-43-bitters-number-2.png",
+				"44": "/resources/menus/drink-menu-44-havna-club.png",
+				"45": "/resources/menus/drink-menu-45-singani.png",
+				"46": "/resources/menus/drink-menu-46-tiki-3.png"
 		};
 		this.nextMenuIndex = 0;
 	}
