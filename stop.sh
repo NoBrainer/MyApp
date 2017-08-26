@@ -9,4 +9,4 @@ forever stopall
 fuser -k 8080/tcp
 
 # delete the service pid file
-sudo rm /var/run/CopyCatCo.pid
+sudo rm /var/run/CopycatCo.pid
