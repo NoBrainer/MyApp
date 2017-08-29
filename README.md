@@ -49,11 +49,20 @@
 - Update Apache configuration
 	- Login to iPage's WHM
 	- Service Configuration -> Apache Configuration -> Include Editor
-	- Select the Apache version for the option that mentions the httpd.conf, and add this:
-<VirtualHost *:{FROM_PORT}>
-    ProxyPreserveHost On
-    ProxyPass / http://{IP_ADDRESS}:{TO_PORT}/
-    ProxyPassReverse / http://{IP_ADDRESS}:{TO_PORT}/
+	- For "Post VirtualHost Include", add this:
+<VirtualHost {SERVER_IP}:{FROM_PORT}>
+    ServerAdmin {ADMIN_EMAIL_ADDRESS}
+    ServerName {DOMAIN}.com
+    ServerAlias mail.{DOMAIN}.com www.{DOMAIN}.com
+    DocumentRoot /path/to/public_html
+
+    # Forward from port {FROM_PORT} to port {TO_PORT}
+    ProxyPass / http://localhost:{TO_PORT}/
+    ProxyPassReverse / http://localhost:{TO_PORT}/
+    <Proxy *>
+        Order deny,allow
+        Allow from all
+  </Proxy>
 </VirtualHost>
 
 
