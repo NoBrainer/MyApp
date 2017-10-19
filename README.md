@@ -50,20 +50,22 @@
 	- Login to iPage's WHM
 	- Service Configuration -> Apache Configuration -> Include Editor
 	- For "Post VirtualHost Include", add this:
-<VirtualHost {SERVER_IP}:{FROM_PORT}>
-    ServerAdmin {ADMIN_EMAIL_ADDRESS}
-    ServerName {DOMAIN}.com
-    ServerAlias mail.{DOMAIN}.com www.{DOMAIN}.com
-    DocumentRoot /path/to/public_html
+		```
+		<VirtualHost {SERVER_IP}:{FROM_PORT}>
+		    ServerAdmin {ADMIN_EMAIL_ADDRESS}
+		    ServerName {DOMAIN}.com
+		    ServerAlias mail.{DOMAIN}.com www.{DOMAIN}.com
+		    DocumentRoot /path/to/public_html
 
-    # Forward from port {FROM_PORT} to port {TO_PORT}
-    ProxyPass / http://localhost:{TO_PORT}/
-    ProxyPassReverse / http://localhost:{TO_PORT}/
-    <Proxy *>
-        Order deny,allow
-        Allow from all
-  </Proxy>
-</VirtualHost>
+		    # Forward from port {FROM_PORT} to port {TO_PORT}
+		    ProxyPass / http://localhost:{TO_PORT}/
+		    ProxyPassReverse / http://localhost:{TO_PORT}/
+		    <Proxy *>
+			Order deny,allow
+			Allow from all
+		  </Proxy>
+		</VirtualHost>
+		```
 
 
 ### Setup .bashrc aliases
